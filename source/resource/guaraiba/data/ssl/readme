@@ -1,0 +1,2 @@
+openssl req -nodes -newkey rsa:2048 -sha256 -keyout server.key -out server.csr
+openssl x509 -sha256 -req -days 365 -in server.csr -signkey server.key -out server.crt
