@@ -91,7 +91,7 @@ qx.Class.define("guaraiba.Application", {
             process.chdir(guaraiba.path.dirname(process.mainModule.filename))
 
             var jake = require('jake');
-            jake.run.apply(jake, args.length > 0 ? args : ['-help']);
+            jake.run.apply(jake, args.length > 0 ? args : ['--help']);
 
             if (args[0] == '--tasks') {
                 process.exit();
