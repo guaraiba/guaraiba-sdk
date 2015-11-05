@@ -14,6 +14,11 @@
 
 var jake = require('jake');
 
+jake.addListener('complete', function () {
+    process.stdout.write("\n");
+    process.exit();
+});
+
 /**
  * This class offers the basic properties and features to create an start guaraiba server applications.
  *
