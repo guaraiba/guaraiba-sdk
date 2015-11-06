@@ -65,7 +65,7 @@ qx.Class.define("guaraiba.Application", {
          * Called when the application relevant classes are loaded and ready.
          */
         main: function () {
-            guaraiba.Tasks.registerTask(null, 'start', false, this.start, this, 'Start server application.');
+            guaraiba.Tasks.registerTask(null, 'start', true, this.start, this, 'Start server application.');
 
             if (!String(process.argv[1]).match(/jake$/)) {
                 var args = process.argv.slice(2);

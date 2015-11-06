@@ -29,27 +29,27 @@ qx.Mixin.define('guaraiba.orm.MTask', {
          * Register tasks to management database schema.
          */
         registerTasks: function () {
-            guaraiba.Tasks.registerTask('fixture', 'load', false, this.fixtureLoadTask, this,
+            guaraiba.Tasks.registerTask('fixture', 'load', true, this.fixtureLoadTask, this,
                 'Load into databases the new instances of model classes from fixture files.'
             );
 
-            guaraiba.Tasks.registerTask('fixture', 'dump', false, this.fixtureDumpTask, this,
+            guaraiba.Tasks.registerTask('fixture', 'dump', true, this.fixtureDumpTask, this,
                 'Dump all instances of model classes in fixture files.'
             );
 
-            guaraiba.Tasks.registerTask('fixture', 'clean', false, this.fixtureCleanTask, this,
+            guaraiba.Tasks.registerTask('fixture', 'clean', true, this.fixtureCleanTask, this,
                 'Remove all instances of model classes in databases.'
             );
 
-            guaraiba.Tasks.registerTask('migrate', 'make', false, this.migrateMakeTask, this,
+            guaraiba.Tasks.registerTask('migrate', 'make', true, this.migrateMakeTask, this,
                 'Creates a new migration, with the (name) of the migration being added.'
             );
 
-            guaraiba.Tasks.registerTask('migrate', 'latest', false, this.migrateLatestTask, this,
+            guaraiba.Tasks.registerTask('migrate', 'latest', true, this.migrateLatestTask, this,
                 'Runs all migrations that have not yet been run.'
             );
 
-            guaraiba.Tasks.registerTask('migrate', 'rollback', false, this.migrateRollbackTask, this,
+            guaraiba.Tasks.registerTask('migrate', 'rollback', true, this.migrateRollbackTask, this,
                 'Rolls back the latest migration group.'
             );
         },
@@ -130,9 +130,8 @@ qx.Mixin.define('guaraiba.orm.MTask', {
                     process.abort();
                 } else {
                     qx.log.Logger.info("END FIXUTE");
-                    complete();
                     process.stdin.destroy();
-                    process.exit();
+                    complete();
                 }
             });
         },
@@ -254,9 +253,8 @@ qx.Mixin.define('guaraiba.orm.MTask', {
                     process.abort();
                 } else {
                     qx.log.Logger.info("END FIXUTE");
-                    complete();
                     process.stdin.destroy();
-                    process.exit();
+                    complete();
                 }
             });
         },
@@ -310,9 +308,8 @@ qx.Mixin.define('guaraiba.orm.MTask', {
                     process.abort();
                 } else {
                     qx.log.Logger.info("END FIXUTE");
-                    complete();
                     process.stdin.destroy();
-                    process.exit();
+                    complete();
                 }
             });
         },
@@ -333,7 +330,7 @@ qx.Mixin.define('guaraiba.orm.MTask', {
             var knex = this.__knex;
 
             knex.migrate.make(name).then(function () {
-                process.exit();
+                complete();
             });
         },
 
@@ -351,7 +348,7 @@ qx.Mixin.define('guaraiba.orm.MTask', {
             var knex = this.__knex;
 
             knex.migrate.latest().then(function (files) {
-                process.exit();
+                complete();
             });
         },
 
@@ -369,7 +366,7 @@ qx.Mixin.define('guaraiba.orm.MTask', {
             var knex = this.__knex;
 
             knex.migrate.rollback().then(function () {
-                process.exit();
+                complete();
             });
         }
     }
