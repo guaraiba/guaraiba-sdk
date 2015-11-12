@@ -104,6 +104,7 @@ qx.Class.define('guaraiba.orm.Model', {
          * Get property definition map for record class.
          *
          * @return {Map} Properties map.
+         * @ignore(Map)
          */
         getProperties: function () {
             if (!this.__properties) {
