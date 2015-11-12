@@ -205,6 +205,10 @@ qx.Class.define('guaraiba.Request', {
                     if (d) {
                         return new Date(Date.UTC(+d[1], +d[2] - 1, +d[3], +d[4], +d[5], +d[6]));
                     }
+
+                    if (value === '#NULL#') {
+                        return null
+                    }
                 }
 
                 return value;
