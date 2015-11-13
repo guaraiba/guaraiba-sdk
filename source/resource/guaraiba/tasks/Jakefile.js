@@ -5,5 +5,5 @@ task('default', { async: true }, function () {
 
 require('./compiling');
 require('./generate');
-require('./fixture');
 require('./migrate');
+require('./fixture');
