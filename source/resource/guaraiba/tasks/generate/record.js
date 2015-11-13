@@ -5,7 +5,8 @@ task('record', { async: true }, function () {
         promptly = require('promptly'),
         prettyJson = require('prettyjson'),
         beautify = require('js-beautify').js_beautify,
-        provides = require('../../../Manifest.json').provides,
+        app = qx.core.BaseInit.getApplication(),
+        appNamespace = app.constructor.classname.replace('.Application', ''),
         settings = { fields: {} },
         inflection = require('inflection'),
         format = require('util').format,
@@ -16,7 +17,7 @@ task('record', { async: true }, function () {
             }
 
             if (!value.match(/\./)) {
-                value = provides.namespace + '.models.' + value;
+                value = appNamespace + '.models.' + value;
             }
 
             settings.path = 'source/class/' + value.replace(/\./g, '/') + '.js';
@@ -182,15 +183,15 @@ task('record', { async: true }, function () {
                 console.log(colors.warn(code));
                 console.log('------------------------------------------------');
 
-                var schema = 'source/class/' + provides.namespace + '/schemas/Default.js';
+                var schema = 'source/class/' + appNamespace + '/schemas/Default.js';
                 if (fs.existsSync(schema)) {
                     console.info('Registering record class in default schema:');
                     var replace = require('replace');
                     replace({
-                        regex: /(^\s*init:\s*function.*$)/,
+                        regex: /(\s*init:\s*function.*)/,
                         replacement: '$1\n            this.register(' + settings.className + ');',
                         paths: [schema],
-                        silent: true,
+                        silent: false,
                     });
                 } else {
                     console.info('You need register class in your schema adding: ',
@@ -199,7 +200,7 @@ task('record', { async: true }, function () {
                         colors.data(')')
                     );
                     console.info('Find schemas in:',
-                        colors.choose('source/class/' + provides.namespace + '/schemas')
+                        colors.choose('source/class/' + appNamespace + '/schemas')
                     );
                 }
                 console.log('------------------------------------------------');
