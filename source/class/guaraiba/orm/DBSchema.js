@@ -21,7 +21,7 @@
  */
 qx.Class.define('guaraiba.orm.DBSchema', {
     extend: qx.core.Object,
-    include: [guaraiba.orm.MTask, guaraiba.utils.MInflection],
+    include: [guaraiba.utils.MInflection],
 
     statics: {
         /**
@@ -198,7 +198,6 @@ qx.Class.define('guaraiba.orm.DBSchema', {
         this.__knex = knex(knexSetting);
 
         this.init();
-        this.registerTasks();
     },
 
     properties: {
@@ -271,6 +270,15 @@ qx.Class.define('guaraiba.orm.DBSchema', {
             }
 
             return model;
+        },
+
+        /**
+         * Returns models collection class.
+         *
+         * @return {Array}
+         */
+        getModels: function(){
+          return this.__models;
         },
 
         /**
