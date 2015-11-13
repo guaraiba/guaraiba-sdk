@@ -174,11 +174,11 @@ task('record', { async: true }, function () {
 
                     stream.write(code);
                     stream.end();
-                    actions.end(code);
+                    actions.stepRegisterModel(code);
                 });
             },
 
-            end: function (code) {
+            stepRegisterModel: function (code) {
                 console.log('------------------------------------------------');
                 console.log(colors.warn(code));
                 console.log('------------------------------------------------');
@@ -191,7 +191,7 @@ task('record', { async: true }, function () {
                         regex: /(\s*init:\s*function.*)/,
                         replacement: '$1\n            this.register(' + settings.className + ');',
                         paths: [schema],
-                        silent: false,
+                        silent: true,
                     });
                 } else {
                     console.info('You need register class in your schema adding: ',
@@ -204,6 +204,73 @@ task('record', { async: true }, function () {
                     );
                 }
                 console.log('------------------------------------------------');
+
+                var msg = 'Do you whant create RestController '.prompt + '(Y/n)'.choose + ':?'.prompt;
+                promptly.choose(msg, ['y', 'n'], { default: 'y' }, function (err, value) {
+                    if (value == 'y') {
+                        actions.stepCreateController();
+                    } else {
+                        actions.end();
+                    }
+                });
+            },
+
+            stepCreateController: function () {
+                var clazz = inflection.pluralize(settings.className);
+
+                clazz = clazz.replace(appNamespace, appNamespace + '.controllers');
+                clazz = clazz.replace('.models.', '.');
+
+                var path = 'source/class/' + clazz.replace(/\./g, '/') + '.js',
+                    stream = fs.createWriteStream(path);
+
+                stream.once('open', function (fd) {
+                    var code,
+                        template = '' +
+                            'qx.Class.define(%j, {' +
+                            '    extend: guaraiba.controllers.ModelRestController,\n\n' +
+                            '    /**\n' +
+                            '     * @param request {guaraiba.Request}\n' +
+                            '     * @param response {guaraiba.Response}\n' +
+                            '     * @param params {Map?} Params hash.\n' +
+                            '     */' +
+                            '    construct: function (request, response, params) {' +
+                            '        this.base(arguments, request, response, params);' +
+                            '        this.setRecordClass(%j);' +
+                            '        this.setAcceptFilters(true);' +
+                            '    }' +
+                            '});';
+
+                    code = format(template, clazz, settings.className);
+                    code = beautify(code, { indent_size: 4 });
+
+                    stream.write(code);
+                    stream.end();
+                    actions.stepRegisterRouter(code, clazz);
+                });
+            },
+
+            stepRegisterRouter: function (code, clazz) {
+                console.log('------------------------------------------------');
+                console.log(colors.warn(code));
+                console.log('------------------------------------------------');
+
+                console.info('Registering controller class in Router class:');
+                var replace = require('replace');
+                replace({
+                    regex: /(\s*init:\s*function.*)/,
+                    replacement: '$1\n            this.resource(' + clazz + ');',
+                    paths: ['source/class/' + appNamespace + '/Router.js'],
+                    silent: true,
+                });
+                console.log('------------------------------------------------');
+                console.log(colors.warn('  this.resource(' + clazz + ')'));
+                actions.end();
+            },
+
+            end: function () {
+                console.log('------------------------------------------------');
+                jake.Task['build:dev'].execute();
                 complete();
             }
         };
