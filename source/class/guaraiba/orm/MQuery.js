@@ -13,7 +13,7 @@
  */
 
 /**
- * Hooks mixin for guaraiba.orm.Record
+ * This mixin offers the basic features to do query in guaraiba.orm.Record.
  */
 qx.Mixin.define('guaraiba.orm.MQuery', {
     members: {

@@ -13,7 +13,7 @@
  */
 
 /**
- * Hooks mixin for guaraiba.orm.Record.
+ * This mixin offers the basic properties and features to add timestamp fields in guaraiba.orm.Record.
  */
 qx.Mixin.define('guaraiba.orm.MTimestampRecord', {
     properties: {

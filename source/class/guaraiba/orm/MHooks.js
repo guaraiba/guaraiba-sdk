@@ -13,7 +13,7 @@
  */
 
 /**
- * Hooks mixin for guaraiba.orm.Record
+ * This mixin offers the basic features to do hooks in guaraiba.orm.Record.
  */
 qx.Mixin.define('guaraiba.orm.MHooks', {
     members: {
@@ -24,11 +24,17 @@ qx.Mixin.define('guaraiba.orm.MHooks', {
          * @param done {Function} Resume function with one boolean argument Ex: function(resume) {...}
          */
         beforeSave: function (done) {
-            if (this._beforeSaveTimestampRecord) {
-                this._beforeSaveTimestampRecord(done)
-            } else {
-                done(true);
-            }
+            this._beforeSaveSerialId(function (resume) {
+                if (resume === true) {
+                    if (this._beforeSaveTimestampRecord) {
+                        this._beforeSaveTimestampRecord(done);
+                    } else {
+                        done(true);
+                    }
+                } else {
+                    done(false);
+                }
+            });
         },
 
         /**

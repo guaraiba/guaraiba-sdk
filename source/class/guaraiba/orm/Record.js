@@ -20,7 +20,13 @@
 qx.Class.define('guaraiba.orm.Record', {
     type: 'abstract',
     extend: qx.core.Object,
-    include: [guaraiba.orm.MHooks, qx.core.MProperty, guaraiba.orm.MRelations, guaraiba.utils.MInflection],
+    include: [
+        qx.core.MProperty,
+        guaraiba.orm.MHooks,
+        guaraiba.orm.MSerial,
+        guaraiba.orm.MRelations,
+        guaraiba.utils.MInflection
+    ],
 
     statics: {
         /**
@@ -101,7 +107,6 @@ qx.Class.define('guaraiba.orm.Record', {
                 callback = function () {};
             }
             scope = scope || vThis;
-
             vThis.beforeSave(function (resume) {
                 if (resume === true) {
                     if (vThis.isNewRecord()) {

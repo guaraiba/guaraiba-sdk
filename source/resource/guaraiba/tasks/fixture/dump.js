@@ -23,9 +23,6 @@ task('dump', { async: true }, function () {
                     var item, data = [];
                     records.forEach(function (record) {
                         item = record.toDataObject();
-                        if (model.isSerialId()) {
-                            delete item[model.getIdFieldName()];
-                        }
                         data.push(item);
                     });
                     fs.writeFile(file, prettyData.json(data), function (err) {

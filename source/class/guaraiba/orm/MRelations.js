@@ -13,7 +13,7 @@
  */
 
 /**
- * Relations mixin for guaraiba.orm.Record.
+ * This mixin offers the basic features to do relations in guaraiba.orm.Record.
  */
 qx.Mixin.define('guaraiba.orm.MRelations', {
     members: {
