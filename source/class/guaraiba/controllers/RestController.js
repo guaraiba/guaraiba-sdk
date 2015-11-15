@@ -245,7 +245,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
         _prepareWhereConditions: function (qb) {
             var params = this.getParams(),
                 acceptFilters = this.getAcceptFilters(),
-                op, fields;
+                fields;
 
             params.filters = params.filters || {};
 
