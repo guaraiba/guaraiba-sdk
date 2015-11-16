@@ -148,7 +148,10 @@ qx.Class.define('guaraiba.controllers.RestController', {
                     if (record) {
                         this._record = record;
                     } else {
-                        this.respordWithStatusNotFound("Not found record of " + this.getRecordClassName() + " with (" + idFieldName + " = '" + id + "').");
+                        this.respordWithStatusNotFound(Error(
+                            "Not found record of " + this.getRecordClassName() +
+                            " with (" + idFieldName + " = '" + id + "')."
+                        ));
                     }
                     done();
                 }
