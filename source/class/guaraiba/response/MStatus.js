@@ -173,9 +173,10 @@ qx.Mixin.define('guaraiba.response.MStatus', {
          *
          * @param err {String|Error|Object|Map?} The error to use as the basis for the response.
          * @param format {String?} Format of response.
+         * @param statusCode {Integer} http status code.
          * @return {boolean}
          */
-        respondError: function (err, format) {
+        respondError: function (err, format, statusCode) {
             if (err) {
                 var message = err.message || String(err);
 
@@ -191,7 +192,7 @@ qx.Mixin.define('guaraiba.response.MStatus', {
                     qx.log.Logger.error(err.message || message);
                 }
 
-                this.respond({ message: message, error: err }, { statusCode: 500, format: format });
+                this.respond({ message: message, error: err }, { statusCode: statusCode || 500, format: format });
 
                 return true;
             }
@@ -713,7 +714,11 @@ qx.Mixin.define('guaraiba.response.MStatus', {
          * @see guaraiba.response.MStatus#HTTP_STATUS_CODES
          */
         respondWithStatus: function (statusCode, data, format) {
-            return this.respond(data, { statusCode: statusCode, format: format });
+            if (data instanceof Error) {
+                return this.respondError(data, format, statusCode);
+            } else {
+                return this.respond(data, { statusCode: statusCode, format: format });
+            }
         }
     }
 });
