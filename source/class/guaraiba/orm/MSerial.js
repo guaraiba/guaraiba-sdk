@@ -32,10 +32,10 @@ qx.Mixin.define('guaraiba.orm.MSerial', {
                 model.max(idFieldName, function (err, data) {
                     if (err) throw err;
                     this.set(idFieldName, (data[0] || {}).max + 1 || 1);
-                    done(true);
+                    done.call(this, true);
                 }, this);
             } else {
-                done(true);
+                done.call(this, true);
             }
         }
     }

@@ -29,10 +29,10 @@ qx.Mixin.define('guaraiba.orm.MHooks', {
                     if (this._beforeSaveTimestampRecord) {
                         this._beforeSaveTimestampRecord(done);
                     } else {
-                        done(true);
+                        done.call(this, true);
                     }
                 } else {
-                    done(false);
+                    done.call(this, false);
                 }
             });
         },
