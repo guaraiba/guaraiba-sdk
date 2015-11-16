@@ -277,8 +277,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          *
          * @return {Array}
          */
-        getModels: function(){
-          return this.__models;
+        getModels: function () {
+            return this.__models;
         },
 
         /**
@@ -334,6 +334,15 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          */
         getTransaction: function () {
             return this._trx;
+        },
+
+        /**
+         * Returns true if transaction is started.
+         *
+         * @return {Boolean}.
+         */
+        isTransaction: function () {
+            return this._trx !== null;
         },
 
         /**

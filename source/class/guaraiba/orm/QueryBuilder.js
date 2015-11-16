@@ -51,11 +51,11 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          */
         then: function (callback, scope) {
             var vThis = this,
-                debug = this._dbSchema.isDebug();
+                debug = this._dbSchema.isDebug(),
+                trx = this._dbSchema.getTransaction();
 
-            if (debug) {
-                this.debug(this._query.toString());
-            }
+            if (debug) this.debug(this._query.toString());
+            if (trx) this._query.transacting(trx);
 
             this._query.then(function (data) {
                 callback && callback.call(scope, null, vThis._hydrateRecord(data));

@@ -50,30 +50,33 @@ task('load', { async: true }, function () {
             });
         };
 
-    if (filters.length == 0) {
-        for (i in models) {
-            execute(models[i]);
-        }
-    } else {
-        for (i in models) {
-            filters.forEach(function (f) {
-                if (i.match(f)) {
-                    execute(models[i]);
-                } else {
-                    console.warn("SKIP " + models[i].getModelName());
-                }
-            }, this);
-        }
-    }
-
-    async.series(actions, function (err, results) {
-        if (err) {
-            console.error(err);
-            process.abort();
+    dbSchema.transaction(function (schema, commit, rollback) {
+        if (filters.length == 0) {
+            for (i in models) {
+                execute(models[i]);
+            }
         } else {
-            console.info("END FIXUTE");
-            process.stdin.destroy();
-            complete();
+            for (i in models) {
+                filters.forEach(function (f) {
+                    if (i.match(f)) {
+                        execute(models[i]);
+                    } else {
+                        console.warn("SKIP " + models[i].getModelName());
+                    }
+                }, this);
+            }
         }
-    });
+
+        async.series(actions, function (err, results) {
+            if (err) {
+                console.error(err);
+                process.abort();
+            } else {
+                console.info("END FIXUTE");
+                commit();
+                //process.stdin.destroy();
+            }
+        });
+    }, complete, complete)
+
 });
