@@ -72,9 +72,8 @@ task('load', { async: true }, function () {
                 console.error(err);
                 process.abort();
             } else {
-                console.info("END FIXUTE");
+                console.info("END FIXTURE");
                 commit();
-                //process.stdin.destroy();
             }
         });
     }, complete, complete)

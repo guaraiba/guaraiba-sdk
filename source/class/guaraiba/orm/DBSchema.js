@@ -324,6 +324,7 @@ qx.Class.define('guaraiba.orm.DBSchema', {
                 rollbackCallback && rollbackCallback.call(scope, data)
             })['finally'](function (err) {
                 vThis._trx = null;
+                if (err && !rollbackCallback) throw err;
             });
         },
 
