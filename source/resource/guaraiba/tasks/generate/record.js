@@ -188,8 +188,8 @@ task('record', { async: true }, function () {
                     console.info('Registering record class in default schema:');
                     var replace = require('replace');
                     replace({
-                        regex: /(\s*init:\s*function.*)/,
-                        replacement: '$1\n            this.register(' + settings.className + ');',
+                        regex: /(\s*)(\/\/ END REGISTER RECORD CLASS\. DON'T REMOVE OR CHANGE THIS COMMENTARY\..*)/,
+                        replacement: '$1this.register(' + settings.className + ');$1$2',
                         paths: [schema],
                         silent: true,
                     });
@@ -258,8 +258,8 @@ task('record', { async: true }, function () {
                 console.info('Registering controller class in Router class:');
                 var replace = require('replace');
                 replace({
-                    regex: /(\s*init:\s*function.*)/,
-                    replacement: '$1\n            this.resource(' + clazz + ');',
+                    regex: /(\s*)(\/\/ END REGISTER RESOURCE ROUTERS\. DON'T REMOVE OR CHANGE THIS COMMENTARY\..*)/,
+                    replacement: '$1this.resource(' + clazz + ');$1$2',
                     paths: ['source/class/' + appNamespace + '/Router.js'],
                     silent: true,
                 });
