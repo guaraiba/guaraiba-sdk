@@ -61,6 +61,8 @@ qx.Class.define('guaraiba.controllers.ModelRestController', {
                 items = request.parseJson(items);
             }
 
+            items = this._normalizeData(items);
+
             this._record.fromDataObject(items);
             this._record.save(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
