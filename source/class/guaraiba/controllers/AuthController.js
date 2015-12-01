@@ -123,60 +123,69 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * @param params {Map?} Params map object.
          */
         login: function (request, response, params) {
-            var vThis = this,
-                config = this.getConfiguration(),
+            var config = this.getConfiguration(),
                 passport;
 
-            this._findFirstUser(params['username'], function (err, user) {
-                if (err) {
-                    vThis.error(err);
-                    return;
-                }
-
-                if (!user) {
-                    vThis.respordWithStatusForbidden();
-                    return;
-                }
-
-                passport = config.getPassport(user.passport || user.getPassport());
-
-                var pModule = passport.getModule(),
-                    StrategyName = passport.getStrategy(),
-                    StrategyClass = passport.getStrategyClass(),
-                    options = passport.getOptions();
-
-                guaraiba.passport.use(StrategyName, new StrategyClass(options, function () {
-                    var args = qx.lang.Array.fromArguments(arguments),
-                        method = '_' + qx.lang.String.camelCase(StrategyName.replace(/ +/g, '-')) + 'Strategy';
-
-                    args.unshift(user);
-                    args.unshift(passport);
-
-                    if (qx.lang.Type.isFunction(vThis[method])) {
-                        vThis[method].apply(vThis, args)
-                    } else {
-                        vThis.respordWithStatusForbidden("Unsupported '" + StrategyName + "' passport strategy");
+            this._findFirstUser(params['username'],
+                qx.lang.Function.bind(function (err, user) {
+                    if (err) {
+                        this.error(err);
+                        return;
                     }
-                }));
 
-                var authenticate = guaraiba.passport.authenticate(StrategyName, options, function (err, profile, info, statuses) {
-                    if (err && !err.statusCode) {
-                        err.statusCode = 403;
+                    if (!user) {
+                        this.respordWithStatusForbidden();
+                        return;
                     }
-                    if (!profile && info) {
-                        vThis.respordWithStatusForbidden(info.message || info)
-                    } else if (!vThis.respondError(err)) {
-                        vThis.getSession().set('profile', profile);
 
-                        vThis.respond({
-                            statusCode: 200,
-                            item: profile
-                        });
-                    }
-                });
+                    passport = config.getPassport(user.passport || user.getPassport());
 
-                authenticate(request);
-            });
+                    var StrategyName = passport.getStrategy(),
+                        StrategyClass = passport.getStrategyClass(),
+                        options = passport.getOptions();
+
+                    guaraiba.passport.use(StrategyName,
+                        new StrategyClass(options,
+                            qx.lang.Function.bind(function () {
+                                var args = qx.lang.Array.fromArguments(arguments),
+                                    method = '_' + qx.lang.String.camelCase(StrategyName.replace(/ +/g, '-'))
+                                        + 'Strategy';
+
+                                args.unshift(user);
+                                args.unshift(passport);
+
+                                if (qx.lang.Type.isFunction(this[method])) {
+                                    this[method].apply(this, args)
+                                } else {
+                                    this.respordWithStatusForbidden(
+                                        "Unsupported '" + StrategyName + "' passport strategy"
+                                    );
+                                }
+                            }, this)
+                        )
+                    );
+
+                    var authenticate = guaraiba.passport.authenticate(StrategyName, options,
+                        qx.lang.Function.bind(function (err, profile, info, statuses) {
+                            if (err && !err.statusCode) {
+                                err.statusCode = 403;
+                            }
+                            if (!profile && info) {
+                                this.respordWithStatusForbidden(info)
+                            } else if (!this.respondError(err)) {
+                                this.getSession().set('profile', profile);
+
+                                this.respond({
+                                    statusCode: 200,
+                                    item: profile
+                                });
+                            }
+                        }, this)
+                    );
+
+                    authenticate(request.getNativeRequest());
+                }, this)
+            );
         },
 
         /**
