@@ -147,6 +147,7 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
         respond: function (content, options) {
             var vThis = this,
                 opts = options || {},
+                content = content || {},
                 negotiated,
 
                 /**
