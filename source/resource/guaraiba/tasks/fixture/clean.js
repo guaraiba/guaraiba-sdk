@@ -27,11 +27,11 @@ task('clean', { async: true }, function () {
         };
 
     if (filters.length == 0) {
-        for (i in models) {
+        Object.keys(models).reverse().forEach(function (i) {
             execute(models[i]);
-        }
+        }, this);
     } else {
-        for (i in models) {
+        Object.keys(models).reverse().forEach(function (i) {
             filters.forEach(function (f) {
                 if (i.match(f)) {
                     execute(models[i]);
@@ -39,7 +39,7 @@ task('clean', { async: true }, function () {
                     console.warn("SKIP " + models[i].getModelName());
                 }
             }, this);
-        }
+        }, this)
     }
 
     async.series(actions, function (err, results) {
