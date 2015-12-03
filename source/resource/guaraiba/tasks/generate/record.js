@@ -160,7 +160,7 @@ task('record', { async: true }, function () {
                             settings.timestamp ? 'guaraiba.orm.MTimestampRecord' : '',
                             settings.tableName,
                             Object.keys(settings.fields).map(function (name) {
-                                return format('%s: {check: %j, nullable: %j}',
+                                return format('%s: {check: %s, nullable: %j}',
                                     name,
                                     settings.fields[name].type,
                                     settings.fields[name].allowNull
@@ -232,7 +232,7 @@ task('record', { async: true }, function () {
                             '    /**\n' +
                             '     * @param request {guaraiba.Request}\n' +
                             '     * @param response {guaraiba.Response}\n' +
-                            '     * @param params {Map?} Params hash.\n' +
+                            '     * @param params {Object?} Params hash.\n' +
                             '     */' +
                             '    construct: function (request, response, params) {' +
                             '        this.base(arguments, request, response, params);' +
