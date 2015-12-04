@@ -294,7 +294,7 @@ qx.Class.define("guaraiba.Router", {
         /**
          * Generates a URL from a params map
          *
-         * @param params {Map} Params map object
+         * @param params {Object} Request parameters hash.
          * @param querystring {Boolean ? false} Add query string to url result.
          * @return {String|false}
          */

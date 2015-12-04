@@ -26,7 +26,7 @@ qx.Class.define('guaraiba.response.Format', {
          * It is used when the response format is html, xhtml, pdf, docx, pptx, xlsx, rtf, xls,
          * csv, odt, ods, xml4swf or jpeg.
          *
-         * @param content {Object?} Respont content.
+         * @param content {Object?} Response content.
          * @return {Object}
          */
         templateFormatter: function (content) {
@@ -38,7 +38,7 @@ qx.Class.define('guaraiba.response.Format', {
          * Transforms the given content into a string.<br/>
          * It is used when the response format is txt.
          *
-         * @param content {Object?} Respont content.
+         * @param content {Object?} Response content.
          * @return {String}
          */
         txtFormatter: function (content) {
@@ -57,7 +57,7 @@ qx.Class.define('guaraiba.response.Format', {
          * Transforms the given content into a JSON.<br/>
          * It is used when the response format is json.
          *
-         * @param content {Object?} Respont content.
+         * @param content {Object?} Response content.
          * @return {String} String in JSON format.
          */
         jsonFormatter: function (content) {
@@ -68,8 +68,8 @@ qx.Class.define('guaraiba.response.Format', {
          * Transforms the given content into a JS.<br/>
          * It is used when the response format is js.
          *
-         * @param content {Object?} Respont content.
-         * @param params {Map} Reguest parameters.
+         * @param content {Object?} Response content.
+         * @param params {Object} Request parameters hash.
          * @return {String} String in JS format.
          */
         jsFormatter: function (content, params) {
@@ -83,7 +83,7 @@ qx.Class.define('guaraiba.response.Format', {
          * Transforms the given content into a xml.<br/>
          * It is used when the response format is xml.
          *
-         * @param content {Object?} Respont content.
+         * @param content {Object?} Response content.
          * @return {String} String in XML document format.
          */
         xmlFormatter: function (content) {

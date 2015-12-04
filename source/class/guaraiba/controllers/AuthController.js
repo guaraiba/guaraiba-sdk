@@ -120,7 +120,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
         login: function (request, response, params) {
             var config = this.getConfiguration(),
@@ -193,7 +193,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
         logout: function (request, response, params) {
             var profile = this.getCurrentUserProfile();

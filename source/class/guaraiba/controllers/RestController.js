@@ -23,7 +23,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
     /**
      * @param request {guaraiba.Request}
      * @param response {guaraiba.Response}
-     * @param params {Map?} Params map object.
+     * @param params {Object} Request parameters hash.
      */
     construct: function (request, response, params) {
         this._acceptFilters = true;
@@ -69,7 +69,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
         index: function (request, response, params) {
             this._prepareCount().then(function (err, count) {
@@ -104,7 +104,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
         count: function (request, response, params) {
             this._prepareCount().then(function (err, count) {
@@ -120,7 +120,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1 }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
         show: function (request, response, params) {
             this._prepareItem(this._record, function (err, item) {

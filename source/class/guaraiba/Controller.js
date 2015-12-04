@@ -30,7 +30,7 @@ qx.Class.define('guaraiba.Controller', {
      *
      * @param request {guaraiba.Request}
      * @param response {guaraiba.Response}
-     * @param params {Map?null} Params map object.
+     * @param params {Object} Request parameters hash.
      */
     construct: function (request, response, params) {
         this.base(arguments);

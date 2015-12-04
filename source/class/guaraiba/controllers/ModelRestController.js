@@ -21,7 +21,7 @@ qx.Class.define('guaraiba.controllers.ModelRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
+         * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         create: function (request, response, params) {
             var items = params.items || {},
@@ -52,7 +52,7 @@ qx.Class.define('guaraiba.controllers.ModelRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         update: function (request, response, params) {
             var items = params.items || {};
@@ -80,7 +80,7 @@ qx.Class.define('guaraiba.controllers.ModelRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1 }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
         destroy: function (request, response, params) {
             this._record.destroy(function (err, record) {

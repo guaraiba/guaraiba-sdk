@@ -45,7 +45,7 @@ qx.Class.define('guaraiba.Response', {
          *
          * @param content {String}
          * @param options {Map}
-         * @param params {Map}
+         * @param params {Object} Request parameters hash.
          * @return {String|Json|Xml|Stream}
          */
         formatContent: function (content, options, params) {
