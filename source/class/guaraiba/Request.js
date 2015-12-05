@@ -169,6 +169,16 @@ qx.Class.define('guaraiba.Request', {
         },
 
         /**
+         * Returns IP address of client that start request.
+         *
+         * @return {string}
+         */
+        getClientAddress: function () {
+            var requestIp = require('request-ip');
+            return requestIp.getClientIp(this.getNativeRequest());
+        },
+
+        /**
          * Flush the buffer and continue piping new events to the outlet.
          */
         sync: function () {

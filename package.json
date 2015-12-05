@@ -29,6 +29,7 @@
     "passport-strategy": "~1.0.0",
     "pg": "~4.3.0",
     "pretty-data": "~0.40.0",
+    "request-ip": "^1.1.4",
     "serve-favicon": "~2.3.0",
     "serve-static": "~1.10.0",
     "strong-cluster-connect-store": "~1.0.0",

@@ -328,8 +328,6 @@ qx.Class.define("guaraiba.Application", {
                 params = request.getParams(),
                 controller, controllerClass;
 
-            console.log(request.getHeaders());
-
             if (params && params.controller) {
                 this.debug("'Worker #" + this.__worker.id + ' REQUEST: ' + guaraiba.Json.encode(params))
 

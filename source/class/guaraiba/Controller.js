@@ -158,11 +158,25 @@ qx.Class.define('guaraiba.Controller', {
         /**
          * Retorna la instancia de la session activa.
          *
-         * @return {guaraiba.Session}
+         * @param key {String?} Name of session var. If key is undefined then return guaraiba.Session.
+         * @return {var|guaraiba.Session}
          */
-        getSession: function () {
-            return this.getRequest().getSession();
+        getSession: function (key) {
+            var session = this.getRequest().getSession();
+            return key == undefined ? session : session.get(key);
         },
+
+        /**
+         * Set value in session var.
+         *
+         * @param key {String} Name of session var.
+         * @param value {var}
+         */
+        setSession: function (key, value) {
+            var session = this.getRequest().getSession();
+            session.set(key, value);
+        },
+
 
         /**
          * Returns configuration of current worker application.
@@ -257,7 +271,7 @@ qx.Class.define('guaraiba.Controller', {
          * @return {Map|null}
          */
         getCurrentUserProfile: function () {
-            return this.getSession().get('profile');
+            return this.getSession('profile');
         },
 
         /**

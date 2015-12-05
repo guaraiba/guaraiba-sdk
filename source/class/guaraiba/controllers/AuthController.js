@@ -19,8 +19,43 @@ qx.Class.define("guaraiba.controllers.AuthController", {
     type: 'abstract',
     extend: guaraiba.Controller,
 
+    // override
+    construct: function (request, response, params) {
+        this.base(arguments, request, response, params);
+
+        this.beforeOnly('_decryptCredentials', ['login'])
+    },
+
     members: {
         _options: null,
+
+        /**
+         * Hook, fired before execute the login action.
+         * Decrypt credential parameter before checking.
+         *
+         * @param proceed {Function} Function to continue normal workflow.
+         * @internal
+         */
+        _decryptCredentials: function (proceed) {
+            var CryptoJS = require('crypto-js'),
+                params = this.getParams(),
+                oneWayToken = this.getSession('one-way-token') || {};
+
+            if (oneWayToken.address != this.getRequest().getClientAddress()) {
+                this.respordWithStatusForbidden()
+            } else {
+                var decrypted = CryptoJS.AES.decrypt(params.credentials, oneWayToken.token);
+
+                // Add decrypted credentials to request parameters. Ex: { username: '...,' password: '...' }
+                qx.lang.Object.mergeWith(params, JSON.parse(decrypted.toString(CryptoJS.enc.Utf8)));
+
+                // Continue normal workflow.
+                proceed();
+            }
+
+            // Destroy one-way-token.
+            this.setSession('one-way-token', null);
+        },
 
         /**
          * Prepares information of authenticated user profile.
@@ -61,22 +96,18 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * Executes the local user authentication strategy and prepares information of authenticated user profile.
          *
          * @param passport {guaraiba.Passport}
-         * @param localUser {Map}
+         * @param localUser {guaraiba.orm.IUser}
          * @param username {String}
          * @param password {String}
          * @param done {Function} Callback function with two params (err, profile)
          * @internal
          */
         _localStrategy: function (passport, localUser, username, password, done) {
-            var options = passport.getOptions(),
-                config = this.getConfiguration(),
-                usernameField = options.usernameField || config.getPassportUsernameField(),
-                passwordField = options.passwordField || config.getPassportPasswordField(),
-                localPassword = localUser[passwordField] || localUser.get(passwordField),
-                localUsername = localUser[usernameField] || localUser.get(usernameField);
-
-            if (localPassword != password || localUsername != username) {
-                this.respordWithStatusForbidden()
+            if (localUser.isExpired()) {
+                this.respordWithStatusForbidden('Expired credential.')
+            }
+            if (!localUser.isValidCredential(username, password)) {
+                this.respordWithStatusForbidden('Bat credential.')
             } else {
                 var profileMap = {
                     username: 'username',
@@ -96,13 +127,13 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * Executes the ldap user authentication strategy and prepares information of authenticated user profile.
          *
          * @param passport {guaraiba.Passport}
-         * @param localUser {Map}
-         * @param ldapUser {Map}
+         * @param localUser {guaraiba.orm.IUser}
+         * @param ldapUser {Object}
          * @param done {Function} Callback function with two params (err, profile)
          * @internal
          */
         _ldapStrategy: function (passport, localUser, ldapUser, done) {
-            var profile, profileMap = {
+            var profileMap = {
                 username: 'sAMAccountName',
                 email: 'mail'
             };
@@ -113,6 +144,29 @@ qx.Class.define("guaraiba.controllers.AuthController", {
             } else {
                 this._getProfile(localUser, ldapUser, profileMap, done);
             }
+        },
+
+        /**
+         * Action to start authentication process.
+         * Generate new token to encrypt one-way-password.
+         *
+         * @param request {guaraiba.Request}
+         * @param response {guaraiba.Response}
+         * @param params {Object} Request parameters hash.
+         */
+        start: function (request, response, params) {
+            var CryptoJS = require('crypto-js'),
+                salt = CryptoJS.lib.WordArray.random(128 / 8),
+                secret = CryptoJS.lib.WordArray.random(128 / 8),
+                key256Bits = CryptoJS.PBKDF2(secret, salt, { keySize: 256 / 32 }).toString();
+
+            this.setSession('one-way-token', {
+                token: key256Bits,
+                address: request.getClientAddress(),
+                date: new Date()
+            });
+
+            this.respond({ statusCode: 200, token: key256Bits });
         },
 
         /**
@@ -174,11 +228,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
                                 this.respordWithStatusForbidden(info)
                             } else if (!this.respondError(err)) {
                                 this.getSession().set('profile', profile);
-
-                                this.respond({
-                                    statusCode: 200,
-                                    item: profile
-                                });
+                                this.respond({ statusCode: 200, item: profile });
                             }
                         }, this)
                     );
@@ -199,10 +249,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
             var profile = this.getCurrentUserProfile();
 
             this.getSession().unset('profile');
-            this.respond({
-                statusCode: 200,
-                item: profile
-            });
+            this.respond({ statusCode: 200, item: profile });
         },
 
         /**
