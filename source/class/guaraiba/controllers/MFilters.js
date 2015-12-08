@@ -33,7 +33,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
          *
          * @param action {String} - Action in that is applied the filters.
          * @param phase {String} - Phase ('before' or 'after') in that execute the filters.
-         * @param callback {Function?} Callback function for return controll to _handleAction method.
+         * @param callback {Function?} Callback function to return control to actionHandler method.
          * @protected
          */
         execFilters: function (action, phase, callback) {
@@ -89,7 +89,8 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
             }
 
             if (!name || !method) {
-                throw "Invalid params method. Was expected one function or string with name of one existent function.";
+                throw "Invalid value for method parameter in before or after filter called. " +
+                "Was expected one function or string with name of one existent method.";
             }
 
             phase = '__' + phase + 'Filters';
@@ -147,7 +148,8 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
             }
 
             if (!name || !method) {
-                throw "Invalid params method. Was expected one function or string with name of one existent function.";
+                throw "Invalid value for method parameter in beforeClean called. " +
+                "Was expected one function or string with name of one existent function.";
             }
 
             this.__beforeFilters[name] = null;
@@ -199,7 +201,8 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
             }
 
             if (!name || !method) {
-                throw "Invalid params method. Was expected one function or string with name of one existent function.";
+                throw "Invalid value for method parameter in afterClean called. " +
+                "Was expected one function or string with name of one existent method.";
             }
 
             this.__afterFilters[name] = null;

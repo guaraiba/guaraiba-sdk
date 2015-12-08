@@ -119,20 +119,20 @@ qx.Class.define('guaraiba.Controller', {
          * @param action {String} - Action name.
          * @internal
          */
-        _handleAction: function (action) {
-            var vThis = this, callback;
+        actionHandler: function (action) {
+            var method = this[action + 'Action'];
 
-            if (!vThis[action]) {
+            if (!method) {
                 return this.respordWithStatusNotFound();
             }
 
             // Wrap the actual action handling in a callback to use as the last
             // - method in the async chain of before filters
-            callback = function () {
-                if (!vThis.getCompleted()) {
-                    vThis[action](vThis.getRequest(), vThis.getResponse(), vThis.getParams());
+            var callback = qx.lang.Function.bind(function () {
+                if (!this.getCompleted()) {
+                    method.call(this, this.getRequest(), this.getResponse(), this.getParams());
                 }
-            };
+            }, this);
 
 //            // Generate an anti-CSRF token
 //            if (config.secret && this.session) {
@@ -284,7 +284,7 @@ qx.Class.define('guaraiba.Controller', {
             var params = this.getParams();
             params.action = action;
             this.setParams(params);
-            this._handleAction(action);
+            this.actionHandler(action);
         },
 
         /**
@@ -333,7 +333,7 @@ qx.Class.define('guaraiba.Controller', {
          *
          * This filter has to be applied in phase 'before'.
          *
-         * @param done {Function} Callback function for return controll to _handleAction method.
+         * @param done {Function} Callback function to return control to actionHandler method.
          */
         _allowCORS: function allowCORS(done) {
             this.getResponse().setHeaders(200, {

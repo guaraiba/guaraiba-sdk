@@ -71,7 +71,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash.
          */
-        index: function (request, response, params) {
+        indexAction: function (request, response, params) {
             this._prepareCount().then(function (err, count) {
                 if (!this.respondError(err)) {
                     count = count[0].count * 1;
@@ -106,7 +106,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash.
          */
-        count: function (request, response, params) {
+        countAction: function (request, response, params) {
             this._prepareCount().then(function (err, count) {
                 this.respondError(err) || this.respond({
                     type: this.getRecordClassName(),
@@ -122,7 +122,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
-        show: function (request, response, params) {
+        showAction: function (request, response, params) {
             this._prepareItem(this._record, function (err, item) {
                 this.respondError(err) || this.respond({
                     type: this.getRecordClassName(),

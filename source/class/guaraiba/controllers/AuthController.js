@@ -154,7 +154,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash.
          */
-        start: function (request, response, params) {
+        startAction: function (request, response, params) {
             var CryptoJS = require('crypto-js'),
                 salt = CryptoJS.lib.WordArray.random(128 / 8),
                 secret = CryptoJS.lib.WordArray.random(128 / 8),
@@ -176,7 +176,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash.
          */
-        login: function (request, response, params) {
+        loginAction: function (request, response, params) {
             var config = this.getConfiguration(),
                 passport;
 
@@ -245,7 +245,7 @@ qx.Class.define("guaraiba.controllers.AuthController", {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash.
          */
-        logout: function (request, response, params) {
+        logoutAction: function (request, response, params) {
             var profile = this.getCurrentUserProfile();
 
             this.getSession().unset('profile');

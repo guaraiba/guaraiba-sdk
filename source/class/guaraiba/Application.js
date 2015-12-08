@@ -336,7 +336,7 @@ qx.Class.define("guaraiba.Application", {
                 if (qx.Class.isDefined(controllerClass)) {
                     controllerClass = qx.Class.getByName(controllerClass);
                     controller = new controllerClass(request, response, params);
-                    controller._handleAction(params.action);
+                    controller.actionHandler(params.action);
                 } else {
                     controller = new guaraiba.controllers.ErrorController(request, response, params);
                     controller.respordWithStatusNotFound(

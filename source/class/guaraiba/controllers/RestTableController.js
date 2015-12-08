@@ -23,7 +23,7 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
-        create: function (request, response, params) {
+        createAction: function (request, response, params) {
             var items = params.items || {},
                 qb = this.createQueryBuilder();
 
@@ -51,7 +51,7 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
-        update: function (request, response, params) {
+        updateAction: function (request, response, params) {
             var qb = this.createQueryBuilder(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName],
@@ -79,7 +79,7 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
          * @param response {guaraiba.Response}
          * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
-        destroy: function (request, response, params) {
+        destroyAction: function (request, response, params) {
             var qb = this.createQueryBuilder(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName];
