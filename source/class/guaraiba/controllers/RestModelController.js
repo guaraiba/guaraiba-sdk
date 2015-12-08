@@ -1,7 +1,7 @@
 /**
  * This class offers the basic properties and features to create a REST controller for a entity of the guaraiba ORM.
  */
-qx.Class.define('guaraiba.controllers.ModelRestController', {
+qx.Class.define('guaraiba.controllers.RestModelController', {
     type: 'abstract',
     extend: guaraiba.controllers.RestController,
     include: [guaraiba.controllers.MSafety],
@@ -132,7 +132,7 @@ qx.Class.define('guaraiba.controllers.ModelRestController', {
          * Create query builder over defined restModel propety.
          *
          * @return {guaraiba.orm.QueryBuilder}
-         * @see guaraiba.controllers.ModelRestController#resModel
+         * @see guaraiba.controllers.RestModelController#resModel
          */
         createQueryBuilder: function () {
             return this.getModel().createQueryBuilder();
