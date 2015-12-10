@@ -236,7 +236,7 @@ task('record', { async: true }, function () {
                             '     */' +
                             '    construct: function (request, response, params) {' +
                             '        this.base(arguments, request, response, params);' +
-                            '        this.setRecordClass(%j);' +
+                            '        this.setRecordClass(%s);' +
                             '        this.setAcceptFilters(true);' +
                             '    }' +
                             '});';
