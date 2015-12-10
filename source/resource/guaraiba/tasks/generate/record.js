@@ -228,7 +228,7 @@ task('record', { async: true }, function () {
                     var code,
                         template = '' +
                             'qx.Class.define(%j, {' +
-                            '    extend: guaraiba.controllers.ModelRestController,\n\n' +
+                            '    extend: guaraiba.controllers.RestModelController,\n\n' +
                             '    /**\n' +
                             '     * @param request {guaraiba.Request}\n' +
                             '     * @param response {guaraiba.Response}\n' +
