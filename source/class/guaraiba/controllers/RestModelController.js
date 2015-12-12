@@ -4,7 +4,6 @@
 qx.Class.define('guaraiba.controllers.RestModelController', {
     type: 'abstract',
     extend: guaraiba.controllers.RestController,
-    include: [guaraiba.controllers.MSafety],
 
     properties: {
         /** ORM model instance */
