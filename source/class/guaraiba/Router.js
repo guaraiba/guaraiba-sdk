@@ -221,13 +221,13 @@ qx.Class.define("guaraiba.Router", {
 
             controller = qx.lang.Type.isString(controller) ? controller : controller.classname;
             var endpoint = controller.replace(/\./g, '/'),
+                cClazz = this._toPlural(controller.replace(/(.*\.)+/, '')),
                 routes = [], paths;
 
             if (path === null) {
-                var cClazz = this._toPlural(controller.replace(/(.*\.)+/, ''));
                 paths = [/*CamelCase*/ cClazz, /*UnderscoreCase*/ this._toUnderscoreCase(cClazz)]
             } else {
-                paths = [path]
+                paths = [/*CamelCase*/ cClazz, /*custom path*/ path]
             }
 
             paths.forEach(function (path) {
