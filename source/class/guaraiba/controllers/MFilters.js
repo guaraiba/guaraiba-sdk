@@ -89,7 +89,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
             }
 
             if (!name || !method) {
-                throw "Invalid value for method parameter in before or after filter called. " +
+                throw "Invalid value '"+name+"' for method parameter in before or after filter called. " +
                 "Was expected one function or string with name of one existent method.";
             }
 

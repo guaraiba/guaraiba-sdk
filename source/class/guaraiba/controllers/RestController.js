@@ -26,10 +26,9 @@ qx.Class.define('guaraiba.controllers.RestController', {
      * @param params {Object} Request parameters hash.
      */
     construct: function (request, response, params) {
-        this._acceptFilters = true;
-
         this.base(arguments, request, response, params);
-        this.beforeOnly(this._requireRecord, ['show', 'update', 'destroy']);
+        this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
+        this.beforeOnly('_parseFilters', ['index', 'count']);
     },
 
     properties: {
@@ -138,7 +137,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param done {Function} Callback function
          */
-        _requireRecord: function requireRecord(done) {
+        _requireRecord: function (done) {
             var params = this.getParams(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName];
@@ -156,6 +155,22 @@ qx.Class.define('guaraiba.controllers.RestController', {
                     done();
                 }
             }, this);
+        },
+
+        /**
+         * Decode params filters.
+         *
+         * @param done {Function} Callback function
+         */
+        _parseFilters: function (done) {
+            var params = this.getParams();
+
+            params.filters = params.filters || {};
+            if (qx.lang.Type.isString(params.filters)) {
+                params.filters = this.getRequest().parseJson(params.filters);
+            }
+
+            done();
         },
 
         /**
@@ -240,7 +255,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
         },
 
         /**
-         * Prepare sql where clausule, constructed from the request parameters to be used in index or count actions.
+         * Prepare sql where clause, constructed from the request parameters to be used in index or count actions.
          *
          * @param qb {guaraiba.orm.QueryBuilder}
          * @return {guaraiba.orm.QueryBuilder}
@@ -249,12 +264,6 @@ qx.Class.define('guaraiba.controllers.RestController', {
             var params = this.getParams(),
                 acceptFilters = this.getAcceptFilters(),
                 fields;
-
-            params.filters = params.filters || {};
-
-            if (qx.lang.Type.isString(params.filters)) {
-                params.filters = this.getRequest().parseJson(params.filters);
-            }
 
             if (qx.lang.Type.isArray(acceptFilters)) {
                 // Allow filter only by fields defined in controller.
@@ -285,7 +294,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
         },
 
         /**
-         * Prepare sql order by clausule, constructed from the request parameters to be used in index actions.
+         * Prepare sql order by clause, constructed from the request parameters to be used in index actions.
          *
          * @param qb {guaraiba.orm.QueryBuilder}
          * @return {guaraiba.orm.QueryBuilder}

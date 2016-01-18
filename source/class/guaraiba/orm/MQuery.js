@@ -232,6 +232,32 @@ qx.Mixin.define('guaraiba.orm.MQuery', {
         },
 
         /**
+         * Find one record, same as `all`, limited by 1 and return object, not collection,
+         * if not found, create using data provided as second argument
+         *
+         * @param options {Object?} Search conditions: {where: {name: 'me', age: {gt: 20}}}
+         * @param data {Object} object to create.
+         * @param callback {Function} Callback function with two argument Ex: function(err, record) {...}
+         * @param scope {Object?} Callback function scope.
+         */
+        findOrCreate: function findOrCreate(options, data, callback, scope) {
+            var qb = this.createQueryBuilder();
+
+            this.first().where(options).then(function (err, record) {
+                if (!this.isErrorThenCallback(err, callback, scope)) {
+                    if (!record) {
+                        var clazz = this.getRecordClass(),
+                            record = new clazz(data, this.getDBSchema());
+
+                        record.save(callback, scope);
+                    } else {
+                        callback.call(scope, null, record)
+                    }
+                }
+            }, this);
+        },
+
+        /**
          * Update or Create the given record.
          *
          * @param data {guaraiba.orm.Record|Map} Record or map object to create.
