@@ -220,51 +220,56 @@ qx.Class.define("guaraiba.Router", {
             }
 
             controller = qx.lang.Type.isString(controller) ? controller : controller.classname;
-            var endpoint = controller.replace(/\./g, '/');
+            var endpoint = controller.replace(/\./g, '/'),
+                routes = [],
+                paths = [];
 
             if (path === null) {
-                path = this._toUnderscoreCase(this._toPlural(controller.replace(/(.*\.)+/, '')))
+                paths.push(this._toUnderscoreCase(this._toPlural(controller.replace(/(.*\.)+/, ''))));
+                paths.push(this._toPlural(controller.replace(/(.*\.)+/, '')));
+            } else {
+                paths.push(path)
             }
 
-            var routes = [];
-
-            if (style == 'url') {
-                routes = [
-                    this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                    this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                    this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
-                    this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                    this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                    this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                    this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
-                    this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
-                ];
-            } else if (style == 'method') {
-                routes = [
-                    this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                    this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                    this.post("/" + path + "(.:format)").to(endpoint + ".create"),
-                    this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                    this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                    this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                    this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
-                    this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy")
-                ];
-            } else if (style == 'both') {
-                routes = [
-                    this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                    this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                    this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
-                    this.post("/" + path + "(.:format)").to(endpoint + ".create"),
-                    this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                    this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                    this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                    this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
-                    this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
-                    this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy"),
-                    this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
-                ];
-            }
+            paths.forEach(function (path) {
+                if (style == 'url') {
+                    routes = [
+                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
+                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
+                        this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
+                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
+                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
+                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
+                        this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
+                        this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
+                    ];
+                } else if (style == 'method') {
+                    routes = [
+                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
+                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
+                        this.post("/" + path + "(.:format)").to(endpoint + ".create"),
+                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
+                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
+                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
+                        this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
+                        this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy")
+                    ];
+                } else if (style == 'both') {
+                    routes = [
+                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
+                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
+                        this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
+                        this.post("/" + path + "(.:format)").to(endpoint + ".create"),
+                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
+                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
+                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
+                        this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
+                        this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
+                        this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy"),
+                        this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
+                    ];
+                }
+            }, this);
 
             return routes;
         },
