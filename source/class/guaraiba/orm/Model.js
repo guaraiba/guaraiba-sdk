@@ -92,12 +92,23 @@ qx.Class.define('guaraiba.orm.Model', {
     members: {
 
         /**
-         * Get the unique name that identify this model in the database schema adapter..
+         * Get the unique name that identify this model in the database schema adapter.
          *
          * @return {String} Model name.
          */
         getModelName: function () {
             return this.getRecordClass().classname;
+        },
+
+        /**
+         * Get the unique name that identify this model in the database schema adapter without commun prefix.
+         *
+         * @return {String} Model name.
+         */
+        getShortModelName: function () {
+            return this.getRecordClass().classname
+                .replace(this.getDBSchema().getModelPrefixName(), '')
+                .replace(/^\./, '');
         },
 
         /**
