@@ -236,16 +236,24 @@ qx.Mixin.define('guaraiba.orm.MQuery', {
          * if not found, create using data provided as second argument
          *
          * @param options {Object?} Search conditions: {where: {name: 'me', age: {gt: 20}}}
-         * @param data {Object} object to create.
+         * @param data {Object?} object to create.
          * @param callback {Function} Callback function with two argument Ex: function(err, record) {...}
          * @param scope {Object?} Callback function scope.
          */
         findOrCreate: function findOrCreate(options, data, callback, scope) {
             var qb = this.createQueryBuilder();
 
+            if (qx.lang.Type.isFunction(data)){
+                scope = callback;
+                callback = data;
+                data = null;
+            }
+
             this.first().where(options).then(function (err, record) {
                 if (!this.isErrorThenCallback(err, callback, scope)) {
                     if (!record) {
+                        data = qx.lang.Object.mergeWith(data || {}, options);
+
                         var clazz = this.getRecordClass(),
                             record = new clazz(data, this.getDBSchema());
 
