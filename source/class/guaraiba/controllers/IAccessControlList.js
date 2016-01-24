@@ -18,6 +18,14 @@ qx.Interface.define("guaraiba.controllers.IAccessControlList", {
         saveAccessControlList: function (record, done) {},
 
         /**
+         * Remove all Access Control List for given record.
+         *
+         * @param record {guaraiba.orm.Record|Object}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
+         */
+        destroyAccessControlList: function (record, done) {},
+
+        /**
          * Returns default permission to be applied according requested action.
          *
          * @return {number}
