@@ -37,11 +37,21 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
 
             record.save(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
-                    this.respondError(err) || this.respond({
-                        type: this.getRecordClassName(),
-                        id: record.get(this.getIdFieldName()),
-                        data: item
-                    });
+                    if (!this.respondError(err)) {
+                        var done = qx.lang.Function.bind(function(){
+                            this.respond({
+                                type: this.getRecordClassName(),
+                                id: record.get(this.getIdFieldName()),
+                                data: item
+                            });
+                        }, this);
+
+                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
+                            this.saveAccessControlList(record, done);
+                        } else {
+                            done();
+                        }
+                    }
                 });
             }, this);
         },
