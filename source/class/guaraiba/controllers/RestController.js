@@ -21,6 +21,8 @@ qx.Class.define('guaraiba.controllers.RestController', {
     include: [guaraiba.controllers.MSafety, guaraiba.utils.MInflection],
 
     /**
+     * Constructor
+     *
      * @param request {guaraiba.Request}
      * @param response {guaraiba.Response}
      * @param params {Object} Request parameters hash.
@@ -29,6 +31,10 @@ qx.Class.define('guaraiba.controllers.RestController', {
         this.base(arguments, request, response, params);
         this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
         this.beforeOnly('_parseFilters', ['index', 'count']);
+
+        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
+            this.beforeAll('checkAccessControlList');
+        }
     },
 
     properties: {
