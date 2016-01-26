@@ -260,8 +260,8 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 idFieldName = this.getIdFieldName(),
                 qb = this.createQueryBuilder().first('*').where(idFieldName, params.id || params[idFieldName]);
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
-                this.applyAccessControlListWhereConditions(qb, done);
+            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                this.applyAccessControlListWhereConditionsToResources(qb, done);
             } else {
                 done.call(this, qb);
             }
@@ -302,8 +302,8 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 }, this);
             }
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
-                this.applyAccessControlListWhereConditions(qb, done);
+            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                this.applyAccessControlListWhereConditionsToResources(qb, done);
             } else {
                 done.call(this, qb);
             }

@@ -89,19 +89,13 @@ qx.Class.define('guaraiba.orm.Record', {
          * Save instance. When instance is new record, create method called instead.
          * Triggers: save, update | create
          *
-         * @param options {Map?} Save options: {validate: true, throws: false}
          * @param callback {Function?} The function should have two argument Ex: function(err, record) {...}
          * @param scope {Object?} Callback function scope.
          * @tag triggers save hook before and after destroying object
          */
-        save: function (options, callback, scope) {
+        save: function (callback, scope) {
             var vThis = this;
 
-            if (qx.lang.Type.isFunction(options)) {
-                scope = callback;
-                callback = options;
-                options = {};
-            }
             if (!qx.lang.Type.isFunction(callback)) {
                 scope = callback;
                 callback = function () {};

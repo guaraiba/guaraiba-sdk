@@ -43,8 +43,8 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
                             });
                         }, this);
 
-                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
-                            this.saveAccessControlList(record, done);
+                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                            this.saveAccessControlListToResources(record, done);
                         } else {
                             done();
                         }
@@ -104,8 +104,8 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
                             });
                         }, this);
 
-                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
-                            this.destroyAccessControlList(record, done);
+                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                            this.destroyAccessControlListToResources(record, done);
                         } else {
                             done();
                         }
