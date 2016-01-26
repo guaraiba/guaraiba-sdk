@@ -45,6 +45,10 @@ qx.Class.define('guaraiba.Controller', {
         if (this.getConfiguration().getAllowCORS()) {
             this.beforeAll(this._allowCORS);
         }
+
+        if (qx.Interface.objectImplements(this, guaraiba.controllers.IActionControlList)) {
+            this.beforeAll('checkActionControlList');
+        }
     },
 
     properties: {

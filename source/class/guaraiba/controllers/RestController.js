@@ -31,10 +31,6 @@ qx.Class.define('guaraiba.controllers.RestController', {
         this.base(arguments, request, response, params);
         this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
         this.beforeOnly('_parseFilters', ['index', 'count']);
-
-        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlList)) {
-            this.beforeAll('checkAccessControlList');
-        }
     },
 
     properties: {

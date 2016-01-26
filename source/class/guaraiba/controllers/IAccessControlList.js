@@ -26,13 +26,6 @@ qx.Interface.define("guaraiba.controllers.IAccessControlList", {
         destroyAccessControlList: function (record, done) {},
 
         /**
-         * Filter to check access to any action before it's execute.
-         *
-         * @param done {Function}
-         */
-        checkAccessControlList: function (done) {},
-
-        /**
          * Returns default permission to be applied according requested action.
          *
          * @return {number}
