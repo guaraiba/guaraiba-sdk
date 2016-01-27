@@ -1,10 +1,11 @@
 qx.Interface.define("guaraiba.controllers.IAccessControlListToActions", {
     members: {
-        /**
-         * Filter to check access to any action before it's execute.
+         /**
+         * Hook, fired before execute any action.
+         * Check access to any action before it's execute.
          *
-         * @param done {Function}
+         * @param proceed {Function} Callback function to continue with normal workflow.
          */
-        checkAccessControlListToActions: function (done) {}
+        checkAccessControlListToActions: function (proceed) {}
     }
 });
