@@ -289,17 +289,40 @@ qx.Class.define('guaraiba.controllers.RestController', {
             if (fields) {
                 // Extract value of each filter fields from params.
                 fields = guaraiba.array.intersect(fields, Object.keys(params.filters));
-                fields.forEach(function (field) {
-                    var _field = this._toUnderscoreCase(field);
 
-                    if (qx.lang.Type.isObject(params.filters[field])) {
-                        qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
-                    } else if (qx.lang.Type.isArray(params.filters[field])) {
-                        qb.andWhereIn(_field, params.filters[field]);
-                    } else {
-                        qb.andWhere(_field, params.filters[field]);
+                // Add andWhere condition for each field in params.filters.
+                fields.forEach(function (field) {
+                    if (field != '_quick_search_') {
+                        var _field = this._toUnderscoreCase(field);
+
+                        if (qx.lang.Type.isObject(params.filters[field])) {
+                            qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
+                        } else if (qx.lang.Type.isArray(params.filters[field])) {
+                            qb.andWhereIn(_field, params.filters[field]);
+                        } else {
+                            qb.andWhere(_field, params.filters[field]);
+                        }
                     }
                 }, this);
+            }
+
+            // Add orWhere like condition for each field of text type.
+            if (params.filters._quick_search_) {
+                var textFiels = [];
+
+                this.getModel().getProperties().forEach(function (propertie) {
+                    if (propertie.check == guaraiba.orm.DBSchema.String || propertie.check == guaraiba.orm.DBSchema.Text) {
+                        textFiels.push(this._toUnderscoreCase(propertie.qxName));
+                    }
+                }, this);
+
+                if (textFiels.length) {
+                    qb.andWhere(function (knex) {
+                        textFiels.forEach(function (field) {
+                            knex.orWhere(field, 'LIKE', '%' + params.filters.quickSearch + '%');
+                        }, this);
+                    });
+                }
             }
 
             if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
