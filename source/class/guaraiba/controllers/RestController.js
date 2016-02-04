@@ -319,7 +319,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 if (textFiels.length) {
                     qb.andWhere(function (knex) {
                         textFiels.forEach(function (field) {
-                            knex.orWhere(field, 'LIKE', '%' + params.filters.quickSearch + '%');
+                            knex.orWhere(field, 'LIKE', '%' + params.filters._quick_search_ + '%');
                         }, this);
                     });
                 }
