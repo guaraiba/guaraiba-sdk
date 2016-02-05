@@ -11,3 +11,7 @@ Es un marco de trabajo desarrollado en JavaScript y qooxdoo que permite la creac
 * Permite de forma nativa y en correspondencia con las vistas implementadas, generar las respuestas a las peticiones en los formatos txt, json, js, xml, html, xhtml, pdf, docx, rtf, pptx, xlsx, xls, csv, odt, ods, odp, swf y jpeg.
 * Permite configurar y ejecutar la aplicación en forma de cluster en relación con el número de procesadores disponibles en el servidor.
 * Permite la configuración de acceso cross-domain.
+
+### Requerimientos:
+* Compilador G++
+* Java JRE o JDK
