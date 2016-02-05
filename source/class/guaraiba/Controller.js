@@ -30,7 +30,7 @@ qx.Class.define('guaraiba.Controller', {
      *
      * @param request {guaraiba.Request}
      * @param response {guaraiba.Response}
-     * @param params {Map?null} Params map object.
+     * @param params {Object} Request parameters hash.
      */
     construct: function (request, response, params) {
         this.base(arguments);
@@ -44,6 +44,10 @@ qx.Class.define('guaraiba.Controller', {
 
         if (this.getConfiguration().getAllowCORS()) {
             this.beforeAll(this._allowCORS);
+        }
+
+        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToActions)) {
+            this.beforeAll('checkAccessControlListToActions');
         }
     },
 
@@ -119,20 +123,20 @@ qx.Class.define('guaraiba.Controller', {
          * @param action {String} - Action name.
          * @internal
          */
-        _handleAction: function (action) {
-            var vThis = this, callback;
+        actionHandler: function (action) {
+            var method = this[action + 'Action'];
 
-            if (!vThis[action]) {
+            if (!method) {
                 return this.respordWithStatusNotFound();
             }
 
             // Wrap the actual action handling in a callback to use as the last
             // - method in the async chain of before filters
-            callback = function () {
-                if (!vThis.getCompleted()) {
-                    vThis[action](vThis.getRequest(), vThis.getResponse(), vThis.getParams());
+            var callback = qx.lang.Function.bind(function () {
+                if (!this.getCompleted()) {
+                    method.call(this, this.getRequest(), this.getResponse(), this.getParams());
                 }
-            };
+            }, this);
 
 //            // Generate an anti-CSRF token
 //            if (config.secret && this.session) {
@@ -158,11 +162,25 @@ qx.Class.define('guaraiba.Controller', {
         /**
          * Retorna la instancia de la session activa.
          *
-         * @return {guaraiba.Session}
+         * @param key {String?} Name of session var. If key is undefined then return guaraiba.Session.
+         * @return {var|guaraiba.Session}
          */
-        getSession: function () {
-            return this.getRequest().getSession();
+        getSession: function (key) {
+            var session = this.getRequest().getSession();
+            return key == undefined ? session : session.get(key);
         },
+
+        /**
+         * Set value in session var.
+         *
+         * @param key {String} Name of session var.
+         * @param value {var}
+         */
+        setSession: function (key, value) {
+            var session = this.getRequest().getSession();
+            session.set(key, value);
+        },
+
 
         /**
          * Returns configuration of current worker application.
@@ -257,7 +275,7 @@ qx.Class.define('guaraiba.Controller', {
          * @return {Map|null}
          */
         getCurrentUserProfile: function () {
-            return this.getSession().get('profile');
+            return this.getSession('profile');
         },
 
         /**
@@ -270,7 +288,7 @@ qx.Class.define('guaraiba.Controller', {
             var params = this.getParams();
             params.action = action;
             this.setParams(params);
-            this._handleAction(action);
+            this.actionHandler(action);
         },
 
         /**
@@ -319,7 +337,7 @@ qx.Class.define('guaraiba.Controller', {
          *
          * This filter has to be applied in phase 'before'.
          *
-         * @param done {Function} Callback function for return controll to _handleAction method.
+         * @param done {Function} Callback function to return control to actionHandler method.
          */
         _allowCORS: function allowCORS(done) {
             this.getResponse().setHeaders(200, {

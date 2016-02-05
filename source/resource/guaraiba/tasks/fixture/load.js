@@ -14,11 +14,11 @@ task('load', { async: true }, function () {
         filters = qx.lang.Array.fromArguments(arguments),
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(),
         models = dbSchema.getModels(),
-        actions = [],
+        loadFileActions = [],
 
         execute = function (model) {
-            actions.push(function (next) {
-                console.info('FIXTURE LOAD: ' + model.getModelName());
+            loadFileActions.push(function (nextFile) {
+                console.info('FIXTURE LOAD START FROM: ' + model.getModelName());
                 var file = util.format('%s/data/fixtures/%s/%s.json',
                     guaraiba.resourcePath,
                     dbSchema.getName(),
@@ -27,21 +27,28 @@ task('load', { async: true }, function () {
 
                 fs.exists(file, function (exists) {
                     if (exists) {
-                        console.info('FIXTURE LOAD: ' + model.getModelName());
-                        var items = require(file), count = items.length;
-                        if (count == 0) {
-                            next();
-                        } else {
-                            items.forEach(function (params) {
+                        var items = require(file),
+                            saveActions = [];
+
+                        items.forEach(function (params) {
+                            saveActions.push(function (nextSave) {
                                 var record = new (model.getRecordClass())(params, dbSchema);
                                 record.save(function (err) {
-                                    if (err) {
-                                        console.error(err);
-                                    }
-                                    (count == 1) ? next() : count--;
+                                    err && console.error(err);
+                                    nextSave();
                                 });
                             });
-                        }
+                        });
+
+                        async.series(saveActions, function (err, results) {
+                            if (err) {
+                                console.error(err);
+                                process.abort();
+                            } else {
+                                console.info('FIXTURE LOAD FINISH FROM: ' + model.getModelName());
+                                nextFile();
+                            }
+                        });
                     } else {
                         console.warn('SKIP: ' + model.getModelName() + ' - (NOT FOUND FIXTURE)');
                         next();
@@ -67,15 +74,15 @@ task('load', { async: true }, function () {
             }
         }
 
-        async.series(actions, function (err, results) {
+        async.series(loadFileActions, function (err, results) {
             if (err) {
                 console.error(err);
                 process.abort();
             } else {
-                console.info("END FIXTURE");
+                console.info("FINISH LOAD FIXTURE");
                 commit();
             }
         });
-    }, complete, complete)
+    }, complete, complete);
 
 });

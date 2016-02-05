@@ -1,10 +1,9 @@
 /**
  * This class offers the basic properties and features to create a REST controller for a table of the database.
  */
-qx.Class.define('guaraiba.controllers.TableRestController', {
+qx.Class.define('guaraiba.controllers.RestTableController', {
     type: 'abstract',
     extend: guaraiba.controllers.RestController,
-    include: [guaraiba.controllers.MSafety],
 
     properties: {
         /** Name of table in database */
@@ -21,9 +20,9 @@ qx.Class.define('guaraiba.controllers.TableRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
+         * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
-        create: function (request, response, params) {
+        createAction: function (request, response, params) {
             var items = params.items || {},
                 qb = this.createQueryBuilder();
 
@@ -35,11 +34,21 @@ qx.Class.define('guaraiba.controllers.TableRestController', {
 
             qb.insert(items, '*').then(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
-                    this.respondError(err) || this.respond({
-                        type: this.getRecordClassName(),
-                        id: record[this.getIdFieldName()],
-                        data: item
-                    });
+                    if (!this.respondError(err)) {
+                        var done = qx.lang.Function.bind(function () {
+                            this.respond({
+                                type: this.getRecordClassName(),
+                                id: record[this.getIdFieldName()],
+                                data: item
+                            });
+                        }, this);
+
+                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                            this.saveAccessControlListToResources(record, done);
+                        } else {
+                            done();
+                        }
+                    }
                 });
             }, this);
         },
@@ -49,9 +58,9 @@ qx.Class.define('guaraiba.controllers.TableRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
-        update: function (request, response, params) {
+        updateAction: function (request, response, params) {
             var qb = this.createQueryBuilder(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName],
@@ -77,20 +86,30 @@ qx.Class.define('guaraiba.controllers.TableRestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1 }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
-        destroy: function (request, response, params) {
+        destroyAction: function (request, response, params) {
             var qb = this.createQueryBuilder(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName];
 
             qb.remove('*').where(idFieldName, id).then(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
-                    this.respondError(err) || this.respond({
-                        type: this.getRecordClassName(),
-                        id: record[this.getIdFieldName()],
-                        data: item
-                    });
+                    if (!this.respondError(err)) {
+                        var done = qx.lang.Function.bind(function () {
+                            this.respond({
+                                type: this.getRecordClassName(),
+                                id: record[this.getIdFieldName()],
+                                data: item
+                            });
+                        }, this);
+
+                        if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                            this.destroyAccessControlListToResources(record, done);
+                        } else {
+                            done();
+                        }
+                    }
                 });
             }, this);
         },
@@ -108,7 +127,7 @@ qx.Class.define('guaraiba.controllers.TableRestController', {
          * Create query builder over defined tableName propety.
          *
          * @return {guaraiba.orm.QueryBuilder}
-         * @see guaraiba.controllers.ModelRestController#tableName
+         * @see guaraiba.controllers.RestModelController#tableName
          */
         createQueryBuilder: function () {
             return this.getDBSchema().createQueryBuilder().from(this.getTableName());

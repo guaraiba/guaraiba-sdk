@@ -22,7 +22,7 @@ qx.Mixin.define('guaraiba.controllers.MSafety', {
          *
          * @param done {Function}
          */
-        _requireAuth: function requireAuth(done) {
+        requireAuth: function (done) {
             var session = this.getSession(),
                 format = this.getFormat();
 

@@ -328,8 +328,6 @@ qx.Class.define("guaraiba.Application", {
                 params = request.getParams(),
                 controller, controllerClass;
 
-            console.log(request.getHeaders());
-
             if (params && params.controller) {
                 this.debug("'Worker #" + this.__worker.id + ' REQUEST: ' + guaraiba.Json.encode(params))
 
@@ -338,7 +336,7 @@ qx.Class.define("guaraiba.Application", {
                 if (qx.Class.isDefined(controllerClass)) {
                     controllerClass = qx.Class.getByName(controllerClass);
                     controller = new controllerClass(request, response, params);
-                    controller._handleAction(params.action);
+                    controller.actionHandler(params.action);
                 } else {
                     controller = new guaraiba.controllers.ErrorController(request, response, params);
                     controller.respordWithStatusNotFound(

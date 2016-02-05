@@ -21,15 +21,16 @@ qx.Class.define('guaraiba.controllers.RestController', {
     include: [guaraiba.controllers.MSafety, guaraiba.utils.MInflection],
 
     /**
+     * Constructor
+     *
      * @param request {guaraiba.Request}
      * @param response {guaraiba.Response}
-     * @param params {Map?} Params map object.
+     * @param params {Object} Request parameters hash.
      */
     construct: function (request, response, params) {
-        this._acceptFilters = true;
-
         this.base(arguments, request, response, params);
-        this.beforeOnly(this._requireRecord, ['show', 'update', 'destroy']);
+        this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
+        this.beforeOnly('_parseFilters', ['index', 'count']);
     },
 
     properties: {
@@ -69,34 +70,38 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
-        index: function (request, response, params) {
-            this._prepareCount().then(function (err, count) {
-                if (!this.respondError(err)) {
-                    count = count[0].count * 1;
-                    if (count == 0) {
-                        this.respond({
-                            type: this.getRecordClassName(),
-                            count: 0,
-                            data: []
-                        });
-                    } else {
-                        this._prepareSelectAll().then(function (err, records) {
-                            this.respondError(err) || this._prepareItems(records, function (err, items) {
-                                this.respondError(err) || this.respond({
-                                    type: this.getRecordClassName(),
-                                    count: count,
-                                    data: items,
-                                    start: params.start,
-                                    end: Math.max(0, params.start + records.length - 1),
-                                    order: params.order
-                                });
+        indexAction: function (request, response, params) {
+            this._prepareCount(qx.lang.Function.bind(function (qb) {
+                qb.then(function (err, count) {
+                    if (!this.respondError(err)) {
+                        count = count[0].count * 1;
+                        if (count == 0) {
+                            this.respond({
+                                type: this.getRecordClassName(),
+                                count: 0,
+                                data: []
                             });
-                        }, this);
+                        } else {
+                            this._prepareSelectAll(qx.lang.Function.bind(function (qb) {
+                                qb.then(function (err, records) {
+                                    this.respondError(err) || this._prepareItems(records, function (err, items) {
+                                        this.respondError(err) || this.respond({
+                                            type: this.getRecordClassName(),
+                                            count: count,
+                                            data: items,
+                                            start: params.start,
+                                            end: Math.max(0, params.start + records.length - 1),
+                                            order: params.order
+                                        });
+                                    });
+                                }, this);
+                            }, this));
+                        }
                     }
-                }
-            }, this);
+                }, this);
+            }, this));
         },
 
         /**
@@ -104,15 +109,17 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map?} Params map object.
+         * @param params {Object} Request parameters hash.
          */
-        count: function (request, response, params) {
-            this._prepareCount().then(function (err, count) {
-                this.respondError(err) || this.respond({
-                    type: this.getRecordClassName(),
-                    count: count[0].count * 1
-                });
-            }, this);
+        countAction: function (request, response, params) {
+            this._prepareCount(qx.lang.Function.bind(function (qb) {
+                qb.then(function (err, count) {
+                    this.respondError(err) || this.respond({
+                        type: this.getRecordClassName(),
+                        count: count[0].count * 1
+                    });
+                }, this);
+            }, this));
         },
 
         /**
@@ -120,9 +127,9 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param request {guaraiba.Request}
          * @param response {guaraiba.Response}
-         * @param params {Map} Params map object with id field: Ex: <code>{ id: 1 }</code>.
+         * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1 }</code>.
          */
-        show: function (request, response, params) {
+        showAction: function (request, response, params) {
             this._prepareItem(this._record, function (err, item) {
                 this.respondError(err) || this.respond({
                     type: this.getRecordClassName(),
@@ -138,24 +145,42 @@ qx.Class.define('guaraiba.controllers.RestController', {
          *
          * @param done {Function} Callback function
          */
-        _requireRecord: function requireRecord(done) {
+        _requireRecord: function (done) {
             var params = this.getParams(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName];
 
-            this._prepareSelectById().then(function (err, record) {
-                if (!this.respondError(err)) {
-                    if (record) {
-                        this._record = record;
-                    } else {
-                        this.respordWithStatusNotFound(Error(
-                            "Not found record of " + this.getRecordClassName() +
-                            " with (" + idFieldName + " = '" + id + "')."
-                        ));
+            this._prepareSelectById(qx.lang.Function.bind(function (qb) {
+                qb.then(function (err, record) {
+                    if (!this.respondError(err)) {
+                        if (record) {
+                            this._record = record;
+                        } else {
+                            this.respordWithStatusNotFound(Error(
+                                "Not found record of " + this.getRecordClassName() +
+                                " with (" + idFieldName + " = '" + id + "')."
+                            ));
+                        }
+                        done.call(this);
                     }
-                    done();
-                }
-            }, this);
+                }, this);
+            }, this));
+        },
+
+        /**
+         * Decode params filters.
+         *
+         * @param done {Function} Callback function
+         */
+        _parseFilters: function (done) {
+            var params = this.getParams();
+
+            params.filters = params.filters || {};
+            if (qx.lang.Type.isString(params.filters)) {
+                params.filters = this.getRequest().parseJson(params.filters);
+            }
+
+            done.call(this);
         },
 
         /**
@@ -192,21 +217,20 @@ qx.Class.define('guaraiba.controllers.RestController', {
         /**
          * Prepare query to count records over defined idFieldName property.
          *
-         * @return {guaraiba.orm.QueryBuilder}
-         * @see guaraiba.controllers.RestController#idFieldName
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          */
-        _prepareCount: function () {
+        _prepareCount: function (done) {
             var qb = this.createQueryBuilder().count('*');
 
-            return this._prepareWhereConditions(qb);
+            this._prepareWhereConditions(qb, done);
         },
 
         /**
          * Prepare query to select all records.
          *
-         * @return {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          */
-        _prepareSelectAll: function () {
+        _prepareSelectAll: function (done) {
             var params = this.getParams(),
                 qb = this.createQueryBuilder();
 
@@ -220,77 +244,102 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 qb.offset(params.start, limit);
             }
 
-            this._prepareOrderBy(qb);
-
-            return this._prepareWhereConditions(qb);
+            this._prepareOrderBy(qb, qx.lang.Function.bind(function (qb) {
+                this._prepareWhereConditions(qb, done);
+            }, this));
         },
 
         /**
          * Prepare query to select one record with id given by request parameters
          * to be used in show, update or destroy actions.
          *
-         * @return {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          */
-        _prepareSelectById: function () {
+        _prepareSelectById: function (done) {
             var params = this.getParams(),
                 idFieldName = this.getIdFieldName(),
                 qb = this.createQueryBuilder().first('*').where(idFieldName, params.id || params[idFieldName]);
 
-            return qb;
+            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                this.applyAccessControlListWhereConditionsToResources(qb, done);
+            } else {
+                done.call(this, qb);
+            }
         },
 
         /**
-         * Prepare sql where clausule, constructed from the request parameters to be used in index or count actions.
+         * Prepare sql where clause, constructed from the request parameters to be used in index or count actions.
          *
          * @param qb {guaraiba.orm.QueryBuilder}
-         * @return {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          */
-        _prepareWhereConditions: function (qb) {
+        _prepareWhereConditions: function (qb, done) {
             var params = this.getParams(),
                 acceptFilters = this.getAcceptFilters(),
                 fields;
 
-            params.filters = params.filters || {};
-
-            if (qx.lang.Type.isString(params.filters)) {
-                params.filters = this.getRequest().parseJson(params.filters);
-            }
-
             if (qx.lang.Type.isArray(acceptFilters)) {
                 // Allow filter only by fields defined in controller.
-                fields = acceptFilters
+                fields = acceptFilters;
             } else if (acceptFilters === true) {
                 // Allow filter for any fields passed by parameter.
-                fields = Object.keys(params.filters)
-            } else {
-                // Dont not use any filters.
-                return qb;
+                fields = Object.keys(params.filters);
             }
 
-            // Extract value of each filter fields from params.
-            fields = guaraiba.array.intersect(fields, Object.keys(params.filters));
-            fields.forEach(function (field) {
-                var _field = this._toUnderscoreCase(field);
+            if (fields) {
+                // Extract value of each filter fields from params.
+                fields = guaraiba.array.intersect(fields, Object.keys(params.filters));
 
-                if (qx.lang.Type.isObject(params.filters[field])) {
-                    qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
-                } else if (qx.lang.Type.isArray(params.filters[field])) {
-                    qb.andWhereIn(_field, params.filters[field]);
-                } else {
-                    qb.andWhere(_field, params.filters[field]);
+                // Add andWhere condition for each field in params.filters.
+                fields.forEach(function (field) {
+                    if (field != '_quick_search_') {
+                        var _field = this._toUnderscoreCase(field);
+
+                        if (qx.lang.Type.isObject(params.filters[field])) {
+                            qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
+                        } else if (qx.lang.Type.isArray(params.filters[field])) {
+                            qb.andWhereIn(_field, params.filters[field]);
+                        } else {
+                            qb.andWhere(_field, params.filters[field]);
+                        }
+                    }
+                }, this);
+            }
+
+            // Add orWhere like condition for each field of text type.
+            if (params.filters._quick_search_) {
+                var textFiels = [];
+
+                this.getModel().getProperties().forEach(function (propertie) {
+                    if (propertie.check == guaraiba.orm.DBSchema.String || propertie.check == guaraiba.orm.DBSchema.Text) {
+                        textFiels.push(this._toUnderscoreCase(propertie.qxName));
+                    }
+                }, this);
+
+                if (textFiels.length) {
+                    qb.andWhere(function (knex) {
+                        textFiels.forEach(function (field) {
+                            knex.orWhere(field, 'LIKE', '%' + params.filters._quick_search_ + '%');
+                        }, this);
+                    });
                 }
-            }, this);
+            }
 
-            return qb;
+            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                this.applyAccessControlListWhereConditionsToResources(qb, done);
+            } else {
+                done.call(this, qb);
+            }
         },
 
         /**
-         * Prepare sql order by clausule, constructed from the request parameters to be used in index actions.
+         * Prepare sql order by clause, constructed from the request parameters to be used in index actions.
          *
          * @param qb {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          * @return {guaraiba.orm.QueryBuilder}
          */
-        _prepareOrderBy: function (qb) {
+        _prepareOrderBy: function (qb, done) {
             var params = this.getParams();
 
             params.order = params.order || this.getDefaultOrder();
@@ -299,6 +348,8 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 var order = params.order.split(' ');
                 qb.orderBy(this._toUnderscoreCase(order[0]), order[1]);
             }
+
+            done.call(this, qb);
         },
 
         /**

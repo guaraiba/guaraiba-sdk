@@ -41,9 +41,15 @@ qx.Mixin.define('guaraiba.orm.MTimestampRecord', {
             var date = new Date();
 
             if (this.isNewRecord()) {
-                this.setCreatedAt(date);
+                if (!this.getCreatedAt()) {
+                    this.setCreatedAt(date);
+                    this.setUpdatedAt(date);
+                } else if (!this.getUpdatedAt()) {
+                    this.setUpdatedAt(this.getCreatedAt());
+                }
+            } else {
+                this.setUpdatedAt(date);
             }
-            this.setUpdatedAt(date);
 
             done(true);
         }

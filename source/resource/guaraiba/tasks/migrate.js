@@ -7,7 +7,7 @@ namespace('migrate', function () {
     task('make', { async: true }, function (name) {
         if (!name) {
             var promptly = require('promptly'),
-                msg = 'Name of migration:'.prompt,
+                msg = 'Name of migration in underscore_case:'.prompt,
                 validateName = function (value) {
                     if (!value.match(/^[a-z][a-z0-9]*([_-][a-z0-9]+)*$/)) {
                         throw Error('Invalid name for migration file.'.error);
