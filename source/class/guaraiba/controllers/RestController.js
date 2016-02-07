@@ -48,7 +48,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
 
         /** Default order used in the SQL ORDER BY clause. */
         defaultOrder: {
-            check: 'String',
+            check: 'Object',
             nullable: true
         },
 
@@ -340,16 +340,34 @@ qx.Class.define('guaraiba.controllers.RestController', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         _prepareOrderBy: function (qb, done) {
-            var params = this.getParams();
+            var params = this.getParams(),
+                orders = params.order ? this._parseOrderBy(params.order) : this.getDefaultOrder();
 
-            params.order = params.order || this.getDefaultOrder();
-
-            if (params.order) {
-                var order = params.order.split(' ');
-                qb.orderBy(this._toUnderscoreCase(order[0]), order[1]);
+            if (orders) {
+                Object.keys(orders).forEach(function (field) {
+                    qb.orderBy(this._toUnderscoreCase(field), orders[field]);
+                }, this);
             }
 
             done.call(this, qb);
+        },
+
+        /**
+         * Returns array with each order field.
+         *
+         * @param strOrderBy {String} String with order field Ex: "createAt, name".
+         * @return {Array}
+         */
+        _parseOrderBy: function (strOrderBy) {
+            var items = strOrderBy.replace(/\s+,\s+/g, ',').split(/,/),
+                order, orders = {};
+
+            items.forEach(function (item) {
+                order = item.split(/\s+/);
+                orders[order[0]] = order[1] || 'ASC';
+            })
+
+            return orders;
         },
 
         /**
