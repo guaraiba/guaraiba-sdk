@@ -1,4 +1,4 @@
-## Guaraiba 1.0.0
+## Guaraiba
 
 Es un marco de trabajo desarrollado en JavaScript y qooxdoo que permite la creación de aplicaciones web para NodeJS bajo el patrón arquitectónico Modelo Vista Controlador.
 Está basado en el marco de trabajo “Ruby on Rails” y aprovecha las bondades de qooxdoo para el desarrollo, compilación y documentación de aplicaciones bajo el paradigma de programación orientada a objetos.
