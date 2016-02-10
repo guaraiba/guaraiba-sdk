@@ -630,9 +630,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereIn: function (column, values) {
-            this._query.whereIn(column, this._normalizeValue(values));
-
-            return this;
+            return this.whereIn(column, values);
         },
 
         /**
@@ -643,9 +641,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereNotIn: function (column, values) {
-            this._query.whereNotIn(column, this._normalizeValue(values));
-
-            return this;
+            return this.whereNotIn(column, values);
         },
 
         /**
@@ -655,9 +651,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereNull: function (column) {
-            this._query.andWhereNull(column);
-
-            return this;
+            return this.whereNull(column);
         },
 
         /**
@@ -667,9 +661,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereNotNull: function (column) {
-            this._query.andWhereNotNull(column);
-
-            return this;
+            return this.whereNotNull(column);
         },
 
         /**
@@ -680,11 +672,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereBetween: function (column, range) {
-            range[0] = this._normalizeValue(range[0]);
-            range[1] = this._normalizeValue(range[1]);
-            this._query.andWhereBetween(column, range);
-
-            return this;
+            return this.whereBetween(column, range);
         },
 
         /**
@@ -695,11 +683,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * @return {guaraiba.orm.QueryBuilder}
          */
         andWhereNotBetween: function (column, range) {
-            range[0] = this._normalizeValue(range[0]);
-            range[1] = this._normalizeValue(range[1]);
-            this._query.andWhereNotBetween(column, range);
-
-            return this;
+            return this.whereNotBetween(column, range);
         },
 
         /**
