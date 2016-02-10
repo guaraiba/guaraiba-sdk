@@ -296,11 +296,23 @@ qx.Class.define('guaraiba.controllers.RestController', {
                         var _field = this._toUnderscoreCase(field);
 
                         if (qx.lang.Type.isObject(params.filters[field])) {
-                            qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
+                            if (params.filters[field].v === null) {
+                                if (params.filters[field].o == '=') {
+                                    qb.andWhereNull(_field);
+                                } else {
+                                    qb.andWhereNotNull(_field);
+                                }
+                            } else {
+                                qb.andWhere(_field, params.filters[field].o || '=', params.filters[field].v);
+                            }
                         } else if (qx.lang.Type.isArray(params.filters[field])) {
                             qb.andWhereIn(_field, params.filters[field]);
                         } else {
-                            qb.andWhere(_field, params.filters[field]);
+                            if (params.filters[field] === null) {
+                                qb.andWhereNull(_field);
+                            } else {
+                                qb.andWhere(_field, params.filters[field]);
+                            }
                         }
                     }
                 }, this);
