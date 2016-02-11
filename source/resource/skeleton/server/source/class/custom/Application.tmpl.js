@@ -27,22 +27,5 @@ qx.Class.define("${Namespace}.Application", {
      */
     construct: function () {
         this.base(arguments, ${Namespace}.Configuration.getInstance(), ${Namespace}.Router.getInstance());
-    },
-
-    members: {
-        // override
-        getServerStaticPaths: function () {
-            var paths = this.base(arguments);
-
-            var guiSourcePath = guaraiba.appRoot + '/../../../${Namespace}-gui/source',
-                qxSourcePath = guaraiba.appRoot + '/../../../qooxdoo-5.0.1-sdk';
-
-            qx.lang.Array.append(paths, [
-                { urlPattern: '/source', resoursePath: guiSourcePath },
-                { urlPattern: '/qooxdoo-5.0.1-sdk', resoursePath: qxSourcePath }
-            ]);
-
-            return paths;
-        }
     }
 });

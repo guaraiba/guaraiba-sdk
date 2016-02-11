@@ -45,7 +45,7 @@
     "js-beautify": "^1.5.10",
     "prettyjson": "^1.1.3",
     "promptly": "^0.2.1",
-    "qooxdoo": "^5.0.1",
-    "replace": "^0.3.0"
+    "replace": "^0.3.0",
+    "qooxdoo": "git+ssh://git@codecomunidades.uci.cu:yfsegredo/extra-libs.git#qooxdoo-5.0.1-sdk"
   }
 }

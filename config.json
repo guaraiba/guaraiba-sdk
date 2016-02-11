@@ -38,7 +38,7 @@
     "default-job": "source",
     "let": {
         "APPLICATION": "guaraiba",
-        "QOOXDOO_PATH": "../qooxdoo-5.0.1-sdk",
+        "QOOXDOO_PATH": "node_modules/qooxdoo",
         "LOCALES": [
             "en"
         ],
