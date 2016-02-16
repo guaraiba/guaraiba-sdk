@@ -32,13 +32,24 @@ Está basado en el marco de trabajo “Ruby on Rails” y aprovecha las bondades
     npm init
     ```
 
-3. Añada el paquete **guaraiba** como dependencia.
+3. Añada los paquetes **guaraiba** y **qooxdoo** como dependencia en entorno de desarrollo.
+   Estos paquetes están disponibles en el gitLab <https://codecomunidades.uci.cu> de Universidad de las Ciencias Informáticas
+   o en internet en <https://github.com>.
 
     ```json
     "devDependencies": {
-       "guaraiba": "git+ssh://git@codecomunidades.uci.cu:andypa/guaraiba.git"
+       "guaraiba": "git+ssh://git@codecomunidades.uci.cu:andypa/guaraiba.git",
+       "qooxdoo": "git+ssh://git@codecomunidades.uci.cu:yfsegredo/extra-libs.git#qooxdoo-5.0.1-sdk"
     }
     ```
+
+    ```json
+    "devDependencies": {
+       "guaraiba": "git+https://github.com/yoandrypa/guaraiba.git",
+       "qooxdoo": "git+https://github.com/qooxdoo/qooxdoo.git"
+    }
+    ```
+
 4. Instale las dependencias.
 
     ```shell
