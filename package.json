@@ -2,6 +2,7 @@
   "name": "guaraiba",
   "version": "1.0.0",
   "repository": {},
+  "bin": "./source/bin/cli.js",
   "dependencies": {
     "array-extended": "0.0.11",
     "async": "~1.3.0",
