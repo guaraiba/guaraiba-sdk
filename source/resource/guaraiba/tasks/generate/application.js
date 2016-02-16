@@ -49,7 +49,7 @@ task('new-app', { async: true }, function () {
 
             end: function () {
                 console.log('------------------------------------------------');
-                var cmd = "python node_modules/qooxdoo/create-application.py -t server -p source/resource/skeleton",
+                var cmd = "python ../qooxdoo/create-application.py -t server -p source/resource/skeleton",
                     options = {
                         printStdout: true,
                         printStderr: true,
