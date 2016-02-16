@@ -39,9 +39,7 @@
     "utf8": "~2.1.0",
     "util": "~0.10.3",
     "utilities": "~1.0.4",
-    "walk": "~2.3.9"
-  },
-  "devDependencies": {
+    "walk": "~2.3.9",
     "colors": "^1.1.2",
     "js-beautify": "^1.5.10",
     "prettyjson": "^1.1.3",
