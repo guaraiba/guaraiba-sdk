@@ -2,10 +2,10 @@ namespace('migrate', function () {
     require('./colors');
 
     try {
-        var knex = qx.core.BaseInit.getApplication().getDBSchema().getKNex();
-
         desc('Creates a new migration, with the (name) of the migration being added.');
         task('make', { async: true }, function (name) {
+            var knex = qx.core.BaseInit.getApplication().getDBSchema().getKNex();
+
             if (!name) {
                 var promptly = require('promptly'),
                     msg = 'Name of migration in underscore_case:'.prompt,
@@ -32,6 +32,8 @@ namespace('migrate', function () {
 
         desc('Runs all migrations that have not yet been run.');
         task('latest', { async: true }, function () {
+            var knex = qx.core.BaseInit.getApplication().getDBSchema().getKNex();
+
             knex.migrate.latest().then(function (files) {
                 complete();
             });
@@ -39,6 +41,8 @@ namespace('migrate', function () {
 
         desc('Rolls back the latest migration group.');
         task('rollback', { async: true }, function () {
+            var knex = qx.core.BaseInit.getApplication().getDBSchema().getKNex();
+
             knex.migrate.rollback().then(function () {
                 complete();
             });

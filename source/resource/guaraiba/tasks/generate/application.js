@@ -2,7 +2,16 @@ desc('Generate new guaraiba server application.');
 task('new-app', { async: true }, function () {
     var colors = require('../colors'),
         promptly = require('promptly'),
-        settings = {},
+        path = require('path'),
+        settings = {
+            out: path.resolve(process.cwd() + '/../../'),
+            options: {
+                printStdout: true,
+                printStderr: true,
+                breakOnError: false,
+                interactive: true
+            }
+        },
         inflection = require('inflection'),
         format = require('util').format,
 
@@ -25,7 +34,7 @@ task('new-app', { async: true }, function () {
         actions = {
             start: function () {
                 console.log('------------------------------------------------');
-                console.info('Creating new guaraiba application.');
+                console.log('Creating new guaraiba application.'.info);
                 actions.stepAppName()
             },
 
@@ -42,9 +51,27 @@ task('new-app', { async: true }, function () {
                 console.log('------------------------------------------------');
                 var msg = 'Application namespace:'.prompt;
                 promptly.prompt(msg, { default: 'app-server', validator: validateNamespace }, function (err, value) {
-                    settings.appName = value;
-                    actions.stepGetRecordTableName();
+                    settings.appNamespace = value;
+                    actions.stepGenerate();
                 });
+            },
+
+            stepGenerate: function () {
+                console.log('------------------------------------------------');
+                var cmd = "python ../qooxdoo/create-application.py -t server -p source/resource/skeleton";
+
+                cmd += ' -n ' + settings.appName;
+                cmd += ' -s ' + settings.appNamespace;
+                cmd += ' -o ' + settings.out;
+
+                console.log(process.cwd());
+                console.log(cmd);
+
+                jake.exec(cmd, settings.options, function () {
+                    complete();
+                });
+
+                complete();
             },
 
             end: function () {

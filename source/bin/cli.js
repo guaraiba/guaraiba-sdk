@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var path = require('path'),
-    fs = require('fs'),
     jake = require('jake'),
     args = process.argv.slice(2);
 

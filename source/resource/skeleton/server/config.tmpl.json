@@ -72,7 +72,7 @@
           "manifest": "$${QOOXDOO_PATH}/framework/Manifest.json"
         },
         {
-          "manifest": "../guaraiba/Manifest.json"
+          "manifest": "../node_modules/guaraiba/Manifest.json"
         }
       ],
       "extend": [
