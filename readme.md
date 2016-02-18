@@ -75,7 +75,7 @@ compilation and documentation of applications under the paradigm of object-orien
 5. Run application with one of the following options.
 
     ```shell
-    jake jake start
+    jake start
     ```
 
     ```shell
