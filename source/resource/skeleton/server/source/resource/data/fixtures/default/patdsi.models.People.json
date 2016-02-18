@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Juan Pérez Pérez",
+    "age": 25,
+    "createdAt": "2015-12-03T08:26:32.257Z",
+    "updatedAt": "2016-02-05T05:41:05.907Z"
+  },
+  {
+    "id": 2,
+    "name": "María Pérez Pérez",
+    "age": 15,
+    "createdAt": "2015-12-03T08:26:32.257Z",
+    "updatedAt": "2016-02-05T05:41:05.907Z"
+  }
+]
