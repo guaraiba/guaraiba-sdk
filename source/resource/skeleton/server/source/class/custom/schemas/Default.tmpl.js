@@ -11,25 +11,13 @@ qx.Class.define('${Namespace}.schemas.Default', {
     construct: function () {
         this.setModelPrefixName('${Namespace}.models');
 
+        var db = qx.util.ResourceManager.getInstance().toUri('data/app.db');
+
         this.base(arguments, 'default', {
-            client: 'pg',
-            connection: 'postgres://${Name}:${Namespace}@127.0.0.1:5432/${Name}',
+            client: 'sqlite3',
+            connection: db,
             debug: true
         });
-
-        this.setJdbcSettings({
-            driver: 'org.postgresql.Driver',
-            connectString: 'jdbc:postgresql://127.0.0.1:5432/${Name}',
-            username: '${Name}',
-            password: 'password'
-        });
-
-    },
-
-    properties: {
-        jdbcSettings: {
-            check: 'Object'
-        }
     },
 
     members: {
@@ -43,11 +31,6 @@ qx.Class.define('${Namespace}.schemas.Default', {
             // BEGIN REGISTER RECORD CLASS. DON'T REMOVE OR CHANGE THIS COMMENTARY.
             this.register(${Namespace}.models.People);
             // END REGISTER RECORD CLASS. DON'T REMOVE OR CHANGE THIS COMMENTARY.
-        },
-
-        driverSettings: function (driver) {
-            // Setting driver to convert int8 (oid=20) DB field type into a result javascript integer type.
-            driver.types.setTypeParser(20, parseInt);
         }
 
     }

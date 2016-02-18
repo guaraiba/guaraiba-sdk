@@ -38,11 +38,12 @@
   "default-job": "source",
   "let": {
     "APPLICATION": "${Namespace}",
-    "QOOXDOO_PATH": "${REL_QOOXDOO_PATH}",
+    "QOOXDOO_PATH": "${ABS_QOOXDOO_PATH}",
+    "GUARAIBA_PATH": "${Cache}",
     "LOCALES": [
       "es"
     ],
-    "CACHE": "${Cache}",
+    "CACHE": "$${TMPDIR}/qx$${QOOXDOO_VERSION}/cache",
     "ROOT": ".",
     "BUILD_PATH": "$${ROOT}/../$${APPLICATION}-build"
   },
@@ -72,7 +73,7 @@
           "manifest": "$${QOOXDOO_PATH}/framework/Manifest.json"
         },
         {
-          "manifest": "../node_modules/guaraiba/Manifest.json"
+          "manifest": "$${GUARAIBA_PATH}/Manifest.json"
         }
       ],
       "extend": [

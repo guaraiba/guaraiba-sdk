@@ -17,6 +17,6 @@ qx.Class.define('${Namespace}.Configuration', {
         this.setAllowCORS(false);
 
         // Registrar el esquema por defecto de la base de datos del sistema.
-        //this.registerDBSchema(${Namespace}.schemas.Default.getInstance());
+        this.registerDBSchema(${Namespace}.schemas.Default.getInstance());
     }
 });

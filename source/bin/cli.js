@@ -2,12 +2,18 @@
 
 var path = require('path'),
     jake = require('jake'),
-    args = process.argv.slice(2);
-
-process.chdir(path.dirname(process.mainModule.filename)+'/../..');
+    args = process.argv.slice(2),
+    jakefile = require('module')._resolveFilename('guaraiba/Jakefile.js');
 
 if (args[0] == 'jake') {
     args.shift()
 }
 
-jake.run.apply(jake, args.length > 0 ? args : ['--tasks']);
+args.push('--jakefile')
+args.push(jakefile)
+
+if (args.length == 2) {
+    args.push('--tasks')
+}
+
+jake.run.apply(jake, args);

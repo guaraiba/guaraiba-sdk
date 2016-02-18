@@ -4,7 +4,7 @@ task('new-app', { async: true }, function () {
         promptly = require('promptly'),
         path = require('path'),
         settings = {
-            out: path.resolve(process.cwd() + '/../../'),
+            out: process.cwd(),
             options: {
                 printStdout: true,
                 printStderr: true,
@@ -58,14 +58,19 @@ task('new-app', { async: true }, function () {
 
             stepGenerate: function () {
                 console.log('------------------------------------------------');
-                var cmd = "python ../qooxdoo/create-application.py -t server -p source/resource/skeleton";
-
-                cmd += ' -n ' + settings.appName;
-                cmd += ' -s ' + settings.appNamespace;
-                cmd += ' -o ' + settings.out;
-
-                console.log(process.cwd());
-                console.log(cmd);
+                var module = require('module'),
+                    util = require('util'),
+                    qooxdooAppCreator = module._resolveFilename('qooxdoo/create-application.py'),
+                    guaraibaPath = path.dirname(module._resolveFilename('guaraiba')),
+                    skeletonPath = guaraibaPath + '/source/resource/skeleton',
+                    cmd = util.format('python "%s" -t server -p "%s" --cache="%s" -n "%s" -s "%s" -o "%s"',
+                        qooxdooAppCreator,
+                        skeletonPath,
+                        guaraibaPath,
+                        settings.appName,
+                        settings.appNamespace,
+                        settings.out
+                    );
 
                 jake.exec(cmd, settings.options, function () {
                     complete();
