@@ -57,8 +57,7 @@ compilation and documentation of applications under the paradigm of object-orien
     ```shell
     npm install -g sqlite3
     ```
-    > Puede usar otro gestor de bases de datos cambiando los datos de la conexión en la clase
-      **myApp.schemas.Default**.
+    > You can use another database manager changing the data connection on **myApp.schemas.Default**.
 
 4. Change to directory of new application and compile the project with one of the following options.
 
