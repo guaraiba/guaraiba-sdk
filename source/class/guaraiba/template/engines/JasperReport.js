@@ -28,7 +28,7 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
     extend: qx.core.Object,
 
     construct: function () {
-        var java = guaraiba.java;
+        var java = guaraiba.java || require('java');
 
         guaraiba.javaClasspath('guaraiba/java/commons-beanutils-1.8.2.jar');
         guaraiba.javaClasspath('guaraiba/java/commons-collections-3.2.1.jar');

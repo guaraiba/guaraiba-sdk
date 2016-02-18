@@ -441,9 +441,10 @@ qx.Class.define("guaraiba.Application", {
             array: require('array-extended'),
             utf8: require('utf8'),
             tmp: require('temporary'),
-            java: require('java'),
 
             javaClasspath: function (jarFile) {
+                guaraiba.java = guaraiba.java || require('java');
+
                 jarFile = qx.util.ResourceManager.getInstance().toUri(jarFile);
 
                 if (fs.existsSync(jarFile)) {
@@ -455,6 +456,12 @@ qx.Class.define("guaraiba.Application", {
                 }
             }
         }, true);
+
+        try {
+            guaraiba.java = require('java');
+        } catch (er) {
+            guaraiba.java = null
+        }
 
         guaraiba.Json.encode = guaraiba.Json.encode || guaraiba.Json.stringify;
         guaraiba.Json.decode = guaraiba.Json.decode || guaraiba.Json.parse;
