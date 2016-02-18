@@ -25,7 +25,7 @@ compilation and documentation of applications under the paradigm of object-orien
 * G++ Compiler to install **java** module.
 * Java JRE o JDK to install **java** module.
 
-### Installation
+### Installation:
 
 1. Install globally modules **guaraiba**, **qooxdoo** and **jake**.
 
