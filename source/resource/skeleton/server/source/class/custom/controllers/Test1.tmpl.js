@@ -70,7 +70,7 @@ qx.Class.define("${Namespace}.controllers.Test1", {
             var session = this.getSession(),
                 data = session.get('data') || 0;
 
-            this.respondWith([{
+            this.respond([{
                     name: 'TEST-003',
                     description: 'Session get an set with mustache template engine for html format.',
                     sessionId: session.get('id'),
