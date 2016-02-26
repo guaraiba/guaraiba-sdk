@@ -29,14 +29,15 @@ compilation and documentation of applications under the paradigm of object-orien
 
 1.  Install globally modules **guaraiba**, **qooxdoo** and **jake**.
 
-    > These packages are available on the gitLab <https://codecomunidades.uci.cu> of **Universidad de las
-      Ciencias Informáticas** or in internet in <https://github.com>.
+    **Install modules from GitLab repository of [Universidad de las Ciencias Informáticas](https://codecomunidades.uci.cu).**
 
     ```shell
     npm install -g git+ssh://git@codecomunidades.uci.cu:andypa/guaraiba.git
     npm install -g git+ssh://git@codecomunidades.uci.cu:yfsegredo/extra-libs.git#qooxdoo-5.0.1-sdk
     npm install -g jake
     ```
+
+    **Install modules from [GitHub](https://github.com).**
 
     ```shell
     npm install -g git+https://github.com/yoandrypa/guaraiba.git
@@ -71,9 +72,13 @@ compilation and documentation of applications under the paradigm of object-orien
 
 4.  Change to directory of new application and compile the project with one of the following options.
 
+    **Build in develop mode:**
+
     ```shell
     jake jake build:dev
     ```
+
+    **Build in production mode:**
 
     ```shell
     python generate.py
