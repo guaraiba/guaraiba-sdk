@@ -75,7 +75,7 @@ compilation and documentation of applications under the paradigm of object-orien
     **Build in develop mode:**
 
     ```shell
-    jake jake build:dev
+    jake build:dev
     ```
 
     **Build in production mode:**
