@@ -5,7 +5,7 @@
  */
 qx.Class.define("${Namespace}.Router", {
     type: 'singleton',
-    extend: guaraiba.Router,
+    extend: guaraiba.routes.Router,
 
     members: {
         /**
@@ -13,8 +13,8 @@ qx.Class.define("${Namespace}.Router", {
          */
         init: function () {
 
-            this.get('/').to('${Namespace}/controllers/Test1.index');
-            this.get('/test1/:action(.:format)').to('${Namespace}/controllers/Test1.:action');
+            this.get('/').to('${Namespace}.controllers.Test1.index');
+            this.get('/test1/:action(.:format)').to('${Namespace}.controllers.Test1.:action');
 
             // BEGIN REGISTER RESOURCE ROUTERS. DON'T REMOVE OR CHANGE THIS COMMENTARY.
             this.resource(${Namespace}.controllers.Peoples);
