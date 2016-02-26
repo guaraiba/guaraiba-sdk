@@ -20,14 +20,14 @@
  *
  * @require(guaraiba.Configuration)
  * @require(guaraiba.orm.DBSchema)
- * @require(guaraiba.Router)
+ * @require(guaraiba.routes.Router)
  */
 qx.Class.define("guaraiba.Application", {
     extend: qx.application.Basic,
 
     /**
      * @param configuration {guaraiba.Configuration}
-     * @param router {guaraiba.Router}
+     * @param router {guaraiba.routes.Router}
      */
     construct: function (configuration, router) {
         // Register logger interface.

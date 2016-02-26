@@ -218,7 +218,7 @@ qx.Class.define('guaraiba.Controller', {
         /**
          * Returns current router instance.
          *
-         * @return {guaraiba.Router}
+         * @return {guaraiba.routes.Router}
          */
         getRouter: function () {
             return guaraiba.router;

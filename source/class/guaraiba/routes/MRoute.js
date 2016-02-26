@@ -15,90 +15,20 @@
 var Barista = require('barista');
 
 /**
- * Class middleware to barista router.
+ * Mixin middleware to barista route.
  *
  * See details barista into your homepage: {@link http://kieran.github.io/barista}
- * @require(guaraiba.Controller)
- * @require(guaraiba.controllers.RestController)
  */
-qx.Class.define("guaraiba.Router", {
-    type: 'abstract',
-    extend: qx.core.Object,
+qx.Mixin.define("guaraiba.routes.MRoute", {
     include: [guaraiba.utils.MInflection],
 
-    construct: function () {
-        this.__nativeRouter = new Barista.Router();
-    },
-
     members: {
-        /** @type {NodeJS.Barista.Router} Native instance of barista router. */
-        __nativeRouter: null,
-
-        /**
-         * Initialise the routes for any action.
-         *
-         * Iden examples:
-         *<pre class='javascript'>
-         *   this.resource(demo.controllers.User));
-         *</pre>
-         *<pre class='javascript'>
-         *   this.resource(demo.controllers.User, 'both'));
-         *</pre>
-         *<pre class='javascript'>
-         *   this.resource('user', demo.controllers.User));
-         *</pre>
-         *<pre class='javascript'>
-         *   this.resource('user', demo.controllers.User, 'both'));
-         *</pre>
-         *<pre class='javascript'>
-         *   this.get("/user(.:format)").to("demo/controllers/User.index");
-         *   this.get("/user/add(.:format)").to("demo/controllers/User.add");
-         *   this.get("/user/:id(.:format)").to("demo/controllers/User.show");
-         *   this.get("/user/:id/edit(.:format)").to("demo/controllers/User.edit");
-         *   this.get("/user/count(.:format)").to("demo/controllers/User.count");
-         *
-         *   this.post("/user(.:format)").to("demo/controllers/User.create");
-         *   this.get("/user/create(.:format)").to("demo/controllers/User.create");
-
-         *   this.put("/user/:id(.:format)").to("demo/controllers/User.update");
-         *   this.get("/user/:id/update(.:format)").to("demo/controllers/User.update");
-         *
-         *   this.del("/user/:id(.:format)").to("demo/controllers/User.destroy");
-         *   this.get("/user/:id/destroy(.:format)").to("demo/controllers/User.destroy");
-         * </pre>
-         *
-         * @abstract
-         */
-        init: function () {
-            throw new Error("Abstract method call.");
-        },
-
-        /**
-         * Returns native instance of barista router.
-         *
-         * @return {NodeJS.Barista.Router}
-         */
-        getNativeRouter: function () {
-            return this.__nativeRouter;
-        },
-
-        /**
-         * Create and returns new route that match with given path and HTTP method.
-         *
-         * @param path {String} URL pattern that matches with new route.
-         * @param method {String} HTTP method that matches with request of new route.
-         * @return {NodeJS.Barista.Route}
-         */
-        match: function (path, method) {
-            return this.__nativeRouter.match(path, method)
-        },
-
         /**
          * Create and returns new route that match with given path by GET HTTP method.
          * This is equivalent to match(path. 'GET').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         get: function (path) {
             return this.match(path, 'GET');
@@ -109,7 +39,7 @@ qx.Class.define("guaraiba.Router", {
          * This is equivalent to match(path. 'OPTIONS').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         options: function (path) {
             return this.match(path, 'OPTIONS');
@@ -120,7 +50,7 @@ qx.Class.define("guaraiba.Router", {
          * This is equivalent to match(path. 'PUT').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         put: function (path) {
             return this.match(path, 'PUT');
@@ -131,7 +61,7 @@ qx.Class.define("guaraiba.Router", {
          * This is equivalent to match(path. 'POST').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         post: function (path) {
             return this.match(path, 'POST');
@@ -142,7 +72,7 @@ qx.Class.define("guaraiba.Router", {
          * This is equivalent to match(path. 'PATCH').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         patch: function (path) {
             return this.match(path, 'PATCH');
@@ -153,7 +83,7 @@ qx.Class.define("guaraiba.Router", {
          * This is equivalent to match(path. 'DELETE').
          *
          * @param path {String} URL pattern that matches with new route.
-         * @return {NodeJS.Barista.Route}
+         * @return {guaraiba.routes.Route}
          */
         del: function (path) {
             return this.match(path, 'DELETE');
@@ -165,7 +95,7 @@ qx.Class.define("guaraiba.Router", {
          * <pre>
          *     init: function () {
          *        ...
-         *        
+         *
          *        this.resource('user', demo.controllers.User, 'utl') // Returns the following routes.
          *        --------------------------------------------------------------------------------------------------
          *        this.get("/user(.:format)").to("demo/controllers/User.index")
@@ -273,56 +203,58 @@ qx.Class.define("guaraiba.Router", {
             return routes;
         },
 
-        /**
-         * Find and returns the parse params for first route that match with given path and method.
-         *
-         * @param path {String} URL pattern that matches with search route.
-         * @param method {String} HTTP method that matches with search route.
-         * @return {Object|false}
-         */
-        first: function (path, method) {
-            return this.__nativeRouter.first(path, method);
+        test: function (path) {
+            return this.__native.test(name);
         },
 
         /**
-         * Find and returns the parse params for all route that match with given path and method.
+         * Defines the endpoint & mixes in optional params.
          *
-         * @param path {String} URL pattern that matches with search route.
-         * @param method {String} HTTP method that matches with search route.
+         * @param endpoint {String} Path to cantroller and action.
+         * @param defaultParams {Object?}
+         * @return {guaraiba.routes.Route}
+         */
+        to: function (endpoint, defaultParams) {
+            var part = endpoint.split('.'),
+                action = part.pop(),
+                controller = part.join('/');
+
+            endpoint = (controller == '') ? action : controller + '.' + action;
+
+            this.__native.to(endpoint, defaultParams);
+            return this;
+        },
+
+        /**
+         * Sets the route name.
+         *
+         * @param route_name {String} Name of route.
+         * @return {guaraiba.routes.Route}
+         */
+        as: function (route_name) {
+            this.__native.as(route_name);
+            return this;
+        },
+
+        /**
+         * Sets conditions that each url variable must match for the URL to be valid.
+         *
+         * @param conditions {Object}
+         * @return {guaraiba.routes.Route}
+         */
+        where: function (conditions) {
+            this.__native.where(conditions);
+            return this;
+        },
+
+        /**
+         * Builds a string url for this Route from a params object.
+         *
+         * @param params {Object}
          * @return {Array}
          */
-        all: function (path, method) {
-            return this.__nativeRouter.all(path, method);
-        },
-
-        /**
-         * Generates a URL from a params map
-         *
-         * @param params {Object} Request parameters hash.
-         * @param querystring {Boolean ? false} Add query string to url result.
-         * @return {String|false}
-         */
-        url: function (params, querystring) {
-            return this.__nativeRouter.url(params, querystring);
-        },
-
-        /**
-         * Remove any route with name iqual to given name.
-         *
-         * @param name {String}
-         */
-        remove: function (name) {
-            this.__nativeRouter.remove(name);
-        },
-
-        /**
-         * Create defer route.
-         *
-         * @param fn {Function}
-         * @return {NodeJS.Barista.Route}
-         */
-        defer: function (fn) {
-            return this.__nativeRouter.defer(fn);
+        stringify: function (params) {
+            return this.__native.stringify(params);
         },
 
         /**
@@ -331,7 +263,7 @@ qx.Class.define("guaraiba.Router", {
          * @return {String}
          */
         toString: function () {
-            return this.__nativeRouter.toString();
+            return this.__native.toString();
         }
     }
 });
