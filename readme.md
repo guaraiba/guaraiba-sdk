@@ -32,13 +32,13 @@ compilation and documentation of applications under the paradigm of object-orien
     > These packages are available on the gitLab <https://codecomunidades.uci.cu> of **Universidad de las
       Ciencias Informáticas** or in internet in <https://github.com>.
 
-    ```bash
+    ```shell
     npm install -g git+ssh://git@codecomunidades.uci.cu:andypa/guaraiba.git
     npm install -g git+ssh://git@codecomunidades.uci.cu:yfsegredo/extra-libs.git#qooxdoo-5.0.1-sdk
     npm install -g jake
     ```
 
-    ```bash
+    ```shell
     npm install -g git+https://github.com/yoandrypa/guaraiba.git
     npm install -g git+https://github.com/qooxdoo/qooxdoo.git
     npm install -g jake
@@ -48,13 +48,13 @@ compilation and documentation of applications under the paradigm of object-orien
 
     **Interactive mode:**
     
-    ```bash
+    ```shell
     guaraiba new-app
     ```
     
     **Quiet mode:**
     
-    ```bash
+    ```shell
     guaraiba new-app name=myproyect namespace=myproyect.test
     guaraiba new-app n=myproyect ns=myproyect.test
     ```
@@ -63,7 +63,7 @@ compilation and documentation of applications under the paradigm of object-orien
     **sqlite3** module or turn off databese default scheme, with removing in class **myApp.Configuration** the line
     ``this.registerDBSchema (myApp.schemas.Default. getInstance ());``
 
-    ```bash
+    ```shell
     npm install -g sqlite3
     ```
     
@@ -71,11 +71,11 @@ compilation and documentation of applications under the paradigm of object-orien
 
 4.  Change to directory of new application and compile the project with one of the following options.
 
-    ```bash
+    ```shell
     jake jake build:dev
     ```
 
-    ```bash
+    ```shell
     python generate.py
     ```
 
@@ -84,10 +84,10 @@ compilation and documentation of applications under the paradigm of object-orien
 
 5.  Run application with one of the following options.
 
-    ```bash
+    ```shell
     jake start
     ```
 
-    ```bash
+    ```shell
     node source/script/myapp-server.js start
     ```
