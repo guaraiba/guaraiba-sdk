@@ -48,16 +48,12 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
         _transformTemplate: function (template) {
             if (template) {
                 // Set template paths
-                if (template.match(/^views\//)) {
+                if (template.match(/^\//)) {
                     // If template includes full views path just use it
                     return template;
-                } else if (template.match(/^\//)) {
-                    // If it includes a '/' and it isn't the full path.
-                    // Assume they are using the 'controller/action' style and prepend views dir
-                    return 'views' + template;
                 } else {
                     // Assume they only included the action, so add the controller path
-                    return 'views/' + this.getControllerName() + '/' + template;
+                    return this.getControllerPath().replace('/controllers/', '/views/') + '/' + template;
                 }
             }
 
@@ -74,16 +70,12 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
          */
         _transformLayout: function (layout) {
             // Set layout paths
-            if (layout.match(/^views\//)) {
+            if (layout.match(/^\//)) {
                 // If layout includes full views path just use it
                 return layout;
-            } else if (layout.match(/^\//)) {
-                // If it includes a '/' and it isn't the full path
-                // Assume they are using the `controller/action` style and prepend views dir
-                return 'views' + layout;
             } else {
                 // Assume they only included the controller, so append it to the layouts path
-                return 'views/layouts/' + layout;
+                return this.getControllerPath().replace(/\/controllers\/.*$/, '/layouts/') + layout;;
             }
         },
 

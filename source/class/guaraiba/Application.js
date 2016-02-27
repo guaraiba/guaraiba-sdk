@@ -161,7 +161,7 @@ qx.Class.define("guaraiba.Application", {
                             guaraiba.fs.watch(root + '/' + dir.name + '/', function (cur, prev) {
                                 if (!guaraiba.reloadingWorkers) {
                                     guaraiba.reloadingWorkers = true;
-                                    setTimeout(function(){
+                                    setTimeout(function () {
                                         app.debug('New version found!, reloading workers.');
                                         reloadWorkers();
                                         guaraiba.reloadingWorkers = false;

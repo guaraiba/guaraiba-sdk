@@ -160,6 +160,15 @@ qx.Class.define('guaraiba.Controller', {
         },
 
         /**
+         * Returns application namespace.
+         *
+         * @return {String}
+         */
+        getNamespace: function () {
+            return this.getApplication().getNamespace();
+        },
+
+        /**
          * Retorna la instancia de la session activa.
          *
          * @param key {String?} Name of session var. If key is undefined then return guaraiba.Session.
@@ -225,11 +234,11 @@ qx.Class.define('guaraiba.Controller', {
         },
 
         /**
-         * Returns the name of the controller that being executed.
+         * Returns the relative path of the controller that being executed.
          *
          * @return {String}
          */
-        getControllerName: function () {
+        getControllerPath: function () {
             return this.getParams().controller;
         },
 
@@ -301,7 +310,7 @@ qx.Class.define('guaraiba.Controller', {
             var url,
                 opts = options || {},
                 statusCode = opts.statusCode || 302,
-                controllerName = this.getControllerName();
+                controllerName = this.getControllerPath();
 
             // Make sure it's a 3xx
             if (String(statusCode).indexOf('3') != 0) {
