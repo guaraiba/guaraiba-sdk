@@ -32,10 +32,7 @@ qx.Class.define('guaraiba.template.Layout', {
         } else {
             this.base(arguments, layoutPath, data, helpers);
 
-            // `render` is just a special case of `partial` using the template-path
-            // that the layout wraps -- just hard-code the path and pass along
-            // the same data
-
+            // Add yield helper method.
             this._helpers.set('yield', qx.lang.Function.bind(function () {
                 var partial = new guaraiba.template.Partial(templatePath, data || this._data, helpers);
 
@@ -43,14 +40,6 @@ qx.Class.define('guaraiba.template.Layout', {
 
                 return '###partial###' + partial._id;
             }, this));
-
-            //this._data.yield = qx.lang.Function.bind(function () {
-            //    var partial = new guaraiba.template.Partial(templatePath, data || this._data, helpers);
-            //
-            //    this._partials.push(partial);
-            //
-            //    return '###partial###' + partial._id;
-            //}, this);
         }
     }
 });

@@ -120,6 +120,12 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
             return null;
         },
 
+        /**
+         * Returns helpers methods.
+         *
+         * @return {Map}
+         * @ignore(Map)
+         */
         getHelpers: function () {
             var helpers = new Map(),
                 helperName,

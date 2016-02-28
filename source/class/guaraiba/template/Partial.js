@@ -38,21 +38,7 @@ qx.Class.define('guaraiba.template.Partial', {
         this._content = '';
         this._helpers = this.__cloneHelpers(helpers);
 
-        // Hang a `renderPartial` method on the execution-context for the
-        // template rendering (e.g., will be the EJS global `renderPartial`
-        // function to add sub-templates
-        //this._data.renderPartial = qx.lang.Function.bind(function (templatePath, data) {
-        //    if (!templatePath.match(/^\//)) {
-        //        templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
-        //    }
-        //
-        //    var partial = new guaraiba.template.Partial(templatePath, data || this._data, this._helpers);
-        //
-        //    this._partials.push(partial);
-        //
-        //    return '###partial###' + partial._id;
-        //}, this);
-
+        // Add renderPartial helper method.
         this._helpers.set('renderPartial', qx.lang.Function.bind(function (templatePath, data) {
             if (!templatePath.match(/^\//)) {
                 templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
@@ -173,6 +159,13 @@ qx.Class.define('guaraiba.template.Partial', {
 
         },
 
+        /**
+         * Returns clone of helpers methods.
+         *
+         * @param helpers {Map} Helpers methods
+         * @return {Map} Clone helpers methods.
+         * @ignore(Map)
+         */
         __cloneHelpers: function (helpers) {
             var newHelpers = new Map();
 
