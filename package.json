@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "repository": {},
   "bin": "./source/bin/cli.js",
-  "license": "MIT",
+  "license": "LGPL/EPL",
   "licenses": [
     {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
+      "type": "LGPL",
+      "url": "http://www.gnu.org/licenses/lgpl.html"
+    },
+    {
+      "type": "EPL",
+      "url": "http://www.eclipse.org/org/documents/epl-v10.php"
     }
   ],
   "dependencies": {
