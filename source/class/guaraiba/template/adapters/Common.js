@@ -27,7 +27,7 @@ qx.Class.define('guaraiba.template.adapters.Common', {
     },
 
     members: {
-        /** @type {Object} Native instance of template engine (ejs, handlebars, jade, JasperReport or mustache). */
+        /** @type {Object} Native instance of template engine (ejs, handlebars, jade, or JasperReport). */
         _engine: null,
 
         /**

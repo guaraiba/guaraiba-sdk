@@ -75,7 +75,8 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                 return layout;
             } else {
                 // Assume they only included the controller, so append it to the layouts path
-                return this.getControllerPath().replace(/\/controllers\/.*$/, '/layouts/') + layout;;
+                return this.getControllerPath().replace(/\/controllers\/.*$/, '/layouts/') + layout;
+                ;
             }
         },
 
@@ -117,6 +118,21 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
             }
 
             return null;
+        },
+
+        getHelpers: function () {
+            var helpers = new Map(),
+                helperName,
+                helperMethod;
+
+            for (helperName in this) {
+                helperMethod = this[helperName]
+                if (helperName.match(/[a-z][a-z0-9]*([A-Z][a-z0-9]*)*Helper$/) && qx.lang.Type.isFunction(helperMethod)) {
+                    helpers.set(helperName.replace(/Helper$/, ''), qx.lang.Function.bind(helperMethod, this));
+                }
+            }
+
+            return helpers;
         },
 
         /**
@@ -180,7 +196,7 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                 this.setLayout(opts.layout || this.getLayout() || 'empty.html.' + engine);
                 this.setTemplate(opts.template || this.getTemplate() || this.getActionName() + '.html.' + engine);
 
-                var layout = new guaraiba.template.Layout(this.getLayout(), this.getTemplate(), content);
+                var layout = new guaraiba.template.Layout(this.getLayout(), this.getTemplate(), content, this.getHelpers());
                 layout.render(done);
 
             } else if (this._jrFormats.indexOf(opts.format) >= 0) {
@@ -192,7 +208,7 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                     adapter = new guaraiba.template.Adapter(null, 'jrxml', resource.toUri(this.getTemplate()));
 
                 try {
-                    done(adapter.render(content));
+                    done(adapter.render(content, this.getHelpers()));
                 } catch (e) {
                     this.respondError(e, 'html');
                 }

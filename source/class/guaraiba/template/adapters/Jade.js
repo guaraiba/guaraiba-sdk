@@ -43,14 +43,14 @@ qx.Class.define('guaraiba.template.adapters.Jade', {
          *
          * @param data {Object} - Data to renderer in template.
          * @param fnOrTmpl {Function|Engine}
+         * @param helpers {Map} - Helpers methods.
          * @return {String}
          */
-        render: function (data, fnOrTmpl) {
-            var helpers = data.helpers || {};
-
-            for (var name in helpers) {
-                data[name] = data[name] || qx.lang.Function.bind(helpers[name], data);
-            }
+        render: function (data, fnOrTmpl, helpers) {
+            // Add helpers methods to data.
+            helpers.forEach(function(method, name){
+                data[name] = method;
+            });
 
             return this.base(arguments, data, fnOrTmpl)
         }

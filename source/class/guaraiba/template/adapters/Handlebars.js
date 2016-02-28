@@ -46,19 +46,23 @@ qx.Class.define('guaraiba.template.adapters.Handlebars', {
          *
          * @param data {Object} - Data to renderer in template.
          * @param fnOrTmpl {Function|Engine}
+         * @param helpers {Map} - Helpers methods.
          * @return {String}
          */
-        render: function (data, fnOrTmpl) {
-            var helpers = data.helpers || {},
-                wrapHelper = function (helper) {
-                    return function (options) {
-                        return helper.call(this, options.fn ? options.fn(this) : null);
-                    }
-                };
+        render: function (data, fnOrTmpl, helpers) {
+            var wrapHelper = function (helper) {
+                return function () {
+                    var args = qx.lang.Array.fromArguments(arguments),
+                        options = args.pop();
 
-            for (var name in helpers) {
-                this._engine.registerHelper(name, wrapHelper(helpers[name]));
+                    return helper.apply(this, options.fn ? [options.fn(this)] : args);
+                }
             }
+
+            // Add helpers methods to data.
+            helpers.forEach(function (method, name) {
+                this._engine.registerHelper(name, wrapHelper(method));
+            }, this);
 
             return this.base(arguments, data, fnOrTmpl)
         }

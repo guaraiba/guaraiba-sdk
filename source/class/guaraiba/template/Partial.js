@@ -27,29 +27,43 @@ qx.Class.define('guaraiba.template.Partial', {
 
     /**
      * @param templatePath {String} - Path to template file.
-     * @param data {Map} - Data to renderer in template.
+     * @param data {Object} - Data to renderer in template.
+     * @param helpers {Map} - Helpers methods.
      */
-    construct: function (templatePath, data) {
+    construct: function (templatePath, data, helpers) {
         this._id = guaraiba.utils.string.uuid();
         this._data = data || {};
         this._templatePath = templatePath
         this._partials = [];
         this._content = '';
+        this._helpers = this.__cloneHelpers(helpers);
 
         // Hang a `renderPartial` method on the execution-context for the
         // template rendering (e.g., will be the EJS global `renderPartial`
         // function to add sub-templates
-        this._data.renderPartial = qx.lang.Function.bind(function (templatePath, data) {
+        //this._data.renderPartial = qx.lang.Function.bind(function (templatePath, data) {
+        //    if (!templatePath.match(/^\//)) {
+        //        templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
+        //    }
+        //
+        //    var partial = new guaraiba.template.Partial(templatePath, data || this._data, this._helpers);
+        //
+        //    this._partials.push(partial);
+        //
+        //    return '###partial###' + partial._id;
+        //}, this);
+
+        this._helpers.set('renderPartial', qx.lang.Function.bind(function (templatePath, data) {
             if (!templatePath.match(/^\//)) {
                 templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
             }
 
-            var partial = new guaraiba.template.Partial(templatePath, data || this._data);
+            var partial = new guaraiba.template.Partial(templatePath, data || this._data, this._helpers);
 
             this._partials.push(partial);
 
             return '###partial###' + partial._id;
-        }, this);
+        }, this));
     },
 
     members: {
@@ -58,6 +72,7 @@ qx.Class.define('guaraiba.template.Partial', {
         _templatePath: null,
         _partials: null,
         _content: '',
+        _helpers: null,
 
         /**
          * Return info from template file.
@@ -104,6 +119,7 @@ qx.Class.define('guaraiba.template.Partial', {
                         if (env != 'development') {
                             cache[templateData.file] = templateContent;
                         }
+
                         vThis._renderSelf(templateContent, templateData.ext, templateData.file);
                         vThis._renderPartials(done);
                     }
@@ -122,7 +138,7 @@ qx.Class.define('guaraiba.template.Partial', {
         _renderSelf: function (templateContent, extOrEngine, templatePath) {
             var adapter = new guaraiba.template.Adapter(templateContent, extOrEngine, templatePath);
             try {
-                this._content = adapter.render(this._data);
+                this._content = adapter.render(this._data, this._helpers);
             } catch (e) {
                 this._content = e.toString();
                 this.error(e);
@@ -136,8 +152,7 @@ qx.Class.define('guaraiba.template.Partial', {
          * @internal
          */
         _renderPartials: function (doneRender) {
-            var vThis = this,
-                cPartial = this._partials.length;
+            var vThis = this;
 
             if (this._partials.length) {
                 var actions = this._partials.map(function (partial) {
@@ -156,6 +171,16 @@ qx.Class.define('guaraiba.template.Partial', {
                 doneRender(this._content);
             }
 
+        },
+
+        __cloneHelpers: function (helpers) {
+            var newHelpers = new Map();
+
+            helpers.forEach(function (method, name) {
+                newHelpers.set(name, method);
+            });
+
+            return newHelpers;
         }
     }
 });

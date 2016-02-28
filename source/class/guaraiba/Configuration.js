@@ -326,7 +326,7 @@ qx.Class.define("guaraiba.Configuration", {
 
         /** Default template engine. */
         defaultTemplateEngine: {
-            check: ['ejs', 'jade', 'mu', 'ms', 'mustache', 'hbs', 'handlebars', 'swig', 'jrxml'],
+            check: ['ejs', 'jade', 'hbs', 'handlebars', 'swig', 'jrxml'],
             init: 'ejs'
         },
 
