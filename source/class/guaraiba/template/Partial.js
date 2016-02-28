@@ -30,22 +30,26 @@ qx.Class.define('guaraiba.template.Partial', {
      * @param data {Map} - Data to renderer in template.
      */
     construct: function (templatePath, data) {
-        var vThis = this;
-
         this._id = guaraiba.utils.string.uuid();
         this._data = data || {};
         this._templatePath = templatePath
         this._partials = [];
         this._content = '';
 
-        // Hang a `partial` method on the execution-context for the
-        // template rendering (e.g., will be the EJS global `partial`
+        // Hang a `renderPartial` method on the execution-context for the
+        // template rendering (e.g., will be the EJS global `renderPartial`
         // function to add sub-templates
-        this._data.partial = function (templatePath, data) {
-            var partial = new guaraiba.template.Partial(templatePath, data || vThis._data, vThis);
-            vThis._partials.push(partial);
-            return '###partial###' + partial._id
-        };
+        this._data.renderPartial = qx.lang.Function.bind(function (templatePath, data) {
+            if (!templatePath.match(/^\//)) {
+                templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
+            }
+
+            var partial = new guaraiba.template.Partial(templatePath, data || this._data);
+
+            this._partials.push(partial);
+
+            return '###partial###' + partial._id;
+        }, this);
     },
 
     members: {

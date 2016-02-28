@@ -24,8 +24,6 @@ qx.Class.define('guaraiba.template.Layout', {
      * @param data {Map} - Data to renderer in template.
      */
     construct: function (layoutPath, templatePath, data) {
-        var vThis = this;
-
         if (!layoutPath) {
             this.base(arguments, templatePath, data);
         } else {
@@ -34,9 +32,13 @@ qx.Class.define('guaraiba.template.Layout', {
             // `render` is just a special case of `partial` using the template-path
             // that the layout wraps -- just hard-code the path and pass along
             // the same data
-            this._data.yield = function () {
-                return vThis._data.partial(templatePath, data);
-            };
+            this._data.yield = qx.lang.Function.bind(function () {
+                var partial = new guaraiba.template.Partial(templatePath, data || this._data);
+
+                this._partials.push(partial);
+
+                return '###partial###' + partial._id;
+            }, this);
         }
     }
 });
