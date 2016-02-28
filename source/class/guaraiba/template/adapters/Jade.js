@@ -36,6 +36,23 @@ qx.Class.define('guaraiba.template.adapters.Jade', {
          */
         compile: function (template) {
             return this._engine.compile(template);
+        },
+
+        /**
+         * Render data in template.
+         *
+         * @param data {Object} - Data to renderer in template.
+         * @param fnOrTmpl {Function|Engine}
+         * @return {String}
+         */
+        render: function (data, fnOrTmpl) {
+            var helpers = data.helpers || {};
+
+            for (var name in helpers) {
+                data[name] = data[name] || qx.lang.Function.bind(helpers[name], data);
+            }
+
+            return this.base(arguments, data, fnOrTmpl)
         }
     }
 });
