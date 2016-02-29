@@ -46,7 +46,7 @@ qx.Class.define("${Namespace}.controllers.Demos", {
 
         d6Action: function (request, response, params) {
             var jasperReport = guaraiba.template.engines.JasperReport.getInstance(),
-                data = this.__prepareData('TEST-004', 'handlebars'),
+                data = this.__prepareData('TEST-006', 'jasperReport'),
                 file = new guaraiba.tmp.File('guaraiba');
 
             //Save data as json in temporal file.

@@ -1,7 +1,5 @@
 /**
  * Singleton instance class for define any route for application action.
- *
- * @require(${Namespace}.controllers.Demo)
  */
 qx.Class.define("${Namespace}.Router", {
     type: 'singleton',
