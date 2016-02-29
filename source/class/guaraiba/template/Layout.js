@@ -32,8 +32,8 @@ qx.Class.define('guaraiba.template.Layout', {
         } else {
             this.base(arguments, layoutPath, data, helpers);
 
-            // Add yield helper method.
-            this._helpers.set('yield', qx.lang.Function.bind(function () {
+            // Register yield helper method.
+            this.registerHelper('yield', qx.lang.Function.bind(function () {
                 var partial = new guaraiba.template.Partial(templatePath, data || this._data, helpers);
 
                 this._partials.push(partial);

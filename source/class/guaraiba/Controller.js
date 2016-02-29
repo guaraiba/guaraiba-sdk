@@ -124,30 +124,24 @@ qx.Class.define('guaraiba.Controller', {
          * @internal
          */
         actionHandler: function (action) {
-            var method = this[action + 'Action'];
+            var method = this[action + 'Action'],
+                strFormat = require('util').format;
 
             if (!method) {
-                return this.respordWithStatusNotFound();
+                return this.respordWithStatusNotFound(
+                    Error(strFormat("Not  was found '%sAction' method on the controller '%s'.", action, this.classname))
+                );
             }
 
-            // Wrap the actual action handling in a callback to use as the last
-            // - method in the async chain of before filters
+            // Wrap the actual action handling in a callback to use as the
+            // last method in the async chain of before filters
             var callback = qx.lang.Function.bind(function () {
                 if (!this.getCompleted()) {
                     method.call(this, this.getRequest(), this.getResponse(), this.getParams());
                 }
             }, this);
 
-//            // Generate an anti-CSRF token
-//            if (config.secret && this.session) {
-//                this.sameOriginToken = _generateSameOriginToken.call(this);
-//            }
-
-            try {
-                this.execFilters(action, 'before', callback);
-            } catch (err) {
-                this.respondError(err)
-            }
+            this.execFilters(action, 'before', callback);
         },
 
         /**
@@ -234,16 +228,25 @@ qx.Class.define('guaraiba.Controller', {
         },
 
         /**
-         * Returns the relative path of the controller that being executed.
+         * Returns path to controller that being executed.
          *
          * @return {String}
          */
         getControllerPath: function () {
-            return this.getParams().controller;
+            return '/' + (this.getParams().controller || this.classname.replace(/\./g, '/')) + '/';
         },
 
         /**
-         * Returns the name of the action that being executed.
+         * Returns path to views of the controller that being executed.
+         *
+         * @return {String}
+         */
+        getViewsPath: function () {
+            return this.getControllerPath().replace('/controllers/', '/views/');
+        },
+
+        /**
+         * Returns name of the action that being executed.
          *
          * @return {String}
          */
@@ -310,7 +313,7 @@ qx.Class.define('guaraiba.Controller', {
             var url,
                 opts = options || {},
                 statusCode = opts.statusCode || 302,
-                controllerName = this.getControllerPath();
+                controllerName = this.classname;
 
             // Make sure it's a 3xx
             if (String(statusCode).indexOf('3') != 0) {

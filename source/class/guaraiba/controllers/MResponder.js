@@ -53,7 +53,7 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                     return template;
                 } else {
                     // Assume they only included the action, so add the controller path
-                    return this.getControllerPath().replace('/controllers/', '/views/') + '/' + template;
+                    return this.getControllerPath().replace('/controllers/', '/views/') + template;
                 }
             }
 
@@ -76,7 +76,6 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
             } else {
                 // Assume they only included the controller, so append it to the layouts path
                 return this.getControllerPath().replace(/\/controllers\/.*$/, '/layouts/') + layout;
-                ;
             }
         },
 
@@ -211,7 +210,8 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                 this.setTemplate(opts.template || this.getTemplate() || this.getActionName() + '.jrxml');
 
                 var resource = qx.util.ResourceManager.getInstance(),
-                    adapter = new guaraiba.template.Adapter(null, 'jrxml', resource.toUri(this.getTemplate()));
+                    template = resource.toUri(this.getTemplate().replace(/^\//, '')),
+                    adapter = new guaraiba.template.Adapter(null, 'jrxml', template);
 
                 try {
                     done(adapter.render(content, this.getHelpers()));

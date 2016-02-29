@@ -339,13 +339,13 @@ qx.Class.define("guaraiba.Application", {
                     controller = new controllerClass(request, response, params);
                     controller.actionHandler(params.action);
                 } else {
-                    controller = new guaraiba.controllers.ErrorController(request, response, params);
+                    controller = new guaraiba.controllers.ErrorsController(request, response, params);
                     controller.respordWithStatusNotFound(
                         Error('Controller class ' + controllerClass + ' not found')
                     );
                 }
             } else {
-                controller = new guaraiba.controllers.ErrorController(request, response, params);
+                controller = new guaraiba.controllers.ErrorsController(request, response, params);
                 controller.respordWithStatusNotFound(
                     Error('Route not found')
                 );

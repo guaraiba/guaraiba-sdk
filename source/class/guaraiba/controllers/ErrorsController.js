@@ -15,9 +15,7 @@
 /**
  * This class offers the basic features for create error controller.
  */
-qx.Class.define("guaraiba.controllers.ErrorController", {
-    extend: guaraiba.Controller,
-
-    members: {}
+qx.Class.define("guaraiba.controllers.ErrorsController", {
+    extend: guaraiba.Controller
 });
 

@@ -14,8 +14,6 @@
 
 /**
  * This class offers the basic properties and features to process partial template.
- *
- * @asset(views/*)
  */
 qx.Class.define('guaraiba.template.Partial', {
     extend: qx.core.Object,
@@ -29,6 +27,7 @@ qx.Class.define('guaraiba.template.Partial', {
      * @param templatePath {String} - Path to template file.
      * @param data {Object} - Data to renderer in template.
      * @param helpers {Map} - Helpers methods.
+     * @ignore(Map)
      */
     construct: function (templatePath, data, helpers) {
         this._id = guaraiba.utils.string.uuid();
@@ -36,10 +35,12 @@ qx.Class.define('guaraiba.template.Partial', {
         this._templatePath = templatePath
         this._partials = [];
         this._content = '';
-        this._helpers = this.__cloneHelpers(helpers);
+        this._helpers = new Map();
 
-        // Add renderPartial helper method.
-        this._helpers.set('renderPartial', qx.lang.Function.bind(function (templatePath, data) {
+        this.registerHelpers(helpers);
+
+        // Register renderPartial helper method.
+        this.registerHelper('renderPartial', qx.lang.Function.bind(function (templatePath, data) {
             if (!templatePath.match(/^\//)) {
                 templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
             }
@@ -67,7 +68,7 @@ qx.Class.define('guaraiba.template.Partial', {
          */
         getTemplateData: function () {
             var resource = qx.util.ResourceManager.getInstance(),
-                file = resource.toUri(this._templatePath),
+                file = resource.toUri(this._templatePath.replace(/^\//, '')),
                 fileExt = guaraiba.path.extname(file),
                 fileBaseName = guaraiba.path.basename(file, fileExt).replace(/\.html$/, ''),
                 noExtFile = file.replace(/\.html.*$/, '');
@@ -160,20 +161,24 @@ qx.Class.define('guaraiba.template.Partial', {
         },
 
         /**
-         * Returns clone of helpers methods.
+         * Register helpers methods.
          *
          * @param helpers {Map} Helpers methods
-         * @return {Map} Clone helpers methods.
-         * @ignore(Map)
          */
-        __cloneHelpers: function (helpers) {
-            var newHelpers = new Map();
-
+        registerHelpers: function (helpers) {
             helpers.forEach(function (method, name) {
-                newHelpers.set(name, method);
-            });
+                this.registerHelper(name, method);
+            }, this);
+        },
 
-            return newHelpers;
+        /**
+         * Register helper method.
+         *
+         * @param name {String} Herper name.
+         * @param method {Function} Helper method.
+         */
+        registerHelper: function (name, method) {
+            this._helpers.set(name, method);
         }
     }
 });
