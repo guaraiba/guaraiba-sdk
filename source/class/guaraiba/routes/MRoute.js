@@ -137,7 +137,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * </pre>
          *
          * @param path {String} URL pattern that matches with new routes.
-         * @param controller {Class|String} Controller class or name of controller class.
+         * @param controller {Class} Controller class.
          * @param style {String?'both'} Style of path (url, method, both).
          * @return {Array} REST routes
          */
@@ -149,9 +149,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
                 path = null;
             }
 
-            controller = qx.lang.Type.isString(controller) ? controller : controller.classname;
-            var endpoint = controller.replace(/\./g, '/'),
-                cClazz = this._toPlural(controller.replace(/(.*\.)+/, '')),
+            var cClazz = this._toPlural(controller.basename),
                 routes = [], paths;
 
             if (path === null) {
@@ -163,39 +161,39 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
             paths.forEach(function (path) {
                 if (style == 'url') {
                     routes = [
-                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                        this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
-                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                        this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
-                        this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
+                        this.get("/" + path + "(.:format)").to(controller, ".index"),
+                        this.get("/" + path + "/count(.:format)").to(controller, "count"),
+                        this.get("/" + path + "/create(.:format)").to(controller, "create"),
+                        this.get("/" + path + "/add.html").to(controller, "add"),
+                        this.get("/" + path + "/:id(.:format)").to(controller, "show"),
+                        this.get("/" + path + "/:id/edit.html").to(controller, "edit"),
+                        this.get("/" + path + "/:id/update(.:format)").to(controller, "update"),
+                        this.get("/" + path + "/:id/destroy(.:format)").to(controller, "destroy")
                     ];
                 } else if (style == 'method') {
                     routes = [
-                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                        this.post("/" + path + "(.:format)").to(endpoint + ".create"),
-                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                        this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
-                        this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy")
+                        this.get("/" + path + "(.:format)").to(controller, "index"),
+                        this.get("/" + path + "/count(.:format)").to(controller, "count"),
+                        this.post("/" + path + "(.:format)").to(controller, "create"),
+                        this.get("/" + path + "/add.html").to(controller, "add"),
+                        this.get("/" + path + "/:id(.:format)").to(controller, "show"),
+                        this.get("/" + path + "/:id/edit.html").to(controller, "edit"),
+                        this.put("/" + path + "/:id(.:format)").to(controller, "update"),
+                        this.del("/" + path + "/:id(.:format)").to(controller, "destroy")
                     ];
                 } else if (style == 'both') {
                     routes = [
-                        this.get("/" + path + "(.:format)").to(endpoint + ".index"),
-                        this.get("/" + path + "/count(.:format)").to(endpoint + ".count"),
-                        this.get("/" + path + "/create(.:format)").to(endpoint + ".create"),
-                        this.post("/" + path + "(.:format)").to(endpoint + ".create"),
-                        this.get("/" + path + "/add.html").to(endpoint + ".add"),
-                        this.get("/" + path + "/:id(.:format)").to(endpoint + ".show"),
-                        this.get("/" + path + "/:id/edit.html").to(endpoint + ".edit"),
-                        this.put("/" + path + "/:id(.:format)").to(endpoint + ".update"),
-                        this.get("/" + path + "/:id/update(.:format)").to(endpoint + ".update"),
-                        this.del("/" + path + "/:id(.:format)").to(endpoint + ".destroy"),
-                        this.get("/" + path + "/:id/destroy(.:format)").to(endpoint + ".destroy")
+                        this.get("/" + path + "(.:format)").to(controller, "index"),
+                        this.get("/" + path + "/count(.:format)").to(controller, "count"),
+                        this.get("/" + path + "/create(.:format)").to(controller, "create"),
+                        this.post("/" + path + "(.:format)").to(controller, "create"),
+                        this.get("/" + path + "/add.html").to(controller, "add"),
+                        this.get("/" + path + "/:id(.:format)").to(controller, "show"),
+                        this.get("/" + path + "/:id/edit.html").to(controller, "edit"),
+                        this.put("/" + path + "/:id(.:format)").to(controller, "update"),
+                        this.get("/" + path + "/:id/update(.:format)").to(controller, "update"),
+                        this.del("/" + path + "/:id(.:format)").to(controller, "destroy"),
+                        this.get("/" + path + "/:id/destroy(.:format)").to(controller, "destroy")
                     ];
                 }
             }, this);
@@ -210,16 +208,22 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
         /**
          * Defines the endpoint & mixes in optional params.
          *
-         * @param endpoint {String} Path to cantroller and action.
-         * @param defaultParams {Object?}
-         * @return {guaraiba.routes.Route}
+         * @param controller {Class|String} Controller class or endpoint to controller.
+         * @param action {String?'index'} Action name.
+         * @param defaultParams {Object?} Default parameters.
+         * @returns {guaraiba.routes.MRoute}
          */
-        to: function (endpoint, defaultParams) {
-            var part = endpoint.split('.'),
-                action = part.pop(),
-                controller = part.join('/');
+        to: function (controller, action, defaultParams) {
+            if (!qx.lang.Type.isString(controller)) {
+                controller = controller.classname;
+            }
 
-            endpoint = (controller == '') ? action : controller + '.' + action;
+            if (qx.lang.Type.isObject(action)) {
+                defaultParams = action;
+                action = 'index';
+            }
+
+            var endpoint = controller.replace(/\./g, '/') + '.' + (action || 'index');
 
             this.__native.to(endpoint, defaultParams);
             return this;

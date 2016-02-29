@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="6db7da9b-6516-4878-b1ea-c30895acb738">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <queryString>
+        <![CDATA[select * from task_definition]]>
+    </queryString>
+    <field name="id" class="java.lang.Long"/>
+    <field name="title" class="java.lang.String"/>
+    <field name="location" class="java.lang.String"/>
+    <field name="start_date" class="java.sql.Date"/>
+    <field name="finish_date" class="java.sql.Date"/>
+    <field name="frequently_type" class="java.lang.String"/>
+    <field name="frequently" class="java.lang.Integer"/>
+    <field name="frequently_week_day" class="java.lang.Object"/>
+    <field name="repeated_until" class="java.sql.Date"/>
+    <field name="notifications" class="java.lang.Boolean"/>
+    <field name="category" class="java.lang.Object"/>
+    <field name="workplan_id" class="java.lang.Long"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="79" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="79" uuid="e6c8d368-2d6b-4063-ba18-da5ff3d62d0b"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="20" isBold="true"/>
+                </textElement>
+                <text><![CDATA[aaaaaaaaaaa]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="20" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="0" width="50" height="20" uuid="04f84971-c1d6-4c74-bf74-14666543d6cb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[title]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="50" y="0" width="50" height="20" uuid="4a82dcc3-cb8a-44e2-9c1b-00ae721131b6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[location]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="0" width="50" height="20" uuid="cf577d87-280e-434d-a640-7e458d690d13"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[start_date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="150" y="0" width="50" height="20" uuid="a699eb9d-ea12-44d6-b6c0-719734504628"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[finish_date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="0" width="50" height="20" uuid="4c111074-f42a-4aaa-9a98-02cbf5be0008"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[frequently_type]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="250" y="0" width="50" height="20" uuid="26b6555a-1f19-42fa-9028-3f749004e9f3"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[frequently]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="0" width="50" height="20" uuid="b2c69ab3-97a6-42ea-89f1-6637eabfc928"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[frequently_week_day]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="0" width="50" height="20" uuid="67818f2e-7cfa-48b9-87c3-692260df41ee"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[repeated_until]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="400" y="0" width="50" height="20" uuid="127eca8f-157a-4339-b420-e87f4bb1df74"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[notifications]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="450" y="0" width="50" height="20" uuid="1d3547ef-c219-40fe-b2fc-716dde13d663"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[category]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="500" y="0" width="50" height="20" uuid="e0f49531-4ab2-40c9-8f9b-3bd173af3f8b"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[workplan_id]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="20" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="50" height="20" uuid="eefa79f6-1090-4aec-9534-5962e742c05a"/>
+                <textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="50" y="0" width="50" height="20" uuid="ec10ec4d-e8e2-4c12-9eed-fe26c8166a86"/>
+                <textFieldExpression><![CDATA[$F{location}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="50" height="20" uuid="360ffefb-6198-46bd-91df-748668d3ece8"/>
+                <textFieldExpression><![CDATA[$F{start_date}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="150" y="0" width="50" height="20" uuid="caeba537-0a0b-45c1-913c-fb0acd11258f"/>
+                <textFieldExpression><![CDATA[$F{finish_date}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="50" height="20" uuid="f80d836d-8e98-434c-9e03-79342c97a805"/>
+                <textFieldExpression><![CDATA[$F{frequently_type}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="250" y="0" width="50" height="20" uuid="ba491354-7ec3-4b04-b242-d8d608153d94"/>
+                <textFieldExpression><![CDATA[$F{frequently}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="0" width="50" height="20" uuid="952afb3b-5b4a-4f27-862b-eefe7278e47d"/>
+                <textFieldExpression><![CDATA[""+$F{frequently_week_day}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="50" height="20" uuid="afdbe0b3-ae59-4a70-b7d4-793e96e8d36c"/>
+                <textFieldExpression><![CDATA[$F{repeated_until}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="400" y="0" width="50" height="20" uuid="bdb1acda-dcce-4e06-a509-acf61bab8abb"/>
+                <textFieldExpression><![CDATA[$F{notifications}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="450" y="0" width="50" height="20" uuid="abffc5fc-9ebc-4365-a572-14409ed8d3d7"/>
+                <textFieldExpression><![CDATA[""+$F{category}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="500" y="0" width="50" height="20" uuid="7455d640-d9b3-4dc6-8553-0d42b6b758cb"/>
+                <textFieldExpression><![CDATA[$F{workplan_id}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>

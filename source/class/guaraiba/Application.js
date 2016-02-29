@@ -161,7 +161,7 @@ qx.Class.define("guaraiba.Application", {
                             guaraiba.fs.watch(root + '/' + dir.name + '/', function (cur, prev) {
                                 if (!guaraiba.reloadingWorkers) {
                                     guaraiba.reloadingWorkers = true;
-                                    setTimeout(function(){
+                                    setTimeout(function () {
                                         app.debug('New version found!, reloading workers.');
                                         reloadWorkers();
                                         guaraiba.reloadingWorkers = false;
@@ -339,13 +339,13 @@ qx.Class.define("guaraiba.Application", {
                     controller = new controllerClass(request, response, params);
                     controller.actionHandler(params.action);
                 } else {
-                    controller = new guaraiba.controllers.ErrorController(request, response, params);
+                    controller = new guaraiba.controllers.ErrorsController(request, response, params);
                     controller.respordWithStatusNotFound(
                         Error('Controller class ' + controllerClass + ' not found')
                     );
                 }
             } else {
-                controller = new guaraiba.controllers.ErrorController(request, response, params);
+                controller = new guaraiba.controllers.ErrorsController(request, response, params);
                 controller.respordWithStatusNotFound(
                     Error('Route not found')
                 );

@@ -11,10 +11,7 @@
 /**
  * This is the main application class of your custom application "${Name}" server.
  *
- *
- * @asset(public/*)
- * @asset(data/*)
- * @asset(views/*)
+ * @asset(*)
  *
  * @ignore(environment)
  * @ignore(process)

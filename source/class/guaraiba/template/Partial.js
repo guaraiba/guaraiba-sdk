@@ -14,8 +14,6 @@
 
 /**
  * This class offers the basic properties and features to process partial template.
- *
- * @asset(views/*)
  */
 qx.Class.define('guaraiba.template.Partial', {
     extend: qx.core.Object,
@@ -27,25 +25,32 @@ qx.Class.define('guaraiba.template.Partial', {
 
     /**
      * @param templatePath {String} - Path to template file.
-     * @param data {Map} - Data to renderer in template.
+     * @param data {Object} - Data to renderer in template.
+     * @param helpers {Map} - Helpers methods.
+     * @ignore(Map)
      */
-    construct: function (templatePath, data) {
-        var vThis = this;
-
+    construct: function (templatePath, data, helpers) {
         this._id = guaraiba.utils.string.uuid();
         this._data = data || {};
         this._templatePath = templatePath
         this._partials = [];
         this._content = '';
+        this._helpers = new Map();
 
-        // Hang a `partial` method on the execution-context for the
-        // template rendering (e.g., will be the EJS global `partial`
-        // function to add sub-templates
-        this._data.partial = function (templatePath, data) {
-            var partial = new guaraiba.template.Partial(templatePath, data || vThis._data, vThis);
-            vThis._partials.push(partial);
-            return '###partial###' + partial._id
-        };
+        this.registerHelpers(helpers);
+
+        // Register renderPartial helper method.
+        this.registerHelper('renderPartial', qx.lang.Function.bind(function (templatePath, data) {
+            if (!templatePath.match(/^\//)) {
+                templatePath = guaraiba.path.dirname(this._templatePath) + '/' + templatePath;
+            }
+
+            var partial = new guaraiba.template.Partial(templatePath, data || this._data, this._helpers);
+
+            this._partials.push(partial);
+
+            return '###partial###' + partial._id;
+        }, this));
     },
 
     members: {
@@ -54,6 +59,7 @@ qx.Class.define('guaraiba.template.Partial', {
         _templatePath: null,
         _partials: null,
         _content: '',
+        _helpers: null,
 
         /**
          * Return info from template file.
@@ -62,7 +68,7 @@ qx.Class.define('guaraiba.template.Partial', {
          */
         getTemplateData: function () {
             var resource = qx.util.ResourceManager.getInstance(),
-                file = resource.toUri(this._templatePath),
+                file = resource.toUri(this._templatePath.replace(/^\//, '')),
                 fileExt = guaraiba.path.extname(file),
                 fileBaseName = guaraiba.path.basename(file, fileExt).replace(/\.html$/, ''),
                 noExtFile = file.replace(/\.html.*$/, '');
@@ -100,6 +106,7 @@ qx.Class.define('guaraiba.template.Partial', {
                         if (env != 'development') {
                             cache[templateData.file] = templateContent;
                         }
+
                         vThis._renderSelf(templateContent, templateData.ext, templateData.file);
                         vThis._renderPartials(done);
                     }
@@ -118,7 +125,7 @@ qx.Class.define('guaraiba.template.Partial', {
         _renderSelf: function (templateContent, extOrEngine, templatePath) {
             var adapter = new guaraiba.template.Adapter(templateContent, extOrEngine, templatePath);
             try {
-                this._content = adapter.render(this._data);
+                this._content = adapter.render(this._data, this._helpers);
             } catch (e) {
                 this._content = e.toString();
                 this.error(e);
@@ -132,8 +139,7 @@ qx.Class.define('guaraiba.template.Partial', {
          * @internal
          */
         _renderPartials: function (doneRender) {
-            var vThis = this,
-                cPartial = this._partials.length;
+            var vThis = this;
 
             if (this._partials.length) {
                 var actions = this._partials.map(function (partial) {
@@ -152,6 +158,27 @@ qx.Class.define('guaraiba.template.Partial', {
                 doneRender(this._content);
             }
 
+        },
+
+        /**
+         * Register helpers methods.
+         *
+         * @param helpers {Map} Helpers methods
+         */
+        registerHelpers: function (helpers) {
+            helpers.forEach(function (method, name) {
+                this.registerHelper(name, method);
+            }, this);
+        },
+
+        /**
+         * Register helper method.
+         *
+         * @param name {String} Herper name.
+         * @param method {Function} Helper method.
+         */
+        registerHelper: function (name, method) {
+            this._helpers.set(name, method);
         }
     }
 });
