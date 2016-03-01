@@ -46,7 +46,6 @@ qx.Class.define("guaraiba.Application", {
         guaraiba.config = configuration;
         guaraiba.router = router;
         guaraiba.router.init();
-        guaraiba.jasperReport = guaraiba.template.engines.JasperReport.getInstance();
 
         this.base(arguments);
     },
@@ -457,12 +456,6 @@ qx.Class.define("guaraiba.Application", {
                 }
             }
         }, true);
-
-        try {
-            guaraiba.java = require('java');
-        } catch (er) {
-            guaraiba.java = null
-        }
 
         guaraiba.Json.encode = guaraiba.Json.encode || guaraiba.Json.stringify;
         guaraiba.Json.decode = guaraiba.Json.decode || guaraiba.Json.parse;
