@@ -29,17 +29,18 @@ qx.Class.define("${Namespace}.controllers.Demos", {
         },
 
         d5Action: function (request, response, params) {
-            var jasperReport = guaraiba.template.engines.JasperReport.getInstance();
+            var jasperReport = guaraiba.template.engines.JasperReport.getInstance(),
+                jdbcSettings = this.getDBSchema().getJdbcSettings();
 
             this.respond({
                 connection: jasperReport.getSqlDataSource(
-                    'org.postgresql.Driver',
-                    'jdbc:postgresql://127.0.0.1:5432/polymita',
-                    'postgres',
-                    '153247869'
+                    jdbcSettings.driver,
+                    jdbcSettings.connectString
                 ),
-                getParams: function () {
-                    return params;
+                reportParams: function () {
+                    return {
+                        TITLE: "GUARAIBA APP DEMO\n TEST-006: JRXML TEMPLATE ENGINE"
+                    }
                 }
             });
         },
