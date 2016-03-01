@@ -1,10 +1,21 @@
-desc('Generate new guaraiba server application.');
+var colors = require('../colors');
+
+desc(
+    'Generate new guaraiba server application.\n' +
+    '\t\t\t  Interactive mode:\n'.info +
+    '\t\t\t   guaraiba new-app\n'.choose +
+    '\t\t\t  Quiet mode:\n'.info +
+    '\t\t\t   guaraiba new-app name=myproyect namespace=myproyect.test\n'.choose +
+    '\t\t\t   guaraiba new-app n=myproyect ns=myproyect.test\n'.choose
+);
+
 task('new-app', { async: true }, function () {
-    var colors = require('../colors'),
-        promptly = require('promptly'),
+    var promptly = require('promptly'),
         path = require('path'),
         settings = {
             out: process.cwd(),
+            appName: process.env.name || process.env.n,
+            appNamespace: process.env.namespace || process.env.ns,
             options: {
                 printStdout: true,
                 printStderr: true,
@@ -39,21 +50,32 @@ task('new-app', { async: true }, function () {
             },
 
             stepAppName: function () {
-                console.log('------------------------------------------------');
-                var msg = 'Application name in :'.prompt;
-                promptly.prompt(msg, { default: 'app-server', validator: validateAppName }, function (err, value) {
-                    settings.appName = value;
+                if (settings.appName && validateAppName(settings.appName)) {
                     actions.stepNamespace();
-                });
+                } else {
+                    console.log('------------------------------------------------');
+                    var msg = 'Application name in :'.prompt;
+                    promptly.prompt(msg, { default: 'app-server', validator: validateAppName }, function (err, value) {
+                        settings.appName = value;
+                        actions.stepNamespace();
+                    });
+                }
             },
 
             stepNamespace: function () {
-                console.log('------------------------------------------------');
-                var msg = 'Application namespace:'.prompt;
-                promptly.prompt(msg, { default: 'app-server', validator: validateNamespace }, function (err, value) {
-                    settings.appNamespace = value;
+                if (settings.appNamespace && validateNamespace(settings.appNamespace)) {
                     actions.stepGenerate();
-                });
+                } else {
+                    console.log('------------------------------------------------');
+                    var msg = 'Application namespace:'.prompt;
+                    promptly.prompt(msg, {
+                        default: 'app-server',
+                        validator: validateNamespace
+                    }, function (err, value) {
+                        settings.appNamespace = value;
+                        actions.stepGenerate();
+                    });
+                }
             },
 
             stepGenerate: function () {

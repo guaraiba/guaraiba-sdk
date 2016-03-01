@@ -20,14 +20,14 @@
  *
  * @require(guaraiba.Configuration)
  * @require(guaraiba.orm.DBSchema)
- * @require(guaraiba.Router)
+ * @require(guaraiba.routes.Router)
  */
 qx.Class.define("guaraiba.Application", {
     extend: qx.application.Basic,
 
     /**
      * @param configuration {guaraiba.Configuration}
-     * @param router {guaraiba.Router}
+     * @param router {guaraiba.routes.Router}
      */
     construct: function (configuration, router) {
         // Register logger interface.
@@ -46,7 +46,6 @@ qx.Class.define("guaraiba.Application", {
         guaraiba.config = configuration;
         guaraiba.router = router;
         guaraiba.router.init();
-        guaraiba.jasperReport = guaraiba.template.engines.JasperReport.getInstance();
 
         this.base(arguments);
     },
@@ -134,11 +133,6 @@ qx.Class.define("guaraiba.Application", {
                         for (var i in cluster.workers) {
                             if (cluster.workers[i].toRestart && cluster.workers[i].state === 'listening') {
                                 cluster.workers[i].disconnect();
-                                var to_restart = qx.lang.Object.getValues(cluster.workers).filter(function (cluster) {
-                                    return cluster.toRestart;
-                                }, this);
-                                app.warn('Disconnected worker #' + cluster.workers[i].id + ', to restart: ', to_restart.length);
-                                break;
                             }
                         }
                     },
@@ -148,7 +142,7 @@ qx.Class.define("guaraiba.Application", {
                         var worker = cluster.fork();
                         //worker.on('message', onMessage);
                         worker.on('online', function () {
-                            app.info('Worker #' + worker.id + ' is online...');
+                            app.info('Worker #' + worker.id + ' is online.');
                             checkWorkers();
                         });
                         return worker;
@@ -164,8 +158,14 @@ qx.Class.define("guaraiba.Application", {
                     walker.on("directories", function (root, dirStatsArray, next) {
                         dirStatsArray.forEach(function (dir) {
                             guaraiba.fs.watch(root + '/' + dir.name + '/', function (cur, prev) {
-                                app.debug('New version found!, reloading workers...');
-                                reloadWorkers();
+                                if (!guaraiba.reloadingWorkers) {
+                                    guaraiba.reloadingWorkers = true;
+                                    setTimeout(function () {
+                                        app.debug('New version found!, reloading workers.');
+                                        reloadWorkers();
+                                        guaraiba.reloadingWorkers = false;
+                                    }, 2000)
+                                }
                             });
                         });
                         next();
@@ -183,9 +183,9 @@ qx.Class.define("guaraiba.Application", {
                 cluster.on('exit', function (worker) {
                     // Replace the dead worker, we're not sentimental
                     if (worker.suicide) {
-                        app.warn('Worker ' + worker.id + ' restarted...');
+                        app.warn('Worker ' + worker.id + ' restarted.');
                     } else {
-                        app.error('Worker ' + worker.id + ' died :(');
+                        app.error('Worker ' + worker.id + ' died.');
                     }
                     createWorker();
                 });
@@ -338,13 +338,13 @@ qx.Class.define("guaraiba.Application", {
                     controller = new controllerClass(request, response, params);
                     controller.actionHandler(params.action);
                 } else {
-                    controller = new guaraiba.controllers.ErrorController(request, response, params);
+                    controller = new guaraiba.controllers.ErrorsController(request, response, params);
                     controller.respordWithStatusNotFound(
                         Error('Controller class ' + controllerClass + ' not found')
                     );
                 }
             } else {
-                controller = new guaraiba.controllers.ErrorController(request, response, params);
+                controller = new guaraiba.controllers.ErrorsController(request, response, params);
                 controller.respordWithStatusNotFound(
                     Error('Route not found')
                 );
@@ -456,12 +456,6 @@ qx.Class.define("guaraiba.Application", {
                 }
             }
         }, true);
-
-        try {
-            guaraiba.java = require('java');
-        } catch (er) {
-            guaraiba.java = null
-        }
 
         guaraiba.Json.encode = guaraiba.Json.encode || guaraiba.Json.stringify;
         guaraiba.Json.decode = guaraiba.Json.decode || guaraiba.Json.parse;

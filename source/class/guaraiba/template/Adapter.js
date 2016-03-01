@@ -19,7 +19,6 @@
  *     <tr><th>Adapter engine</th><th>Extension</th></tr>
  *     <tr><th>EJS: {@link guaraiba.template.adapters.Ejs}</th><td>.ejs</td></tr>
  *     <tr><th>JASE: {@link guaraiba.template.adapters.Jade}</th><td>.jade</td></tr>
- *     <tr><th>MUSTACHE: {@link guaraiba.template.adapters.Mustache}</th><td>.mu, .ms or .mustache</td></tr>
  *     <tr><th>HANDLEBARS: {@link guaraiba.template.adapters.Handlebars}</th><td>.hbs or .handlebars</td></tr>
  *     <tr><th>SWIG: {@link guaraiba.template.adapters.Swig}</th><td>.swig</td></tr>
  * </table>
@@ -49,7 +48,7 @@ qx.Class.define('guaraiba.template.Adapter', {
         /**
          * Define adapter engine.
          *
-         * Supported engines: ('ejs', 'jade', 'mu', 'ms', 'mustache', 'hbs', 'handlebars', 'swig', 'jrxml').
+         * Supported engines: ('ejs', 'jade', 'ms', 'hbs', 'handlebars', 'swig', 'jrxml').
          *
          * @param engineName {String} - Engine name.
          * @internal
@@ -64,12 +63,6 @@ qx.Class.define('guaraiba.template.Adapter', {
                     break;
                 case 'jade':
                     this.__engine = guaraiba.template.adapters.Jade.getInstance();
-                    break;
-                case 'mu':
-                case 'ms':
-                case 'mustache':
-                    this.__engineName = 'mustache';
-                    this.__engine = guaraiba.template.adapters.Mustache.getInstance();
                     break;
                 case 'hbs':
                 case 'handlebars':
@@ -87,12 +80,13 @@ qx.Class.define('guaraiba.template.Adapter', {
          * Render data in template.
          *
          * @param data {Object} - Data to renderer in template.
+         * @param helpers {Map} - Helpers methods.
          * @return {String}
          */
-        render: function (data) {
+        render: function (data, helpers) {
             this.__fn = this.__fn || this.__engine.compile(this.__template);
 
-            return this.__engine.render(data || {}, this.__fn);
+            return this.__engine.render(data || {}, this.__fn, helpers);
         }
     }
 });

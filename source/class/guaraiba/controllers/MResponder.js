@@ -48,16 +48,12 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
         _transformTemplate: function (template) {
             if (template) {
                 // Set template paths
-                if (template.match(/^views\//)) {
+                if (template.match(/^\//)) {
                     // If template includes full views path just use it
                     return template;
-                } else if (template.match(/^\//)) {
-                    // If it includes a '/' and it isn't the full path.
-                    // Assume they are using the 'controller/action' style and prepend views dir
-                    return 'views' + template;
                 } else {
                     // Assume they only included the action, so add the controller path
-                    return 'views/' + this.getControllerName() + '/' + template;
+                    return this.getControllerPath().replace('/controllers/', '/views/') + template;
                 }
             }
 
@@ -74,16 +70,12 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
          */
         _transformLayout: function (layout) {
             // Set layout paths
-            if (layout.match(/^views\//)) {
+            if (layout.match(/^\//)) {
                 // If layout includes full views path just use it
                 return layout;
-            } else if (layout.match(/^\//)) {
-                // If it includes a '/' and it isn't the full path
-                // Assume they are using the `controller/action` style and prepend views dir
-                return 'views' + layout;
             } else {
                 // Assume they only included the controller, so append it to the layouts path
-                return 'views/layouts/' + layout;
+                return this.getControllerPath().replace(/\/controllers\/.*$/, '/layouts/') + layout;
             }
         },
 
@@ -125,6 +117,27 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
             }
 
             return null;
+        },
+
+        /**
+         * Returns helpers methods.
+         *
+         * @return {Map}
+         * @ignore(Map)
+         */
+        getHelpers: function () {
+            var helpers = new Map(),
+                helperName,
+                helperMethod;
+
+            for (helperName in this) {
+                helperMethod = this[helperName]
+                if (helperName.match(/[a-z][a-z0-9]*([A-Z][a-z0-9]*)*Helper$/) && qx.lang.Type.isFunction(helperMethod)) {
+                    helpers.set(helperName.replace(/Helper$/, ''), qx.lang.Function.bind(helperMethod, this));
+                }
+            }
+
+            return helpers;
         },
 
         /**
@@ -188,7 +201,7 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                 this.setLayout(opts.layout || this.getLayout() || 'empty.html.' + engine);
                 this.setTemplate(opts.template || this.getTemplate() || this.getActionName() + '.html.' + engine);
 
-                var layout = new guaraiba.template.Layout(this.getLayout(), this.getTemplate(), content);
+                var layout = new guaraiba.template.Layout(this.getLayout(), this.getTemplate(), content, this.getHelpers());
                 layout.render(done);
 
             } else if (this._jrFormats.indexOf(opts.format) >= 0) {
@@ -197,10 +210,11 @@ qx.Mixin.define('guaraiba.controllers.MResponder', {
                 this.setTemplate(opts.template || this.getTemplate() || this.getActionName() + '.jrxml');
 
                 var resource = qx.util.ResourceManager.getInstance(),
-                    adapter = new guaraiba.template.Adapter(null, 'jrxml', resource.toUri(this.getTemplate()));
+                    template = resource.toUri(this.getTemplate().replace(/^\//, '')),
+                    adapter = new guaraiba.template.Adapter(null, 'jrxml', template);
 
                 try {
-                    done(adapter.render(content));
+                    done(adapter.render(content, this.getHelpers()));
                 } catch (e) {
                     this.respondError(e, 'html');
                 }

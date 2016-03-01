@@ -18,6 +18,19 @@ qx.Class.define('${Namespace}.schemas.Default', {
             connection: db,
             debug: true
         });
+
+        // Include sqlite jdbc driver.
+        guaraiba.javaClasspath('guaraiba/java/sqlite-jdbc-3.6.7.jar');
+        this.setJdbcSettings({
+            driver: 'org.sqlite.JDBC',
+            connectString: 'jdbc:sqlite:' + db
+        });
+    },
+
+    properties: {
+        jdbcSettings: {
+            check: 'Object'
+        }
     },
 
     members: {

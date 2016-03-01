@@ -24,7 +24,8 @@ qx.Class.define("guaraiba.Configuration", {
     include: qx.core.MAssert,
 
     construct: function () {
-        var appBaseNameSpace = this.classname.replace(/\..*/, '');
+        var regExp = new RegExp('.' + this.basename + '$'),
+            appBaseNameSpace = this.classname.replace(regExp, '');
 
         // Set base path for application resources.
         qx.util.LibraryManager.getInstance().set(appBaseNameSpace, "resourceUri", guaraiba.resourcePath);
@@ -325,7 +326,7 @@ qx.Class.define("guaraiba.Configuration", {
 
         /** Default template engine. */
         defaultTemplateEngine: {
-            check: ['ejs', 'jade', 'mu', 'ms', 'mustache', 'hbs', 'handlebars', 'swig', 'jrxml'],
+            check: ['ejs', 'jade', 'hbs', 'handlebars', 'swig', 'jrxml'],
             init: 'ejs'
         },
 

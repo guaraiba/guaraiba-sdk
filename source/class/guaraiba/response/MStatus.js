@@ -177,8 +177,34 @@ qx.Mixin.define('guaraiba.response.MStatus', {
          * @return {boolean}
          */
         respondError: function (err, format, statusCode) {
+            statusCode = statusCode || 500;
+
             if (err) {
-                var message = err.message || String(err);
+                var message = err.message || String(err),
+                    resource = qx.util.ResourceManager.getInstance(),
+                    engine = this.getConfiguration().getDefaultTemplateEngine(),
+                    viewControllerPath = this.getViewsPath(),
+                    viewDefaulErrorsPath = viewControllerPath.replace(/\/views\/[^\/]+/, '/views/Errors'),
+                    viewGuaraibaErrorsPath = '/guaraiba/views/Errors/',
+
+                // Template error paths by preference.
+                    templates = [
+                        viewControllerPath + 'error' + statusCode + '.html.' + engine,
+                        viewControllerPath + 'errorDefault.html.' + engine,
+                        viewDefaulErrorsPath + 'error' + statusCode + '.html.' + engine,
+                        viewDefaulErrorsPath + 'errorDefault.html.' + engine,
+                        viewGuaraibaErrorsPath + 'error' + statusCode + '.html.' + engine,
+                        viewGuaraibaErrorsPath + 'errorDefault.html.' + engine
+                    ];
+
+                this.setTemplate(templates.pop());
+
+                // Search preferred error template.
+                templates.forEach(function (template) {
+                    if (guaraiba.fs.existsSync(resource.toUri(template.replace(/^\//, '')))) {
+                        return this.setTemplate(template);
+                    }
+                }, this);
 
                 if (err instanceof Error) {
                     qx.log.Logger.error(err.stack);
@@ -186,13 +212,14 @@ qx.Mixin.define('guaraiba.response.MStatus', {
                         type: err.name,
                         message: err.message,
                         stack: err.stack,
-                        code: err.code
+                        code: err.code,
+                        statusCode: statusCode
                     }
                 } else {
                     qx.log.Logger.error(err.message || message);
                 }
 
-                this.respond({ message: message, error: err }, { statusCode: statusCode || 500, format: format });
+                this.respond({ message: message, error: err }, { statusCode: statusCode, format: format });
 
                 return true;
             }

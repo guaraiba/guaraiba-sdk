@@ -28,7 +28,7 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
     extend: qx.core.Object,
 
     construct: function () {
-        var java = guaraiba.java || require('java');
+        var java = guaraiba.java = (guaraiba.java || require('java'));
 
         guaraiba.javaClasspath('guaraiba/java/commons-beanutils-1.8.2.jar');
         guaraiba.javaClasspath('guaraiba/java/commons-collections-3.2.1.jar');
@@ -67,8 +67,8 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
         guaraiba.javaClasspath('guaraiba/java/mongo-java-driver-2.7.3.jar');
         guaraiba.javaClasspath('guaraiba/java/spring.jar');
         guaraiba.javaClasspath('guaraiba/java/jasperreports-json.jar');
-        //        guaraiba.javaClasspath('guaraiba/java/jasperreports-chart-themes-5.2.0.jar');
-        guaraiba.javaClasspath('guaraiba/java/postgresql-9.3-1102.jdbc4.jar');
+        //guaraiba.javaClasspath('guaraiba/java/jasperreports-chart-themes-5.2.0.jar');
+        //guaraiba.javaClasspath('guaraiba/java/postgresql-9.3-1102.jdbc4.jar');
 
         this.JasperFillManager = java.import('net.sf.jasperreports.engine.JasperFillManager');
         this.JasperExportManager = java.import('net.sf.jasperreports.engine.JasperExportManager');

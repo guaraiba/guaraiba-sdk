@@ -27,10 +27,9 @@ compilation and documentation of applications under the paradigm of object-orien
 
 ### Installation:
 
-1. Install globally modules **guaraiba**, **qooxdoo** and **jake**.
+1.  Install globally modules **guaraiba**, **qooxdoo** and **jake**.
 
-    > These packages are available on the gitLab <https://codecomunidades.uci.cu> of **Universidad de las
-      Ciencias Informáticas** or in internet in <https://github.com>.
+    **Install modules from GitLab repository of [Universidad de las Ciencias Informáticas](https://codecomunidades.uci.cu).**
 
     ```shell
     npm install -g git+ssh://git@codecomunidades.uci.cu:andypa/guaraiba.git
@@ -38,32 +37,48 @@ compilation and documentation of applications under the paradigm of object-orien
     npm install -g jake
     ```
 
+    **Install modules from [GitHub](https://github.com).**
+
     ```shell
     npm install -g git+https://github.com/yoandrypa/guaraiba.git
     npm install -g git+https://github.com/qooxdoo/qooxdoo.git
     npm install -g jake
     ```
 
-2. Create a new application.
+2.  Generate new guaraiba server application.
 
+    **Interactive mode:**
+    
     ```shell
     guaraiba new-app
     ```
+    
+    **Quiet mode:**
+    
+    ```shell
+    guaraiba new-app name=myproyect namespace=myproyect.test
+    guaraiba new-app n=myproyect ns=myproyect.test
+    ```
 
-3. The created application implements the data model on a SQLite database so you should install globally
-   **sqlite3** module or turn off databese default scheme, with removing in class **myApp.Configuration** the line
-   ``this.registerDBSchema (myApp.schemas.Default. getInstance ());``
+3.  The created application implements the data model on a SQLite database so you should install globally
+    **sqlite3** module or turn off databese default scheme, with removing in class **myApp.Configuration** the line
+    ``this.registerDBSchema (myApp.schemas.Default. getInstance ());``
 
     ```shell
     npm install -g sqlite3
     ```
+    
     > You can use another database manager changing the data connection on **myApp.schemas.Default**.
 
-4. Change to directory of new application and compile the project with one of the following options.
+4.  Change to directory of new application and compile the project with one of the following options.
+
+    **Build in develop mode:**
 
     ```shell
-    jake jake build:dev
+    jake build:dev
     ```
+
+    **Build in production mode:**
 
     ```shell
     python generate.py
@@ -72,7 +87,7 @@ compilation and documentation of applications under the paradigm of object-orien
     > You can view the list of available tasks by running the command **jake**, **jake -T** or
       **node source/script/myapp-server.js**.
 
-5. Run application with one of the following options.
+5.  Run application with one of the following options.
 
     ```shell
     jake start

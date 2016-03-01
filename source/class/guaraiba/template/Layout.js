@@ -19,24 +19,27 @@ qx.Class.define('guaraiba.template.Layout', {
     extend: guaraiba.template.Partial,
 
     /**
+     * Constructor.
+     *
      * @param layoutPath {String} - Path to layout template file.
      * @param templatePath {String} - Path to template file.
-     * @param data {Map} - Data to renderer in template.
+     * @param data {Object} - Data to renderer in template.
+     * @param helpers {Map} - Helpers methods.
      */
-    construct: function (layoutPath, templatePath, data) {
-        var vThis = this;
-
+    construct: function (layoutPath, templatePath, data, helpers) {
         if (!layoutPath) {
-            this.base(arguments, templatePath, data);
+            this.base(arguments, templatePath, data, helpers);
         } else {
-            this.base(arguments, layoutPath, data);
+            this.base(arguments, layoutPath, data, helpers);
 
-            // `render` is just a special case of `partial` using the template-path
-            // that the layout wraps -- just hard-code the path and pass along
-            // the same data
-            this._data.yield = function () {
-                return vThis._data.partial(templatePath, data);
-            };
+            // Register yield helper method.
+            this.registerHelper('yield', qx.lang.Function.bind(function () {
+                var partial = new guaraiba.template.Partial(templatePath, data || this._data, helpers);
+
+                this._partials.push(partial);
+
+                return '###partial###' + partial._id;
+            }, this));
         }
     }
 });
