@@ -32,8 +32,8 @@ compilation and documentation of applications under the paradigm of object-orien
     **Install modules from GitLab repository of [Universidad de las Ciencias Informáticas](https://codecomunidades.prod.uci.cu).**
 
     ```shell
-    npm install -g git+ssh://git@codecomunidades.prod.uci.cu:datec/guaraiba.git
-    npm install -g git+ssh://git@codecomunidades.prod.uci.cu:datec/extra-libs.git#qooxdoo-5.0.1-sdk
+    npm install -g git+http://codecomunidades.prod.uci.cu/datec/guaraiba.git
+    npm install -g git+http://git@codecomunidades.prod.uci.cu/datec/extra-libs.git#qooxdoo-5.0.1-sdk
     npm install -g jake
     ```
 
