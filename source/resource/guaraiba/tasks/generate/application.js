@@ -82,36 +82,28 @@ task('new-app', { async: true }, function () {
                 console.log('------------------------------------------------');
                 var module = require('module'),
                     util = require('util'),
+                    spawn = require('child_process').spawn,
                     qooxdooAppCreator = module._resolveFilename('qooxdoo/create-application.py'),
                     guaraibaPath = path.dirname(module._resolveFilename('guaraiba')),
-                    skeletonPath = guaraibaPath + '/source/resource/skeleton',
-                    cmd = util.format('python "%s" -t server -p "%s" --cache="%s" -n "%s" -s "%s" -o "%s"',
-                        qooxdooAppCreator,
-                        skeletonPath,
-                        guaraibaPath,
-                        settings.appName,
-                        settings.appNamespace,
-                        settings.out
-                    );
+                    skeletonPath = path.join(guaraibaPath, '/source/resource/skeleton'),
+                    childProcess = spawn('python', [qooxdooAppCreator,
+                        '-t', 'server',
+                        '-p', skeletonPath,
+                        '--cache="' + guaraibaPath + '"',
+                        '-n', settings.appName,
+                        '-s', settings.appNamespace,
+                        '-o', settings.out
+                    ]);
 
-                jake.exec(cmd, settings.options, function () {
-                    complete();
+                childProcess.stdout.addListener("data", function (data) {
+                    process.stdout.write(data);
                 });
 
-                complete();
-            },
+                childProcess.stderr.addListener("data", function (data) {
+                    process.stderr.write(data);
+                });
 
-            end: function () {
-                console.log('------------------------------------------------');
-                var cmd = "python ../qooxdoo/create-application.py -t server -p source/resource/skeleton",
-                    options = {
-                        printStdout: true,
-                        printStderr: true,
-                        breakOnError: false,
-                        interactive: true
-                    };
-
-                jake.exec(cmd, options, function () {
+                childProcess.addListener('exit', function (code) {
                     complete();
                 });
             }
