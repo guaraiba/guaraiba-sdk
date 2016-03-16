@@ -33,7 +33,7 @@ compilation and documentation of applications under the paradigm of object-orien
 
     ```shell
     npm install -g git+http://codecomunidades.prod.uci.cu/datec/guaraiba.git
-    npm install -g git+http://git@codecomunidades.prod.uci.cu/datec/extra-libs.git#qooxdoo-5.0.1-sdk
+    npm install -g git+http://codecomunidades.prod.uci.cu/datec/extra-libs.git#qooxdoo-5.0.1-sdk
     npm install -g jake
     ```
 
