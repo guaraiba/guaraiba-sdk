@@ -70,24 +70,39 @@ compilation and documentation of applications under the paradigm of object-orien
     
     > You can use another database manager changing the data connection on **myApp.schemas.Default**.
 
-4.  Change to directory of new application and compile the project with one of the following options.
+4.  The created application implements demo actions using the JasperReport template engine to generate outs in
+    pdf, docx, otd, xlsx and others formats. So it is necessary to install the java module of NodeJS.
 
-    **Build in develop mode:**
+    ```shell
+    npm install -g java
+    ```
+
+5.  Change to directory of new application and compile the project with one of the following options.
+
+    **To build in develop mode, run one of the following command:**
 
     ```shell
     jake build:dev
     ```
 
-    **Build in production mode:**
-
     ```shell
     python generate.py
+    ```
+
+    **To build in production mode, run one of the following command:**
+
+    ```shell
+    jake build:prod
+    ```
+
+    ```shell
+    python generate.py build
     ```
 
     > You can view the list of available tasks by running the command **jake**, **jake -T** or
       **node source/script/myapp-server.js**.
 
-5.  Run application with one of the following options.
+6.  Run application with one of the following options.
 
     ```shell
     jake start
@@ -96,3 +111,5 @@ compilation and documentation of applications under the paradigm of object-orien
     ```shell
     node source/script/myapp-server.js start
     ```
+
+7.  To see demo open this URL [https://127.0.0.1:3002]() in browser.
