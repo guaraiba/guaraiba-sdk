@@ -89,7 +89,7 @@ task('new-app', { async: true }, function () {
                     childProcess = spawn('python', [qooxdooAppCreator,
                         '-t', 'server',
                         '-p', skeletonPath,
-                        '--cache="' + guaraibaPath + '"',
+                        '--cache=' + guaraibaPath,
                         '-n', settings.appName,
                         '-s', settings.appNamespace,
                         '-o', settings.out
