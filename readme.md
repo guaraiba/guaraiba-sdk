@@ -112,4 +112,4 @@ compilation and documentation of applications under the paradigm of object-orien
     node source/script/myapp-server.js start
     ```
 
-7.  To see demo open this URL [https://127.0.0.1:3002]() in browser.
+7.  To see demo open this URL [https://127.0.0.1:3002] in browser.
