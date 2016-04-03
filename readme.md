@@ -22,4 +22,5 @@ compilation and documentation of applications under the paradigm of object-orien
 * It allows configuration of cross-domain access.
 
 ### Documentation:
-* [wiki](/<user-name>/<repo-name>/wiki)
+* [Wiki pages in gitlab uci.](http://codecomunidades.prod.uci.cu/datec/guaraiba/wikis)
+* [Wiki pages in github.](https://github.com/yoandrypa/guaraiba/wiki)
