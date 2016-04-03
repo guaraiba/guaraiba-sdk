@@ -22,4 +22,4 @@ compilation and documentation of applications under the paradigm of object-orien
 * It allows configuration of cross-domain access.
 
 ### Documentation:
-* [wiki](guaraiba/wiki)
+* [wiki](/<user-name>/<repo-name>/wiki)
