@@ -29,7 +29,7 @@ qx.Class.define("guaraiba.routes.Router", {
     /**
      * Constructor
      *
-     * @param native {NodeJS.Barista.Router?} Instance of native barista router.
+     * @param nativeRouter {NodeJS.Barista.Router?} Instance of native barista router.
      */
     construct: function (nativeRouter) {
         this.__native = nativeRouter || new Barista.Router();

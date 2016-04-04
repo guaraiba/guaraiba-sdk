@@ -18,8 +18,18 @@
 qx.Interface.define('guaraiba.orm.IUser', {
 
     members: {
+        /**
+         * Returns true/false depending on whether the user credentials are expired.
+         */
         isExpired: function () {},
 
+        /**
+         * Returns true/false depending on whether the user credentials are valid.
+         *
+         * @param username {String}
+         * @param password {String}
+         * @return {Boolean}
+         */
         isValidCredential: function (username, password) {}
     }
 });
