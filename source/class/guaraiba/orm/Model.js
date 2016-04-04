@@ -170,6 +170,11 @@ qx.Class.define('guaraiba.orm.Model', {
             return this.getDBSchema().getKNex();
         },
 
+        /**
+         * Returns true / false depending on whether the model has the ID field with seriel type.
+         *
+         * @return {Boolean}
+         */
         isSerialId: function () {
             var idFieldName = this._toUnderscoreCase(this.getIdFieldName());
 
