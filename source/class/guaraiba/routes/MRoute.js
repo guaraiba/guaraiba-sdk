@@ -201,6 +201,12 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
             return routes;
         },
 
+        /**
+         * Returns true/false depending on whether the url matches.
+         *
+         * @param path {String}
+         * @return {Boolean}
+         */
         test: function (path) {
             return this.__native.test(name);
         },
@@ -211,7 +217,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @param controller {Class|String} Controller class or endpoint to controller.
          * @param action {String?'index'} Action name.
          * @param defaultParams {Object?} Default parameters.
-         * @returns {guaraiba.routes.MRoute}
+         * @return {guaraiba.routes.MRoute}
          */
         to: function (controller, action, defaultParams) {
             if (!qx.lang.Type.isString(controller)) {
