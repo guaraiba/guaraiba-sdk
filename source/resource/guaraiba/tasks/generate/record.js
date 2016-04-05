@@ -7,6 +7,7 @@ task('record', { async: true }, function () {
         beautify = require('js-beautify').js_beautify,
         app = qx.core.BaseInit.getApplication(),
         appNamespace = app.constructor.classname.replace('.Application', ''),
+        appNamespacePath = appNamespace.replace(/\./g, '/'),
         settings = { fields: {} },
         inflection = require('inflection'),
         format = require('util').format,
@@ -75,8 +76,8 @@ task('record', { async: true }, function () {
             stepIsTimestampRecord: function () {
                 console.log('------------------------------------------------');
                 var msg = 'Is timestamp record '.prompt + '(Y/n)'.choose + ':?'.prompt;
-                promptly.choose(msg, ['y', 'n'], { default: 'y' }, function (err, value) {
-                    settings.timestamp = (value == 'y');
+                promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
+                    settings.timestamp = (value.toLowerCase() == 'y');
                     actions.stepAddField();
                 });
             },
@@ -107,8 +108,8 @@ task('record', { async: true }, function () {
             stepAllowNull: function (name) {
                 console.log('------------------------------------------------');
                 var msg = 'Allow null value in '.prompt + name.choose + ' field '.prompt + '(Y/n)'.choose + '?:'.prompt
-                promptly.choose(msg, ['y', 'n'], { default: 'y' }, function (err, value) {
-                    settings.fields[name].allowNull = (value == 'y');
+                promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
+                    settings.fields[name].allowNull = (value.toLowerCase() == 'y');
                     actions.stepListAllFields();
                 });
             },
@@ -123,12 +124,12 @@ task('record', { async: true }, function () {
                     + '     4. Create record class.\n'.choose
                     + '     x. Abort.\n'.choose
                     + '------------------------------------------------\n[' + '1'.choose + ']:'
-                promptly.choose(msg, ['1', '2', '3', '4', 'x'], { default: 1 }, function (err, value) {
+                promptly.choose(msg, ['1', '2', '3', '4', 'x', 'X'], { default: 1 }, function (err, value) {
                     if (value == '1') actions.stepAddField();
                     else if (value == '2') actions.stepListAllFields();
                     else if (value == '3') actions.stepRemoveAllField();
                     else if (value == '4') actions.stepCreateFile();
-                    else if (value == 'x') process.abort();
+                    else if (value.toLowerCase() == 'x') process.abort();
                 });
             },
 
@@ -183,7 +184,7 @@ task('record', { async: true }, function () {
                 console.log(colors.warn(code));
                 console.log('------------------------------------------------');
 
-                var schema = 'source/class/' + appNamespace + '/schemas/Default.js';
+                var schema = 'source/class/' + appNamespacePath + '/schemas/Default.js';
                 if (fs.existsSync(schema)) {
                     console.info('Registering record class in default schema:');
                     var replace = require('replace');
@@ -200,14 +201,14 @@ task('record', { async: true }, function () {
                         colors.data(')')
                     );
                     console.info('Find schemas in:',
-                        colors.choose('source/class/' + appNamespace + '/schemas')
+                        colors.choose('source/class/' + appNamespacePath + '/schemas')
                     );
                 }
                 console.log('------------------------------------------------');
 
                 var msg = 'Do you whant create RestController '.prompt + '(Y/n)'.choose + ':?'.prompt;
-                promptly.choose(msg, ['y', 'n'], { default: 'y' }, function (err, value) {
-                    if (value == 'y') {
+                promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
+                    if (value.toLowerCase() == 'y') {
                         actions.stepCreateController();
                     } else {
                         actions.end();
@@ -260,7 +261,7 @@ task('record', { async: true }, function () {
                 replace({
                     regex: /(\s*)(\/\/ END REGISTER RESOURCE ROUTERS\. DON'T REMOVE OR CHANGE THIS COMMENTARY\..*)/,
                     replacement: '$1this.resource(' + clazz + ');$1$2',
-                    paths: ['source/class/' + appNamespace + '/Router.js'],
+                    paths: ['source/class/' + appNamespacePath + '/Router.js'],
                     silent: true,
                 });
                 console.log('------------------------------------------------');
