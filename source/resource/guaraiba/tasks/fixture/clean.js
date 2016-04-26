@@ -6,11 +6,7 @@ desc(
     '\t\t\t\tjake fixture:clean[Book,Article,User]\n'.choose
 );
 task('clean', { async: true }, function () {
-    var i,
-        fs = require('fs'),
-        util = require('util'),
-        async = require('async'),
-        promptly = require('promptly'),
+    var async = require('async'),
         filters = qx.lang.Array.fromArguments(arguments),
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(),
         models = dbSchema.getModels(),
