@@ -50,6 +50,15 @@ qx.Class.define("guaraiba.routes.Route", {
             return new guaraiba.routes.Route(this.__router, this.__native.match(
                 this.__router.getNative(), path, method
             ));
+        },
+
+        /**
+         * Returns native instance of barista route.
+         *
+         * @return {NodeJS.Barista.Route}
+         */
+        getNative: function () {
+            return this.__native;
         }
     }
 });
