@@ -93,11 +93,12 @@ task('new-app', { async: true }, function () {
                     ]);
 
                 childProcess.stdout.addListener("data", function (data) {
-                    process.stdout.write(data);
+                    console.info(data.toString());
                 });
 
                 childProcess.stderr.addListener("data", function (data) {
-                    process.stderr.write(data);
+                    console.error(data.toString());
+                    process.abort();
                 });
 
                 childProcess.addListener('exit', function (code) {
