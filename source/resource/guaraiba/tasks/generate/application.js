@@ -39,6 +39,19 @@ task('new-app', { async: true }, function () {
             return value;
         },
 
+        error = function (msg) {
+            msg = msg.replace(/WARN/, '').trim();
+
+            if (msg) {
+                if (msg.match(/Error:/)) {
+                    console.error(msg);
+                    process.abort();
+                } else {
+                    console.warn(msg);
+                }
+            }
+        },
+
         actions = {
             start: function () {
                 console.log('------------------------------------------------');
@@ -93,12 +106,11 @@ task('new-app', { async: true }, function () {
                     ]);
 
                 childProcess.stdout.addListener("data", function (data) {
-                    console.info(data.toString());
+                    console.info(data.toString().trim());
                 });
 
                 childProcess.stderr.addListener("data", function (data) {
-                    console.error(data.toString());
-                    process.abort();
+                    error(data.toString());
                 });
 
                 childProcess.addListener('exit', function (code) {
