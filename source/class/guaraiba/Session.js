@@ -111,6 +111,20 @@ qx.Class.define('guaraiba.Session', {
         },
 
         /**
+         * Get current user profile.
+         */
+        getProfile: function () {
+            var profile = this.get('profile');
+
+            if (!profile) {
+                profile = {}
+                this.set('profile', profile);
+            }
+
+            return profile
+        },
+
+        /**
          * Get session attribute value.
          *
          * @param key {String}

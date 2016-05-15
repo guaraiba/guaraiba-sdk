@@ -206,6 +206,15 @@ qx.Class.define('guaraiba.Controller', {
         },
 
         /**
+         * Return all instances of register database connection schema.
+         *
+         * @return {Array}
+         */
+        getDBSchemas: function () {
+            return this.getConfiguration().getDBSchemas();
+        },
+
+        /**
          * Returns model instance for given record class or model name.
          *
          * @param classOrName {Class|String} ORM record class or model class name.
@@ -215,7 +224,17 @@ qx.Class.define('guaraiba.Controller', {
         getModel: function (classOrName, dbSchema) {
             var modelName = qx.lang.Type.isString(classOrName) ? classOrName : (classOrName.classname);
 
-            return this.getDBSchema(dbSchema).getModel(modelName);
+            if (dbSchema) return this.getDBSchema(dbSchema).getModel(modelName);
+
+            var model = false,
+                dbSchemas = this.getDBSchemas();
+
+            while (!model && dbSchemas.length > 0) {
+                dbSchema = dbSchemas.shift();
+                model = dbSchema.getModel(modelName, dbSchemas.lenght == 0);
+            }
+
+            return model;
         },
 
         /**

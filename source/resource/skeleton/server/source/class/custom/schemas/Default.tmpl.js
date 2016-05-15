@@ -2,35 +2,17 @@
  * This class offers the specific properties and features to configure the data base schemas of ${Name} application.
  */
 qx.Class.define('${Namespace}.schemas.Default', {
-    type: 'singleton',
     extend: guaraiba.orm.DBSchema,
 
     /**
      * Constructor
+     *
+     * @param knexSetting {Object}
+     * @param jdbcSettings {Object?}
      */
-    construct: function () {
+    construct: function (knexSetting, jdbcSettings) {
         this.setModelPrefixName('${Namespace}.models');
-
-        var db = qx.util.ResourceManager.getInstance().toUri('data/app.db');
-
-        this.base(arguments, 'default', {
-            client: 'sqlite3',
-            connection: db,
-            debug: true
-        });
-
-        // Include sqlite jdbc driver.
-        guaraiba.javaClasspath('guaraiba/java/sqlite-jdbc-3.6.7.jar');
-        this.setJdbcSettings({
-            driver: 'org.sqlite.JDBC',
-            connectString: 'jdbc:sqlite:' + db
-        });
-    },
-
-    properties: {
-        jdbcSettings: {
-            check: 'Object'
-        }
+        this.base(arguments, 'default', knexSetting, jdbcSettings);
     },
 
     members: {

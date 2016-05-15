@@ -3,7 +3,10 @@ task('default', { async: true }, function () {
     complete();
 });
 
-require('./compiling');
-require('./generate');
+if (guaraiba.Tasks.itIsDeveloping()) {
+    require('./compiling');
+    require('./generate');
+}
+
 require('./migrate');
 require('./fixture');

@@ -44,6 +44,25 @@ qx.Class.define('guaraiba.Tasks', {
             };
 
             nameSpace ? namespace(nameSpace, createTask) : createTask();
+        },
+
+        /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         * @ignore(__filename)
+         */
+        itIsDeveloping: function(){
+            return String(__filename).match(/source\/class\/guaraiba\/Tasks.js$/);
+        },
+
+        /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         */
+        itIsProduction: function(){
+            return !this.itIsDeveloping();
         }
     }
 });
