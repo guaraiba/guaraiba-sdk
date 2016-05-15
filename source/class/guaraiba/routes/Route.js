@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -50,6 +50,15 @@ qx.Class.define("guaraiba.routes.Route", {
             return new guaraiba.routes.Route(this.__router, this.__native.match(
                 this.__router.getNative(), path, method
             ));
+        },
+
+        /**
+         * Returns native instance of barista route.
+         *
+         * @return {NodeJS.Barista.Route}
+         */
+        getNative: function () {
+            return this.__native;
         }
     }
 });

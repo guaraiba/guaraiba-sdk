@@ -5,6 +5,18 @@ desc(
     '\t\t\t\t// Clean any model that contain book, article, or user word:\n'.info +
     '\t\t\t\tjake fixture:reload[Book,Article,User]\n'.choose
 );
-task('reload', ['clean','load'], { async: true }, function () {
-    complete();
+task('reload', { async: true }, function () {
+    var args = Array.prototype.slice.call(arguments),
+        clean = jake.Task['fixture:clean'],
+        load = jake.Task['fixture:load'];
+
+    clean.addListener('complete', function () {
+        load.invoke.apply(load, args);
+    });
+
+    load.addListener('complete', function () {
+        complete();
+    });
+
+    clean.invoke.apply(clean, args);
 });

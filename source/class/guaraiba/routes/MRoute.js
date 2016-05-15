@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -208,7 +208,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @return {Boolean}
          */
         test: function (path) {
-            return this.__native.test(name);
+            return this.getNative().test(name);
         },
 
         /**
@@ -231,7 +231,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
 
             var endpoint = controller.replace(/\./g, '/') + '.' + (action || 'index');
 
-            this.__native.to(endpoint, defaultParams);
+            this.getNative().to(endpoint, defaultParams);
             return this;
         },
 
@@ -242,7 +242,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @return {guaraiba.routes.Route}
          */
         as: function (route_name) {
-            this.__native.as(route_name);
+            this.getNative().as(route_name);
             return this;
         },
 
@@ -253,7 +253,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @return {guaraiba.routes.Route}
          */
         where: function (conditions) {
-            this.__native.where(conditions);
+            this.getNative().where(conditions);
             return this;
         },
 
@@ -264,7 +264,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @return {Array}
          */
         stringify: function (params) {
-            return this.__native.stringify(params);
+            return this.getNative().stringify(params);
         },
 
         /**
@@ -273,7 +273,7 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
          * @return {String}
          */
         toString: function () {
-            return this.__native.toString();
+            return this.getNative().toString();
         }
     }
 });

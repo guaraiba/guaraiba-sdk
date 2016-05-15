@@ -11,7 +11,6 @@ desc(
 
 task('new-app', { async: true }, function () {
     var promptly = require('promptly'),
-        path = require('path'),
         settings = {
             out: process.cwd(),
             appName: process.env.name || process.env.n,
@@ -23,8 +22,6 @@ task('new-app', { async: true }, function () {
                 interactive: true
             }
         },
-        inflection = require('inflection'),
-        format = require('util').format,
 
         validateAppName = function (value) {
             if (!value.match(/^[a-z]+[a-z0-9]*([\-\._ ][a-z]+[a-z0-9]*)*$/i)) {
@@ -40,6 +37,19 @@ task('new-app', { async: true }, function () {
             }
 
             return value;
+        },
+
+        error = function (msg) {
+            msg = msg.replace(/WARN/, '').trim();
+
+            if (msg) {
+                if (msg.match(/Error:/)) {
+                    console.error(msg);
+                    process.abort();
+                } else {
+                    console.warn(msg);
+                }
+            }
         },
 
         actions = {
@@ -81,7 +91,7 @@ task('new-app', { async: true }, function () {
             stepGenerate: function () {
                 console.log('------------------------------------------------');
                 var module = require('module'),
-                    util = require('util'),
+                    path = require('path'),
                     spawn = require('child_process').spawn,
                     qooxdooAppCreator = module._resolveFilename('qooxdoo/create-application.py'),
                     guaraibaPath = path.dirname(module._resolveFilename('guaraiba')),
@@ -96,11 +106,11 @@ task('new-app', { async: true }, function () {
                     ]);
 
                 childProcess.stdout.addListener("data", function (data) {
-                    process.stdout.write(data);
+                    console.info(data.toString().trim());
                 });
 
                 childProcess.stderr.addListener("data", function (data) {
-                    process.stderr.write(data);
+                    error(data.toString());
                 });
 
                 childProcess.addListener('exit', function (code) {

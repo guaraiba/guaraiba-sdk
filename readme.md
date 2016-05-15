@@ -15,7 +15,7 @@ compilation and documentation of applications under the paradigm of object-orien
 * It offers multiple authentication services such as local, ldap, soap, facebook, google and others of the family of
   the passport modules in NodeJS.
 * It contains a layer of abstraction for the development of complete REST services.
-* It allows the implementation of views on formats ejs, handlebars, jade, jasper report and mustache.
+* It allows the implementation of views on formats ejs, handlebars, jade, and jasper report.
 * Allows natively and in correspondence with the views implemented, generating responses to requests in formats txt,
   json, js, xml, html, xhtml, pdf, docx, rtf, pptx, xlsx, xls, csv, odt, ods ODP, swf and jpeg.
 * Allows configure and run the application as a cluster in relation with number of processors available on the server.
