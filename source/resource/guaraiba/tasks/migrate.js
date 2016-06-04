@@ -7,7 +7,7 @@ namespace('db', function () {
     try {
         desc(
             'Creates a new migration, with the (name) of the migration being added.\n' +
-            '\t\t\t  Interactive mode:\n'.info +
+            '\t\t\t  Interactive mode over default database schema:\n'.info +
             '\t\t\t   jake db:make-migration\n'.choose +
             '\t\t\t  Quiet mode:\n'.info +
             '\t\t\t   jake db:make-migration n=create_books\n'.choose +
