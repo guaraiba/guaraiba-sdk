@@ -220,7 +220,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
          * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
          */
         _prepareCount: function (done) {
-            var qb = this.createQueryBuilder().count('*');
+            var qb = this.createQueryBuilder().count('* AS count');
 
             this._prepareWhereConditions(qb, done);
         },

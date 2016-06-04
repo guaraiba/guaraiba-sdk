@@ -429,6 +429,9 @@ qx.Mixin.define('guaraiba.orm.MQuery', {
                 value = ( typeof data[dbField] == 'undefined' ) ? data[property.qxName] : data[dbField];
 
                 if (typeof value != 'undefined') {
+                    if (qx.lang.Type.isDate(value)) value = value.toISOString();
+                    if (qx.lang.Type.isBoolean(value)) value = value ? 'true' : 'false';
+
                     nData[dbField] = value;
                 }
             }, this);

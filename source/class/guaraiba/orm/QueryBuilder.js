@@ -895,9 +895,9 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
                     values[i] = this._normalizeValue(v);
                 }, this)
             } else {
-                if (values instanceof guaraiba.orm.QueryBuilder) {
-                    values = values.toKnex();
-                }
+                if (values instanceof guaraiba.orm.QueryBuilder) values = values.toKnex();
+                if (qx.lang.Type.isDate(values)) values = values.toISOString();
+                if (qx.lang.Type.isBoolean(values)) values = values ? 'true' : 'false';
             }
 
             return values;
