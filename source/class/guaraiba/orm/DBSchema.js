@@ -30,14 +30,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @param v {String}
          * @return {String|Boolean}
          */
-        String: function (v) {
+        String: function RecordPropertyTypeString(v) {
             var nv = new String(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
-
-            // When caller a simple check function.
             return qx.lang.Type.isString(v) || (nv == v) ? true : false;
         },
 
@@ -47,40 +41,34 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @param v {Boolean}
          * @return {Boolean}
          */
-        Boolean: function (v) {
+        Boolean: function RecordPropertyTypeBoolean(v) {
             if (qx.lang.Type.isString(v)) {
                 v = v.toLowerCase();
             }
 
-            v = ( v === 'false' || v === '0' || v == null) ? false : true;
-
-            var nv = new Boolean(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
-
-            // When caller a simple check function.
+            var nv = ( v === 'false' || v === '0' || v == null) ? false : true;
             return qx.lang.Type.isBoolean(v) || (nv === v) ? true : false;
         },
 
-        Number: Number,
+        /**
+         * Type for define orm record field and check property value.
+         *
+         * @param v {Number|String}
+         * @return {Boolean}
+         */
+        Number: function RecordPropertyTypeNumber(v) {
+            var nv = new Number(v);
+            return qx.lang.Type.isNumber(nv) ? true : false;
+        },
 
         /**
          * Type for define orm record field and check property value.
          *
          * @param v {Date|String}
-         * @return {Date|Boolean}
+         * @return {Boolean}
          */
-        Date: function (v) {
+        Date: function RecordPropertyTypeDate(v) {
             var nv = new Date(v);
-
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
-
-            // When caller a simple check function.
             return qx.lang.Type.isDate(nv) ? true : false;
         },
 
@@ -88,16 +76,10 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * Type for define orm record field and check property value.
          *
          * @param v {String}
-         * @return {String|Boolean}
+         * @return {Boolean}
          */
-        Text: function (v) {
+        Text: function RecordPropertyTypeText(v) {
             var nv = new String(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
-
-            // When caller a simple check function.
             return qx.lang.Type.isString(v) || (nv == v) ? true : false;
         },
 
@@ -105,16 +87,10 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * Type for define orm record field and check property value.
          *
          * @param v {String} String of only one character.
-         * @return {String|Boolean}
+         * @return {Boolean}
          */
-        Character: function (v) {
+        Character: function RecordPropertyTypeCharacter(v) {
             var nv = new String(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
-
-            // When caller a simple check function.
             return qx.lang.Type.isString(v) && v.length <= 1 ? true : false;
         },
 
@@ -124,12 +100,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @param v {Number}
          * @return {Number|Boolean}
          */
-        Integer: function (v) {
+        Integer: function RecordPropertyTypeInteger(v) {
             var nv = Number(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
             return parseInt(v) === nv ? true : false;
         },
 
@@ -139,12 +111,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @param v {Number}
          * @return {Number|Boolean}
          */
-        Serial: function (v) {
+        Serial: function RecordPropertyTypeSerial(v) {
             var nv = Number(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
             return parseInt(v) === nv ? true : false;
         },
 
@@ -154,12 +122,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @param v {Number}
          * @return {Number|Boolean}
          */
-        Float: function (v) {
+        Float: function RecordPropertyTypeFloat(v) {
             var nv = Number(v);
-            // When caller from native schema.
-            if (this == window) {
-                return nv;
-            }
             return parseFloat(v) === nv ? true : false;
         }
     },
@@ -250,6 +214,17 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @return {guaraiba.orm.Model}
          */
         register: function (recordClass) {
+            var trasformMethod, rProperties = qx.util.PropertyUtil.getProperties(recordClass);
+
+            rProperties && Object.keys(rProperties).forEach(function (name) {
+                if (rProperties[name]['check'] && !rProperties[name]['transform']) {
+                    if (trasformMethod = this.getRecordPropertyTransform(rProperties[name]['check'])) {
+                        rProperties[name]['transform'] = trasformMethod;
+                        qx.core.Property.attachMethods(recordClass, name, rProperties[name]);
+                    }
+                }
+            }, this);
+
             var model = guaraiba.orm.Model.getModel(recordClass, this);
 
             this.__models[model.getModelName()] = model;
@@ -345,6 +320,16 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          */
         getTransaction: function () {
             return this._trx;
+        },
+
+        /**
+         * Returns name of transform method to given check function.
+         *
+         * @param checkFunc {String|Function}
+         */
+        getRecordPropertyTransform: function (checkFunc) {
+            var name = qx.lang.Type.isString(checkFunc) ? eval(checkFunc).name : checkFunc.name;
+            return name ? '__transform' + name.replace(/^RecordPropertyType/, '') : false;
         },
 
         /**

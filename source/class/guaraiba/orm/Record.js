@@ -248,6 +248,108 @@ qx.Class.define('guaraiba.orm.Record', {
             var cache = guaraiba.orm.Model.getCacheRecords(this.getModel().getModelName());
 
             delete cache[this.getId()];
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {String}
+         */
+        __transformString: function (v) {
+            if (v === null || v === undefined) return null;
+
+            return v.toString ? v.toString() : String(v);
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Boolean}
+         */
+        __transformBoolean: function (v) {
+            var nv
+
+            if (v === null || v === undefined) return null;
+            if (qx.lang.Type.isString(v)) nv = v.toLowerCase();
+            if (nv === 'true' || nv === '1' || v === 1) return true;
+            if (nv === 'false' || nv === '0' || v === 0) return false;
+
+            return v
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Number}
+         */
+        __transformNumber: function (v) {
+            var nv
+
+            if (v === null || v === undefined) return null;
+            if (qx.lang.Type.isString(v)) nv = new Number(v);
+            if (qx.lang.Type.isNumber(nv)) return nv;
+
+            return v
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Date}
+         */
+        __transformDate: function (v) {
+            var nv
+
+            if (v === null || v === undefined) return null;
+            if (qx.lang.Type.isString(v)) nv = new Date(v);
+            if (qx.lang.Type.isDate(nv)) return nv;
+
+            return v
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {String}
+         */
+        __transformText: function (v) {
+            return this.__transformString(v);
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {String}
+         */
+        __transformCharacter: function (v) {
+            return this.__transformString(v);
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Integer}
+         */
+        __transformInteger: function (v) {
+            return this.__transformNumber(v);
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Integer}
+         */
+        __transformSerial: function (v) {
+            return this.__transformInteger(v);
+        },
+
+        /**
+         * Returns trasform value for serial property type.
+         * @param v {var}
+         * @return {Integer}
+         */
+        __transformFloat: function (v) {
+            return this.__transformNumber(v);
         }
 
     }

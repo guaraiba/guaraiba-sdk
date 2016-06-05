@@ -23,8 +23,7 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
          * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         createAction: function (request, response, params) {
-            var items = params.items || {},
-                qb = this.createQueryBuilder();
+            var items = params.items || {};
 
             if (qx.lang.Type.isString(items)) {
                 items = request.parseJson(items);
@@ -35,7 +34,8 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
             var model = this.getModel(),
                 record = new (model.getRecordClass())(items, model.getDBSchema());
 
-            record.save(function (err, record) {
+            record.save(function (err, sRecord) {
+                record = sRecord || record
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
                     if (!this.respondError(err)) {
                         var done = qx.lang.Function.bind(function(){
@@ -73,11 +73,12 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
             items = this._normalizeData(items);
 
             this._record.fromDataObject(items);
-            this._record.save(function (err, record) {
-                this.respondError(err) || this._prepareItem(record, function (err, item) {
+            this._record.save(function (err, sRecord) {
+                this._record = sRecord || this._record
+                this.respondError(err) || this._prepareItem(this._record, function (err, item) {
                     this.respondError(err) || this.respond({
                         type: this.getRecordClassName(),
-                        id: record.get(this.getIdFieldName()),
+                        id: this._record.get(this.getIdFieldName()),
                         data: item
                     });
                 });

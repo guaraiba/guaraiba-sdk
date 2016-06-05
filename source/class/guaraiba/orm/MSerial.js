@@ -29,9 +29,9 @@ qx.Mixin.define('guaraiba.orm.MSerial', {
                 idFieldValue = this.get(idFieldName);
 
             if (model.isSerialId() && idFieldValue === null) {
-                model.max(idFieldName, function (err, data) {
+                model.max(idFieldName + ' AS max', function (err, data) {
                     if (err) throw err;
-                    this.set(idFieldName, (data[0] || {}).max + 1 || 1);
+                    this.set(idFieldName, (data[0] || { max: 0 }).max + 1);
                     done.call(this, true);
                 }, this);
             } else {
