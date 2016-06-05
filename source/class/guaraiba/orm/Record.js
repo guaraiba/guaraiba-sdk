@@ -255,7 +255,7 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {String}
          */
-        __transformString: function (v) {
+        _transformString: function (v) {
             if (v === null || v === undefined) return null;
 
             return v.toString ? v.toString() : String(v);
@@ -266,7 +266,7 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Boolean}
          */
-        __transformBoolean: function (v) {
+        _transformBoolean: function (v) {
             var nv
 
             if (v === null || v === undefined) return null;
@@ -282,7 +282,7 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Number}
          */
-        __transformNumber: function (v) {
+        _transformNumber: function (v) {
             var nv
 
             if (v === null || v === undefined) return null;
@@ -297,7 +297,7 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Date}
          */
-        __transformDate: function (v) {
+        _transformDate: function (v) {
             var nv
 
             if (v === null || v === undefined) return null;
@@ -312,8 +312,8 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {String}
          */
-        __transformText: function (v) {
-            return this.__transformString(v);
+        _transformText: function (v) {
+            return this._transformString(v);
         },
 
         /**
@@ -321,8 +321,8 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {String}
          */
-        __transformCharacter: function (v) {
-            return this.__transformString(v);
+        _transformCharacter: function (v) {
+            return this._transformString(v);
         },
 
         /**
@@ -330,8 +330,8 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Integer}
          */
-        __transformInteger: function (v) {
-            return this.__transformNumber(v);
+        _transformInteger: function (v) {
+            return this._transformNumber(v);
         },
 
         /**
@@ -339,8 +339,8 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Integer}
          */
-        __transformSerial: function (v) {
-            return this.__transformInteger(v);
+        _transformSerial: function (v) {
+            return this._transformInteger(v);
         },
 
         /**
@@ -348,8 +348,8 @@ qx.Class.define('guaraiba.orm.Record', {
          * @param v {var}
          * @return {Integer}
          */
-        __transformFloat: function (v) {
-            return this.__transformNumber(v);
+        _transformFloat: function (v) {
+            return this._transformNumber(v);
         }
 
     }
