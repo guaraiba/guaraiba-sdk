@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -44,6 +44,25 @@ qx.Class.define('guaraiba.Tasks', {
             };
 
             nameSpace ? namespace(nameSpace, createTask) : createTask();
+        },
+
+        /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         * @ignore(__filename)
+         */
+        itIsDeveloping: function(){
+            return String(__filename).match(/source\/class\/guaraiba\/Tasks.js$/);
+        },
+
+        /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         */
+        itIsProduction: function(){
+            return !this.itIsDeveloping();
         }
     }
 });

@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -21,6 +21,7 @@
 qx.Class.define("guaraiba.Configuration", {
     type: 'abstract',
     extend: qx.core.Object,
+    implement: guaraiba.IConfiguration,
     include: qx.core.MAssert,
 
     construct: function () {
@@ -28,13 +29,17 @@ qx.Class.define("guaraiba.Configuration", {
             appBaseNameSpace = this.classname.replace(regExp, '');
 
         // Set base path for application resources.
-        qx.util.LibraryManager.getInstance().set(appBaseNameSpace, "resourceUri", guaraiba.resourcePath);
+        this.registerResourceUri(appBaseNameSpace, guaraiba.resourcePath)
         // Set base path for guaraiba resources.
         if (guaraiba.fs.existsSync(guaraiba.path.join(guaraiba.resourcePath, 'guaraiba'))) {
-            qx.util.LibraryManager.getInstance().set("guaraiba", "resourceUri", guaraiba.resourcePath);
+            this.registerResourceUri("guaraiba", guaraiba.resourcePath);
         } else {
-            qx.util.LibraryManager.getInstance().set("guaraiba", "resourceUri", __dirname + '/../../resource');
+            this.registerResourceUri("guaraiba", guaraiba.path.join(__dirname, '/../../resource'));
         }
+
+        this.__cacheControlExpires = {'default': 0};
+        this.__passports = {};
+        this.__dBSchemas = {};
 
         // Register local passport.
         this.registerPassport(new guaraiba.Passport('passport-local', 'local', {
@@ -65,6 +70,8 @@ qx.Class.define("guaraiba.Configuration", {
 
             this.registerPassport(passport);
         }
+
+        this.init();
     },
 
     properties: {
@@ -348,19 +355,17 @@ qx.Class.define("guaraiba.Configuration", {
         /**
          * Expiry times for cache control.
          */
-        __cacheControlExpires: {
-            'default': 0
-        },
+        __cacheControlExpires: null,
 
         /**
          * Session passport settings.
          */
-        __passports: {},
+        __passports: null,
 
         /**
          * Settings of database connection schemas.
          */
-        __dBSchemas: {},
+        __dBSchemas: null,
 
         /**
          * Set
@@ -440,6 +445,17 @@ qx.Class.define("guaraiba.Configuration", {
         },
 
         /**
+         * Register new resource uri.
+         *
+         * @param namespace {String} Resources namespace.
+         * @param resourcePath {String} Path to resources.
+         */
+        registerResourceUri: function (namespace, resourcePath) {
+            // Set base path for namespace resources.
+            qx.util.LibraryManager.getInstance().set(namespace, "resourceUri", resourcePath || guaraiba.resourcePath);
+        },
+
+        /**
          * Register new passport for authentication actions.
          *
          * @param passport {guaraiba.Passport}
@@ -475,6 +491,15 @@ qx.Class.define("guaraiba.Configuration", {
                 'The database connection schema (' + dBSchema.getName() + ') is already register.'
             );
             this.__dBSchemas[dBSchema.getName()] = dBSchema;
+        },
+
+        /**
+         * Return all instances of register database connection schema.
+         *
+         * @return {Array}
+         */
+        getDBSchemas: function () {
+            return qx.lang.Object.getValues(this.__dBSchemas);
         },
 
         /**

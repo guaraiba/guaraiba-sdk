@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -206,6 +206,15 @@ qx.Class.define('guaraiba.Controller', {
         },
 
         /**
+         * Return all instances of register database connection schema.
+         *
+         * @return {Array}
+         */
+        getDBSchemas: function () {
+            return this.getConfiguration().getDBSchemas();
+        },
+
+        /**
          * Returns model instance for given record class or model name.
          *
          * @param classOrName {Class|String} ORM record class or model class name.
@@ -215,7 +224,17 @@ qx.Class.define('guaraiba.Controller', {
         getModel: function (classOrName, dbSchema) {
             var modelName = qx.lang.Type.isString(classOrName) ? classOrName : (classOrName.classname);
 
-            return this.getDBSchema(dbSchema).getModel(modelName);
+            if (dbSchema) return this.getDBSchema(dbSchema).getModel(modelName);
+
+            var model = false,
+                dbSchemas = this.getDBSchemas();
+
+            while (!model && dbSchemas.length > 0) {
+                dbSchema = dbSchemas.shift();
+                model = dbSchema.getModel(modelName, dbSchemas.lenght == 0);
+            }
+
+            return model;
         },
 
         /**

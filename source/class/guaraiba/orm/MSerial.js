@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -29,9 +29,9 @@ qx.Mixin.define('guaraiba.orm.MSerial', {
                 idFieldValue = this.get(idFieldName);
 
             if (model.isSerialId() && idFieldValue === null) {
-                model.max(idFieldName, function (err, data) {
+                model.max(idFieldName + ' AS max', function (err, data) {
                     if (err) throw err;
-                    this.set(idFieldName, (data[0] || {}).max + 1 || 1);
+                    this.set(idFieldName, (data[0] || { max: 0 }).max + 1);
                     done.call(this, true);
                 }, this);
             } else {

@@ -3,8 +3,8 @@
  *      2015 Yoandry Pacheco Aguila
  *
  * License:
- *      LGPL: http://www.gnu.org/licenses/lgpl.html
- *      EPL: http://www.eclipse.org/org/documents/epl-v10.php
+ *      LGPL-3.0: http://spdx.org/licenses/LGPL-3.0.html#licenseText
+ *      EPL-1.0: http://spdx.org/licenses/EPL-1.0.html#licenseText
  *      See the LICENSE file in the project's top-level directory for details.
  *
  * Authors:
@@ -50,11 +50,6 @@ qx.Class.define("guaraiba.Application", {
         this.base(arguments);
     },
 
-    /*
-     *****************************************************************************
-     MEMBERS
-     *****************************************************************************
-     */
     members: {
 
         __nativeAppication: null,
@@ -82,14 +77,34 @@ qx.Class.define("guaraiba.Application", {
         },
 
         /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         * @ignore(__filename)
+         */
+        itIsDeveloping: function () {
+            return String(__filename).match(/source\/class\/guaraiba\/Application.js$/);
+        },
+
+        /**
+         * Check if the application is under development.
+         *
+         * @return {Boolean}
+         */
+        itIsProduction: function () {
+            return !this.itIsDeveloping();
+        },
+
+        /**
          * Run guaraiba framework or application tasks.
          *
          * @param args {Array}
          */
         runJakeTask: function (args) {
-            process.chdir(guaraiba.path.dirname(process.mainModule.filename))
+            process.chdir(guaraiba.appRoot);
 
             var jake = require('jake');
+
             jake.run.apply(jake, args.length > 0 ? args : ['--help']);
 
             if (args[0] == '--tasks') {
@@ -101,6 +116,8 @@ qx.Class.define("guaraiba.Application", {
          * Star guaraiba server application.
          */
         start: function () {
+            process.chdir(guaraiba.appRoot);
+
             // Include the cluster module
             var app = this,
                 cluster = require('cluster'),
@@ -263,9 +280,9 @@ qx.Class.define("guaraiba.Application", {
             if (!this.__nativeAppication) {
                 this.__nativeAppication = guaraiba.connect();
                 this.__nativeAppication.use(serveFavicon(resource.toUri('public/images/favicon.ico')));
-                this.__nativeAppication.use(logger('combined', { stream: config.getLogStream() }));
+                this.__nativeAppication.use(logger('combined', {stream: config.getLogStream()}));
                 this.__nativeAppication.use(bodyParser.json());
-                this.__nativeAppication.use(bodyParser.urlencoded({ extended: true }));
+                this.__nativeAppication.use(bodyParser.urlencoded({extended: true}));
                 this.__nativeAppication.use(methodOverride('x-http-method-override'));
                 this.__nativeAppication.use(methodOverride('_method'));
                 this.__nativeAppication.use(session(config.getSessionOptions()));
@@ -280,7 +297,7 @@ qx.Class.define("guaraiba.Application", {
         },
 
         /**
-         * Set server static resourse path.
+         * Set server static resource path.
          *
          * @param nativeAppication {NodeJS.Connect}
          * @param serveStatic {NodeJS.ServeStatic}
@@ -288,19 +305,19 @@ qx.Class.define("guaraiba.Application", {
          */
         __setServerStatic: function (nativeAppication, serveStatic) {
             this.getServerStaticPaths().forEach(function (sp) {
-                nativeAppication.use(sp.urlPattern, serveStatic(sp.resoursePath));
+                nativeAppication.use(sp.urlPattern, serveStatic(sp.resourcePath));
             }, this);
         },
 
         /**
-         * Returns list of static resourse paths.
+         * Returns list of static resource paths.
          *
-         * @return {Array} As this [ { urlPattern: '/public', resoursePath: '/opt/MyApp/public'}, ...]
+         * @return {Array} As this [ { urlPattern: '/public', resourcePath: '/opt/MyApp/public'}, ...]
          * @internal
          */
         getServerStaticPaths: function () {
             return [
-                { urlPattern: '/public', resoursePath: guaraiba.path.join(guaraiba.resourcePath, 'public') }
+                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public')}
             ]
         },
 
@@ -313,6 +330,15 @@ qx.Class.define("guaraiba.Application", {
          */
         getDBSchema: function (name) {
             return this.getConfiguration().getDBSchema(name);
+        },
+
+        /**
+         * Return all instances of register database connection schema.
+         *
+         * @return {Array}
+         */
+        getDBSchemas: function () {
+            return this.getConfiguration().getDBSchemas();
         },
 
         /**
@@ -400,19 +426,20 @@ qx.Class.define("guaraiba.Application", {
         if (String(process.argv[1]).match(/jake$/)) {
             appRoot = process.cwd();
         } else {
-            appRoot = path.dirname(process.argv[1])
+            appRoot = path.dirname(process.argv[1]);
         }
 
         // Locate the path to resources.
-        if (fs.existsSync(path.join(appRoot, 'resource'))) {
-            resPath = path.join(appRoot, 'resource');
-        } else if (fs.existsSync(path.join(appRoot, '../resource'))) {
-            resPath = fs.realpathSync(path.join(appRoot, '../resource'));
-        } else if (fs.existsSync(path.join(appRoot, '../../resource'))) {
-            resPath = fs.realpathSync(path.join(appRoot, '../../resource'));
-        } else if (fs.existsSync(path.join(appRoot, 'source/resource'))) {
-            resPath = fs.realpathSync(path.join(appRoot, 'source/resource'));
-            appRoot = fs.realpathSync(path.join(appRoot, 'source/script'));
+        if (!fs.existsSync(path.join(appRoot, 'resource'))) {
+            if (fs.existsSync(path.join(appRoot, '../resource'))) {
+                appRoot = fs.realpathSync(path.join(appRoot, '..'));
+            } else if (fs.existsSync(path.join(appRoot, '../../resource'))) {
+                appRoot = fs.realpathSync(path.join(appRoot, '../../'));
+            } else if (fs.existsSync(path.join(appRoot, 'source/resource'))) {
+                appRoot = fs.realpathSync(path.join(appRoot, 'source'));
+            } else {
+                throw Error('Invalid path application work directory.');
+            }
         }
 
         // Link to NodeJS modules and other guaraiba application var.
@@ -420,7 +447,7 @@ qx.Class.define("guaraiba.Application", {
             cwd: process.cwd(),
             exit: process.exit,
             appRoot: appRoot,
-            resourcePath: resPath,
+            resourcePath: path.join(appRoot, 'resource'),
             env: process.env,
             utils: require('utilities'),
             path: path,
