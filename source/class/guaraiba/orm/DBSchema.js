@@ -326,6 +326,7 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * Returns name of transform method to given check function.
          *
          * @param checkFunc {String|Function}
+         * @return {String} Name of transform method.
          */
         getRecordPropertyTransform: function (checkFunc) {
             var name = qx.lang.Type.isString(checkFunc) ? eval(checkFunc).name : checkFunc.name;
@@ -335,7 +336,7 @@ qx.Class.define('guaraiba.orm.DBSchema', {
         /**
          * Returns true if transaction is started.
          *
-         * @return {Boolean}.
+         * @return {Boolean}
          */
         isTransaction: function () {
             return this._trx !== null;

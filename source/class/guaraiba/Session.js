@@ -76,7 +76,7 @@ qx.Class.define('guaraiba.Session', {
         /**
          *  Get cookie object.
          *
-         * @return {object}
+         * @return {Object}
          */
         getCookies: function () {
             return this.__nativeSession.cookie;
@@ -85,7 +85,7 @@ qx.Class.define('guaraiba.Session', {
         /**
          * Get cookie time remaining in milliseconds
          *
-         * @return {number}
+         * @return {Number}
          */
         getMaxAge: function () {
             return this.__nativeSession.cookie.maxAge;
@@ -112,6 +112,8 @@ qx.Class.define('guaraiba.Session', {
 
         /**
          * Get current user profile.
+         *
+         * @return {Object}
          */
         getProfile: function () {
             var profile = this.get('profile');
@@ -138,7 +140,7 @@ qx.Class.define('guaraiba.Session', {
          * Defined an initialize session attribute.
          *
          * @param key {String}
-         * @param value {}
+         * @param value {Any}
          */
         set: function (key, value) {
             this.__nativeSession[key] = value;

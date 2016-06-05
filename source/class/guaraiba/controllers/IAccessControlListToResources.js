@@ -45,7 +45,7 @@ qx.Interface.define("guaraiba.controllers.IAccessControlListToResources", {
         /**
          * Returns default permission to be applied according requested action.
          *
-         * @return {number}
+         * @return {Number}
          */
         getDefaultPermissionToResources: function () {}
     }
