@@ -329,7 +329,7 @@ qx.Class.define('guaraiba.orm.DBSchema', {
          * @return {String} Name of transform method.
          */
         getRecordPropertyTransform: function (checkFunc) {
-            var name = qx.lang.Type.isString(checkFunc) ? eval(checkFunc).name : checkFunc.name;
+            var name = qx.lang.Type.isString(checkFunc) ? qx.lang.Function.globalEval(checkFunc).name : checkFunc.name;
             return name ? '__transform' + name.replace(/^RecordPropertyType/, '') : false;
         },
 
