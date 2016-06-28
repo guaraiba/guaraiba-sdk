@@ -280,9 +280,9 @@ qx.Class.define("guaraiba.Application", {
             if (!this.__nativeAppication) {
                 this.__nativeAppication = guaraiba.connect();
                 this.__nativeAppication.use(serveFavicon(resource.toUri('public/images/favicon.ico')));
-                this.__nativeAppication.use(logger('combined', {stream: config.getLogStream()}));
+                this.__nativeAppication.use(logger('combined', { stream: config.getLogStream() }));
                 this.__nativeAppication.use(bodyParser.json());
-                this.__nativeAppication.use(bodyParser.urlencoded({extended: true}));
+                this.__nativeAppication.use(bodyParser.urlencoded({ extended: true }));
                 this.__nativeAppication.use(methodOverride('x-http-method-override'));
                 this.__nativeAppication.use(methodOverride('_method'));
                 this.__nativeAppication.use(session(config.getSessionOptions()));
@@ -317,7 +317,7 @@ qx.Class.define("guaraiba.Application", {
          */
         getServerStaticPaths: function () {
             return [
-                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public')}
+                { urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public') }
             ]
         },
 
@@ -372,7 +372,7 @@ qx.Class.define("guaraiba.Application", {
             } else {
                 controller = new guaraiba.controllers.ErrorsController(request, response, params);
                 controller.respordWithStatusNotFound(
-                    Error('Route not found')
+                    Error('Route not found to (' + request.getUrl()+')')
                 );
             }
         },
