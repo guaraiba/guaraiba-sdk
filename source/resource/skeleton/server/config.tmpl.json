@@ -37,15 +37,15 @@
     ],
     "default-job": "source",
     "let": {
+        "ROOT": ".",
         "APPLICATION": "${Namespace}",
         "QOOXDOO_PATH": "${ABS_QOOXDOO_PATH}",
         "GUARAIBA_PATH": "${Cache}",
+        "BUILD_PATH": "$${ROOT}/../$${APPLICATION}-build",
+        "CACHE": "./cache/qx${QOOXDOO_VERSION}",
         "LOCALES": [
             "es"
-        ],
-        "CACHE": "$${TMPDIR}/qx$${QOOXDOO_VERSION}/cache",
-        "ROOT": ".",
-        "BUILD_PATH": "$${ROOT}/../$${APPLICATION}-build"
+        ]
     },
     "config-warnings": {
         "job-shadowing": [
