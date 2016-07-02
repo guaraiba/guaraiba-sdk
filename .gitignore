@@ -2,3 +2,5 @@
 /api/
 /build/
 /node_modules/
+/source/script/
+/cache/
