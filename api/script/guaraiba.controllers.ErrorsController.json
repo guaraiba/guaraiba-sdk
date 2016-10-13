@@ -1,1 +1,0 @@
-{"attributes": {"fullName": "guaraiba.controllers.ErrorsController", "packageName": "guaraiba.controllers", "type": "class", "name": "ErrorsController", "superClass": "guaraiba.Controller"}, "type": "class", "children": [{"attributes": {"text": "<p>This class offers the basic features for create error controller.</p>"}, "type": "desc"}]}
