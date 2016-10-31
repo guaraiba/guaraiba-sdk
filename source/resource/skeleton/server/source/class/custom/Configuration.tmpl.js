@@ -17,11 +17,11 @@ qx.Class.define('${Namespace}.Configuration', {
             this.setAllowCORS(false);
 
             // Register database schemas.
-            var resourceManager = qx.util.ResourceManager.getInstance(),
-                db = resourceManager.toUri('${Namespace}/data/app.db'),
-                migrations = resourceManager.toUri('${Namespace}/data/migrations'),
-                seeds = resourceManager.toUri('${Namespace}/data/seeds'),
-
+            var path = guaraiba.path,
+                db = path.join(guaraiba.resourcePath,'${Namespace}/data/app.db'),
+                migrations = path.join(guaraiba.resourcePath, '${Namespace}/data/migrations'),
+                seeds = path.join(guaraiba.resourcePath, '${Namespace}/data/seeds'),
+                
                 knexSetting = {
                     client: 'sqlite3',
                     connection: db,

@@ -43,6 +43,7 @@ qx.Class.define("guaraiba.Application", {
         }
 
         guaraiba.app = this;
+        guaraiba.namespace = this.getNamespace();
         guaraiba.config = configuration;
         guaraiba.router = router;
         guaraiba.router.init();

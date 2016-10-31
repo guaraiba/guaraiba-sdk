@@ -24,8 +24,9 @@ task('load', { async: true }, function () {
 
             loadFileActions.push(function (nextFile) {
                 var modelName = model.getModelName(),
-                    file = util.format('%s/data/fixtures/%s/%s.json',
+                    file = util.format('%s/%s/data/fixtures/%s/%s.json',
                         guaraiba.resourcePath,
+                        guaraiba.namespace,
                         dbSchema.getName(),
                         modelName
                     );
