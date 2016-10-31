@@ -43,6 +43,7 @@ qx.Class.define("guaraiba.Application", {
         }
 
         guaraiba.app = this;
+        guaraiba.namespace = this.getNamespace();
         guaraiba.config = configuration;
         guaraiba.router = router;
         guaraiba.router.init();
@@ -139,13 +140,13 @@ qx.Class.define("guaraiba.Application", {
                         checkWorkers();
                     },
 
-                // Handle worker messages
-                //    onMessage = function (message) {
-                //        app.debug('We got a message!');
-                //        app.debug(guaraiba.prettyData.json(message));
-                //    },
+                    // Handle worker messages
+                    //    onMessage = function (message) {
+                    //        app.debug('We got a message!');
+                    //        app.debug(guaraiba.prettyData.json(message));
+                    //    },
 
-                // Check workers to restart
+                    // Check workers to restart
                     checkWorkers = function () {
                         for (var i in cluster.workers) {
                             if (cluster.workers[i].toRestart && cluster.workers[i].state === 'listening') {
@@ -154,7 +155,7 @@ qx.Class.define("guaraiba.Application", {
                         }
                     },
 
-                // Create worker
+                    // Create worker
                     createWorker = function () {
                         var worker = cluster.fork();
                         //worker.on('message', onMessage);
@@ -248,6 +249,17 @@ qx.Class.define("guaraiba.Application", {
         },
 
         /**
+         * Get application name space.
+         *
+         * @returns {string}
+         */
+        getNamespace: function () {
+            var regExp = new RegExp('.' + this.basename + '$');
+
+            return this.classname.replace(regExp, '');
+        },
+
+        /**
          * Get instance of guaraiba.Configuration class.
          *
          * @return {guaraiba.Configuration}
@@ -280,9 +292,9 @@ qx.Class.define("guaraiba.Application", {
             if (!this.__nativeAppication) {
                 this.__nativeAppication = guaraiba.connect();
                 this.__nativeAppication.use(serveFavicon(resource.toUri('public/images/favicon.ico')));
-                this.__nativeAppication.use(logger('combined', { stream: config.getLogStream() }));
+                this.__nativeAppication.use(logger('combined', {stream: config.getLogStream()}));
                 this.__nativeAppication.use(bodyParser.json());
-                this.__nativeAppication.use(bodyParser.urlencoded({ extended: true }));
+                this.__nativeAppication.use(bodyParser.urlencoded({extended: true}));
                 this.__nativeAppication.use(methodOverride('x-http-method-override'));
                 this.__nativeAppication.use(methodOverride('_method'));
                 this.__nativeAppication.use(session(config.getSessionOptions()));
@@ -317,7 +329,7 @@ qx.Class.define("guaraiba.Application", {
          */
         getServerStaticPaths: function () {
             return [
-                { urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public') }
+                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public')}
             ]
         },
 
@@ -372,7 +384,7 @@ qx.Class.define("guaraiba.Application", {
             } else {
                 controller = new guaraiba.controllers.ErrorsController(request, response, params);
                 controller.respordWithStatusNotFound(
-                    Error('Route not found to (' + request.getUrl()+')')
+                    Error('Route not found to (' + request.getUrl() + ')')
                 );
             }
         },

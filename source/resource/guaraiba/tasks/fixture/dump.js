@@ -48,8 +48,9 @@ task('dump', {async: true}, function () {
         execute = function (model, dbSchema) {
             actions.push(function (next) {
                 console.info('START DUMP TO MODEL: ' + model.getModelName());
-                var file = util.format('%s/data/fixtures/%s/%s.json',
+                var file = util.format('%s/%s/data/fixtures/%s/%s.json',
                     guaraiba.resourcePath,
+                    guaraiba.namespace,
                     dbSchema.getName(),
                     model.getModelName()
                 );

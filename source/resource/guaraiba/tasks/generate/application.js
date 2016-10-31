@@ -93,7 +93,7 @@ task('new-app', { async: true }, function () {
                 var module = require('module'),
                     path = require('path'),
                     spawn = require('child_process').spawn,
-                    qooxdooAppCreator = module._resolveFilename('qooxdoo/create-application.py'),
+                    qooxdooAppCreator = module._resolveFilename('guaraiba/node_modules/qooxdoo-sdk/create-application.py'),
                     guaraibaPath = path.dirname(module._resolveFilename('guaraiba')),
                     skeletonPath = path.join(guaraibaPath, '/source/resource/skeleton'),
                     childProcess = spawn('python', [qooxdooAppCreator,
