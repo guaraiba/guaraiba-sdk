@@ -64,7 +64,7 @@ task('new-app', { async: true }, function () {
                     actions.stepNamespace();
                 } else {
                     console.log('------------------------------------------------');
-                    var msg = 'Application name in :'.prompt;
+                    var msg = 'Application name'.prompt;
                     promptly.prompt(msg, { default: 'app-server', validator: validateAppName }, function (err, value) {
                         settings.appName = value;
                         actions.stepNamespace();
@@ -77,7 +77,7 @@ task('new-app', { async: true }, function () {
                     actions.stepGenerate();
                 } else {
                     console.log('------------------------------------------------');
-                    var msg = 'Application namespace:'.prompt;
+                    var msg = 'Application namespace'.prompt;
                     promptly.prompt(msg, {
                         default: 'app-server',
                         validator: validateNamespace

@@ -6,7 +6,7 @@ task('record', { async: true }, function () {
         prettyJson = require('prettyjson'),
         beautify = require('js-beautify').js_beautify,
         app = qx.core.BaseInit.getApplication(),
-        appNamespace = app.constructor.classname.replace('.Application', ''),
+        appNamespace = app.getNamespace(),
         appNamespacePath = appNamespace.replace(/\./g, '/'),
         settings = { fields: {} },
         inflection = require('inflection'),
@@ -55,7 +55,7 @@ task('record', { async: true }, function () {
 
             stepGetRecordClass: function () {
                 console.log('------------------------------------------------');
-                var msg = 'Name of record class in UpperCamelCase:'.prompt;
+                var msg = 'Name of record class in UpperCamelCase'.prompt;
                 promptly.prompt(msg, { validator: validateClassName }, function (err, value) {
                     settings.className = value;
                     actions.stepGetRecordTableName();
@@ -65,7 +65,7 @@ task('record', { async: true }, function () {
             stepGetRecordTableName: function () {
                 console.log('------------------------------------------------');
                 var defaultName = inflection.underscore(settings.className.split('.').pop()),
-                    msg = 'Name of relation (view or table) in underscore_case ['.prompt + defaultName.choose + ']:'.prompt;
+                    msg = 'Name of relation (view or table) in underscore_case'.prompt;
 
                 promptly.prompt(msg, { validator: validateRelationName, default: defaultName }, function (err, value) {
                     settings.tableName = value != defaultName ? value : '';
@@ -75,7 +75,7 @@ task('record', { async: true }, function () {
 
             stepIsTimestampRecord: function () {
                 console.log('------------------------------------------------');
-                var msg = 'Is timestamp record '.prompt + '(Y/n)'.choose + ':?'.prompt;
+                var msg = 'Is timestamp record '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
                     settings.timestamp = (value.toLowerCase() == 'y');
                     actions.stepAddField();
@@ -84,9 +84,9 @@ task('record', { async: true }, function () {
 
             stepAddField: function () {
                 console.log('------------------------------------------------');
-                var msg = 'Name of field in lowerCamelCase:'.prompt;
+                var msg = 'Name of field in lowerCamelCase'.prompt;
                 promptly.prompt(msg, { validator: validateFieldName }, function (err, value) {
-                    settings.fields[value] = { name: value }
+                    settings.fields[value] = { name: value };
                     actions.stepGetFieldType(value);
                 });
             },
@@ -98,7 +98,7 @@ task('record', { async: true }, function () {
                     msg = 'Choose type for '.prompt + name.choose + ' field:\n'.prompt
                         + '------------------------------------------------\n'
                         + types.map(function (t, i) {return i + '. ' + t}).join('\n').choose + '\n'
-                        + '------------------------------------------------\n[' + 'String'.choose + ']:'
+                        + '------------------------------------------------\n[' + 'String'.choose + ']';
                 promptly.choose(msg, values, { default: 7 }, function (err, value) {
                     settings.fields[name].type = 'guaraiba.orm.DBSchema.' + types[value];
                     actions.stepAllowNull(name);
@@ -107,7 +107,7 @@ task('record', { async: true }, function () {
 
             stepAllowNull: function (name) {
                 console.log('------------------------------------------------');
-                var msg = 'Allow null value in '.prompt + name.choose + ' field '.prompt + '(Y/n)'.choose + '?:'.prompt
+                var msg = 'Allow null value in '.prompt + name.choose + ' field '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
                     settings.fields[name].allowNull = (value.toLowerCase() == 'y');
                     actions.stepListAllFields();
@@ -123,7 +123,7 @@ task('record', { async: true }, function () {
                     + '     3. Remove all fields.\n'.choose
                     + '     4. Create record class.\n'.choose
                     + '     x. Abort.\n'.choose
-                    + '------------------------------------------------\n[' + '1'.choose + ']:'
+                    + '------------------------------------------------\n';
                 promptly.choose(msg, ['1', '2', '3', '4', 'x', 'X'], { default: 1 }, function (err, value) {
                     if (value == '1') actions.stepAddField();
                     else if (value == '2') actions.stepListAllFields();
@@ -206,7 +206,7 @@ task('record', { async: true }, function () {
                 }
                 console.log('------------------------------------------------');
 
-                var msg = 'Do you whant create RestController '.prompt + '(Y/n)'.choose + ':?'.prompt;
+                var msg = 'Do you whant create RestController '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
                     if (value.toLowerCase() == 'y') {
                         actions.stepCreateController();

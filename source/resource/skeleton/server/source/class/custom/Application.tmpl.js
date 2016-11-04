@@ -23,6 +23,8 @@ qx.Class.define("${Namespace}.Application", {
      * Constructor
      */
     construct: function () {
-        this.base(arguments, ${Namespace}.Configuration.getInstance(), ${Namespace}.Router.getInstance());
+        this.base(arguments);
+        this.setConfiguration(${Namespace}.Configuration.getInstance());
+        this.setRouter(${Namespace}.Router.getInstance());
     }
 });

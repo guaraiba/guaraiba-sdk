@@ -151,7 +151,7 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
             exporter = new this.JRXhtmlExporter();
             exporter.setParameterSync(this.JRExporterParameter.JASPER_PRINT_LIST, jasperPrint);
             exporter.setParameterSync(this.JRExporterParameter.OUTPUT_STREAM, report);
-            exporter.setParameterSync(this.JRHtmlExporterParameter.IMAGES_DIR_NAME, guaraiba.resourcePath + '/public/' + imgPath);
+            exporter.setParameterSync(this.JRHtmlExporterParameter.IMAGES_DIR_NAME, guaraiba.appResourcePath + '/public/' + imgPath);
             exporter.setParameterSync(this.JRHtmlExporterParameter.IMAGES_URI, '/public/' + imgPath + '/');
             if (typeof content.PAGE_INDEX != 'undefined') {
                 exporter.setParameterSync(this.JRExporterParameter.PAGE_INDEX, content.PAGE_INDEX * 1);

@@ -17,25 +17,16 @@ qx.Class.define('${Namespace}.Configuration', {
             this.setAllowCORS(false);
 
             // Register database schemas.
-            var path = guaraiba.path,
-                db = path.join(guaraiba.resourcePath,'${Namespace}/data/app.db'),
-                migrations = path.join(guaraiba.resourcePath, '${Namespace}/data/migrations'),
-                seeds = path.join(guaraiba.resourcePath, '${Namespace}/data/seeds'),
-                
+            var dbPath = guaraiba.path.join(guaraiba.appDataPath, 'app.db'),
+
                 knexSetting = {
                     client: 'sqlite3',
-                    connection: db,
-                    debug: true,
-                    migrations: {
-                        directory: migrations,
-                        tableName: 'default_migrations'
-                    },
-                    seeds: {
-                        directory: seeds
-                    }
+                    connection: dbPath,
+                    useNullAsDefault: true,
+                    debug: true
                 },
 
-                jdbcSettings = { driver: 'org.sqlite.JDBC', connectString: 'jdbc:sqlite:' + db }
+                jdbcSettings = {driver: 'org.sqlite.JDBC', connectString: 'jdbc:sqlite:' + dbPath}
 
             this.registerDBSchema(new ${Namespace}.schemas.Default(knexSetting, jdbcSettings));
         }

@@ -29,10 +29,10 @@ qx.Class.define("guaraiba.Configuration", {
             appBaseNameSpace = this.classname.replace(regExp, '');
 
         // Set base path for application resources.
-        this.registerResourceUri(appBaseNameSpace, guaraiba.resourcePath)
+        this.registerResourceUri(appBaseNameSpace, guaraiba.appResourcePath)
         // Set base path for guaraiba resources.
-        if (guaraiba.fs.existsSync(guaraiba.path.join(guaraiba.resourcePath, 'guaraiba'))) {
-            this.registerResourceUri("guaraiba", guaraiba.resourcePath);
+        if (guaraiba.fs.existsSync(guaraiba.path.join(guaraiba.appResourcePath, 'guaraiba'))) {
+            this.registerResourceUri("guaraiba", guaraiba.appResourcePath);
         } else {
             this.registerResourceUri("guaraiba", guaraiba.path.join(__dirname, '/../../resource'));
         }
@@ -452,7 +452,7 @@ qx.Class.define("guaraiba.Configuration", {
          */
         registerResourceUri: function (namespace, resourcePath) {
             // Set base path for namespace resources.
-            qx.util.LibraryManager.getInstance().set(namespace, "resourceUri", resourcePath || guaraiba.resourcePath);
+            qx.util.LibraryManager.getInstance().set(namespace, "resourceUri", resourcePath || guaraiba.appResourcePath);
         },
 
         /**
