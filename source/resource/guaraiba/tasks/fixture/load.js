@@ -16,6 +16,7 @@ task('load', {async: true}, function () {
         filters = qx.lang.Array.fromArguments(arguments),
         dbSchemaName = process.env.dbSchema || process.env.s || 'default',
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(dbSchemaName),
+        fixturesPath = dbSchema.getKNex().client.config.fixtures.directory,
         models = dbSchema.getModels(),
         loadFileActions = [],
 
@@ -23,11 +24,7 @@ task('load', {async: true}, function () {
 
             loadFileActions.push(function (nextFile) {
                 var modelName = model.getModelName(),
-                    file = guaraiba.path.join(
-                        guaraiba.appDataPath, 'fixtures',
-                        dbSchema.getName(),
-                        modelName + '.json'
-                    );
+                    file = guaraiba.path.join(fixturesPath, modelName + '.json');
 
                 console.info('START LOAD TO MODEL: ' + modelName);
                 fs.exists(file, function (exists) {
