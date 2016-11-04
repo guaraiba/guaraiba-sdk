@@ -146,7 +146,8 @@ qx.Class.define('guaraiba.orm.DBSchema', {
     construct: function (name, knexSetting, jdbcSettings) {
         var knex = require('knex'),
             migrationsPath = guaraiba.path.join(guaraiba.appDataPath, 'migrations', name),
-            seedsPath = guaraiba.path.join(guaraiba.appDataPath, 'seeds', name);
+            seedsPath = guaraiba.path.join(guaraiba.appDataPath, 'seeds', name),
+            fixturesPath = guaraiba.path.join(guaraiba.appDataPath, 'fixtures', name);
 
         this.setName(name);
         jdbcSettings && this.setJdbcSettings(jdbcSettings);
@@ -157,6 +158,9 @@ qx.Class.define('guaraiba.orm.DBSchema', {
 
         knexSetting.seeds = knexSetting.seeds || {};
         knexSetting.seeds.directory = knexSetting.seeds.directory || seedsPath;
+
+        knexSetting.fixtures = knexSetting.fixtures || {};
+        knexSetting.fixtures.directory = knexSetting.fixtures.directory || fixturesPath;
 
         this.setDebug(knexSetting.debug || false);
         knexSetting.debug = false;

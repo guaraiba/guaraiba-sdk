@@ -19,6 +19,7 @@ task('dump', {async: true}, function () {
         filters = qx.lang.Array.fromArguments(arguments),
         dbSchemaName = process.env.dbSchema || process.env.s || 'default',
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(dbSchemaName),
+        fixturesPath = dbSchema.getKNex().client.config.fixtures.directory,
         models = dbSchema.getModels(),
         actions = [],
 
@@ -48,11 +49,7 @@ task('dump', {async: true}, function () {
         execute = function (model, dbSchema) {
             actions.push(function (next) {
                 console.info('START DUMP TO MODEL: ' + model.getModelName());
-                var file = guaraiba.path.join(
-                    guaraiba.appDataPath, 'fixtures',
-                    dbSchema.getName(),
-                    model.getModelName() + '.json'
-                );
+                var file = guaraiba.path.join(fixturesPath, model.getModelName() + '.json');
 
                 fs.exists(file, function (exists) {
                     if (exists) {
