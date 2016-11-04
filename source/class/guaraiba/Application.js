@@ -281,7 +281,7 @@ qx.Class.define("guaraiba.Application", {
         /**
          * Get application name space.
          *
-         * @returns {string}
+         * @return {string}
          */
         getNamespace: function () {
             var regExp = new RegExp('.' + this.basename + '$');
@@ -292,7 +292,7 @@ qx.Class.define("guaraiba.Application", {
         /**
          * Get application data resource path.
          *
-         * @returns {string}
+         * @return {string}
          */
         getDataPath: function () {
             var appNamespacePath = this.getNamespace().replace(/\./g, guaraiba.path.sep);
