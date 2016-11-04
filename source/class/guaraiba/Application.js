@@ -26,10 +26,9 @@ qx.Class.define("guaraiba.Application", {
     extend: qx.application.Basic,
 
     /**
-     * @param configuration {guaraiba.Configuration}
-     * @param router {guaraiba.routes.Router}
+     * Constructor
      */
-    construct: function (configuration, router) {
+    construct: function () {
         // Register logger interface.
         if (qx.core.Environment.get("runtime.name") == "rhino") {
             qx.log.Logger.register(qx.log.appender.RhinoConsole);
@@ -37,24 +36,55 @@ qx.Class.define("guaraiba.Application", {
             qx.log.Logger.register(guaraiba.Console);
         }
 
-        if (!configuration.getSessionSecret()) {
-            qx.log.Logger.error('Session configuration not found in config file.');
-            process.abort();
-        }
-
         guaraiba.app = this;
-        guaraiba.namespace = this.getNamespace();
-        guaraiba.config = configuration;
-        guaraiba.router = router;
-        guaraiba.router.init();
+        guaraiba.appNamespace = this.getNamespace();
+        guaraiba.appDataPath = this.getDataPath();
 
         this.base(arguments);
+    },
+
+    properties: {
+        /** Configuration instance of the application. */
+        configuration: {
+            check: 'guaraiba.Configuration',
+            apply: '__applyConfiguration'
+        },
+
+        /** Router instance of the application. */
+        router: {
+            check: 'guaraiba.routes.Router',
+            apply: '__applyRouter'
+        }
     },
 
     members: {
 
         __nativeAppication: null,
         __worker: null,
+
+        /**
+         * Apply configuration instance of the application.
+         *
+         * @param configuration {guaraiba.Configuration}
+         */
+        __applyConfiguration: function (configuration) {
+            if (!configuration.getSessionSecret()) {
+                qx.log.Logger.error('Session configuration not found in config file.');
+                process.abort();
+            }
+
+            guaraiba.config = configuration;
+        },
+
+        /**
+         * Apply router instance of the application.
+         *
+         * @param router {guaraiba..routes.Router}
+         */
+        __applyRouter: function (router) {
+            guaraiba.router = router;
+            guaraiba.router.init();
+        },
 
         /**
          * Called when the application relevant classes are loaded and ready.
@@ -251,7 +281,7 @@ qx.Class.define("guaraiba.Application", {
         /**
          * Get application name space.
          *
-         * @returns {string}
+         * @return {string}
          */
         getNamespace: function () {
             var regExp = new RegExp('.' + this.basename + '$');
@@ -260,12 +290,14 @@ qx.Class.define("guaraiba.Application", {
         },
 
         /**
-         * Get instance of guaraiba.Configuration class.
+         * Get application data resource path.
          *
-         * @return {guaraiba.Configuration}
+         * @return {string}
          */
-        getConfiguration: function () {
-            return guaraiba.config;
+        getDataPath: function () {
+            var appNamespacePath = this.getNamespace().replace(/\./g, guaraiba.path.sep);
+
+            return guaraiba.path.join(guaraiba.appResourcePath, appNamespacePath, 'data');
         },
 
         /**
@@ -329,7 +361,7 @@ qx.Class.define("guaraiba.Application", {
          */
         getServerStaticPaths: function () {
             return [
-                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.resourcePath, 'public')}
+                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.appResourcePath, 'public')}
             ]
         },
 
@@ -459,7 +491,7 @@ qx.Class.define("guaraiba.Application", {
             cwd: process.cwd(),
             exit: process.exit,
             appRoot: appRoot,
-            resourcePath: path.join(appRoot, 'resource'),
+            appResourcePath: path.join(appRoot, 'resource'),
             env: process.env,
             utils: require('utilities'),
             path: path,

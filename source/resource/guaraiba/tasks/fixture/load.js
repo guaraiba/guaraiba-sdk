@@ -9,11 +9,10 @@ desc(
     '\t\t\t\tjake fixture:load[Book,Article,User] s=schema_x\n'.choose +
     '\t\t\t\tjake fixture:load[Book,Article,User] schema=schema_x\n'.choose
 );
-task('load', { async: true }, function () {
+task('load', {async: true}, function () {
     var fs = require('fs'),
         util = require('util'),
         async = require('async'),
-        promptly = require('promptly'),
         filters = qx.lang.Array.fromArguments(arguments),
         dbSchemaName = process.env.dbSchema || process.env.s || 'default',
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(dbSchemaName),
@@ -24,14 +23,14 @@ task('load', { async: true }, function () {
 
             loadFileActions.push(function (nextFile) {
                 var modelName = model.getModelName(),
-                    file = util.format('%s/%s/data/fixtures/%s/%s.json',
-                        guaraiba.resourcePath,
-                        guaraiba.namespace,
+                    file = guaraiba.path.join(
+                        guaraiba.appDataPath, 'fixtures',
                         dbSchema.getName(),
-                        modelName
+                        modelName + '.json'
                     );
 
                 console.info('START LOAD TO MODEL: ' + modelName);
+                console.log(file);
                 fs.exists(file, function (exists) {
                     if (exists) {
                         var items = require(file),
@@ -62,7 +61,7 @@ task('load', { async: true }, function () {
                         });
                     } else {
                         console.warn('SKIP LOAD TO MODEL: ' + modelName + ' - (NOT FOUND FIXTURE)');
-                        next();
+                        nextFile();
                     }
                 });
             });
