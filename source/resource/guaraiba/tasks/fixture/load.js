@@ -30,7 +30,6 @@ task('load', {async: true}, function () {
                     );
 
                 console.info('START LOAD TO MODEL: ' + modelName);
-                console.log(file);
                 fs.exists(file, function (exists) {
                     if (exists) {
                         var items = require(file),
