@@ -23,4 +23,4 @@ compilation and documentation of applications under the paradigm of object-orien
 
 ### Documentation:
 * [Wiki pages](https://github.com/guaraiba/guaraiba-sdk/wiki/Home)
-* [API Documentation](http://yoandrypa.github.io/guaraiba)
+* [API Documentation](https://guaraiba.github.io/guaraiba-sdk)
