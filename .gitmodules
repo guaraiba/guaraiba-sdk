@@ -1,7 +1,7 @@
 [submodule "docs"]
 	path = docs
-	url = https://github.com/yoandrypa/guaraiba.wiki.git
+	url = https://github.com/guaraiba/guaraiba-sdk.wiki.git
 [submodule "api"]
 	path = api
-	url = https://github.com/yoandrypa/guaraiba.git
+	url = https://github.com/guaraiba/guaraiba-sdk.git
 	branch = gh-pages

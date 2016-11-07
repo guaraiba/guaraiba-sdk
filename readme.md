@@ -22,5 +22,5 @@ compilation and documentation of applications under the paradigm of object-orien
 * It allows configuration of cross-domain access.
 
 ### Documentation:
-* [Wiki pages](https://github.com/yoandrypa/guaraiba/wiki/Home)
+* [Wiki pages](https://github.com/guaraiba/guaraiba-sdk/wiki/Home)
 * [API Documentation](http://yoandrypa.github.io/guaraiba)
