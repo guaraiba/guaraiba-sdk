@@ -118,7 +118,7 @@ qx.Class.define("guaraiba.Application", {
         },
 
         /**
-         * Check if the application is under development.
+         * Check if the application is under production.
          *
          * @return {Boolean}
          */
