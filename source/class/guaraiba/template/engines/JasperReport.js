@@ -130,7 +130,7 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
          * @return {Buffer} XHTM source code.
          */
         exportToXHTML: function (content, jasperFiles, dataSourceOrConnection) {
-            var uuid = require('node-uuid'),
+            var uuid = require('uuid'),
                 imgPath = uuid.v4(),
                 params = this._getParamsHashMap(content),
                 report = new this.ByteArrayOutputStream(),

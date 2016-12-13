@@ -61,6 +61,7 @@
     "utf8": "^2.1.1",
     "util": "^0.10.3",
     "utilities": "^1.0.4",
+    "uuid": "^3.0.1",
     "walk": "^2.3.9"
   },
   "devDependencies": {
