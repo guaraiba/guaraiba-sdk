@@ -152,7 +152,6 @@ qx.Class.define("guaraiba.Application", {
             // Include the cluster module
             var app = this,
                 cluster = require('cluster'),
-                walk = require('walk'),
                 config = app.getConfiguration();
 
             require('strong-cluster-connect-store').setup();
@@ -197,11 +196,13 @@ qx.Class.define("guaraiba.Application", {
                     };
 
                 // Watch version file
-                if (config.getEnvironment() === 'development') {
-                    var walker = walk.walk(guaraiba.appRoot + '/../class', {
-                        followLinks: false,
-                        filters: ["data", "jakelib", "node_modules", /\.idea/] // directories with these keys will be skipped
-                    });
+                if (this.itIsDeveloping()) {
+                    var walk = require('walk'),
+                        walker = walk.walk(guaraiba.appRoot + '/../class', {
+                            followLinks: false,
+                            filters: // directories with these keys will be skipped
+                                ['api', 'docs', 'node_modules', '.idea']
+                        });
 
                     walker.on("directories", function (root, dirStatsArray, next) {
                         dirStatsArray.forEach(function (dir) {
@@ -260,6 +261,7 @@ qx.Class.define("guaraiba.Application", {
             var resource = qx.util.ResourceManager.getInstance(),
                 keyPath = resource.toUri(guaraiba.config.getSSLSecurityKeyPath()),
                 certPath = resource.toUri(guaraiba.config.getSSLSecurityCertPath()),
+                port = process.env.PORT || guaraiba.config.getPort() || 3000,
                 options = {
                     key: guaraiba.fs.readFileSync(keyPath),
                     cert: guaraiba.fs.readFileSync(certPath)
@@ -267,8 +269,8 @@ qx.Class.define("guaraiba.Application", {
 
             this.__worker = worker;
 
-            guaraiba.https.createServer(options, this.getNativeApplication())
-                .listen(process.env.PORT || guaraiba.config.getPort() || 3000);
+            this.info("Application listen on port: " + port);
+            guaraiba.https.createServer(options, this.getNativeApplication()).listen(port);
         },
 
         /**
@@ -324,9 +326,9 @@ qx.Class.define("guaraiba.Application", {
             if (!this.__nativeAppication) {
                 this.__nativeAppication = guaraiba.connect();
                 this.__nativeAppication.use(serveFavicon(resource.toUri('public/images/favicon.ico')));
-                this.__nativeAppication.use(logger('combined', {stream: config.getLogStream()}));
+                this.__nativeAppication.use(logger('combined', { stream: config.getLogStream() }));
                 this.__nativeAppication.use(bodyParser.json());
-                this.__nativeAppication.use(bodyParser.urlencoded({extended: true}));
+                this.__nativeAppication.use(bodyParser.urlencoded({ extended: true }));
                 this.__nativeAppication.use(methodOverride('x-http-method-override'));
                 this.__nativeAppication.use(methodOverride('_method'));
                 this.__nativeAppication.use(session(config.getSessionOptions()));
@@ -361,7 +363,7 @@ qx.Class.define("guaraiba.Application", {
          */
         getServerStaticPaths: function () {
             return [
-                {urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.appResourcePath, 'public')}
+                { urlPattern: '/public', resourcePath: guaraiba.path.join(guaraiba.appResourcePath, 'public') }
             ]
         },
 
@@ -513,7 +515,7 @@ qx.Class.define("guaraiba.Application", {
             utf8: require('utf8'),
             tmp: require('temporary'),
 
-            javaClasspath: function (jarFile) {
+            javaClassPath: function (jarFile) {
                 guaraiba.java = guaraiba.java || require('java');
 
                 jarFile = qx.util.ResourceManager.getInstance().toUri(jarFile);

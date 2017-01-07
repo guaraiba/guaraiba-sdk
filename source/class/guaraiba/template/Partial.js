@@ -98,12 +98,11 @@ qx.Class.define('guaraiba.template.Partial', {
             } else { // Otherwise fetch off disk
                 // Get the template from the FS then cache it for subsequent requests
                 guaraiba.fs.readFile(templateData.file, 'utf8', function (err, templateContent) {
-                    var env = guaraiba.config.getEnvironment();
                     if (err) {
-                        done(env != 'development' ? '### ERROR ###' : err.message);
+                        done(guaraiba.app.itIsProduction() ? '### ERROR ###' : err.message);
                         vThis.error(err)
                     } else {
-                        if (env != 'development') {
+                        if (guaraiba.app.itIsProduction()) {
                             cache[templateData.file] = templateContent;
                         }
 
