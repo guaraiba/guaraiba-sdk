@@ -20,7 +20,7 @@ compilation and documentation of applications under the paradigm of object-orien
   json, js, xml, html, xhtml, pdf, docx, rtf, pptx, xlsx, xls, csv, odt, ods ODP, swf and jpeg.
 * Allows configure and run the application as a cluster in relation with number of processors available on the server.
 * It allows configuration of cross-domain access.
-npm
+
 ### Documentation:
 * [Wiki pages](https://github.com/guaraiba/guaraiba-sdk/wiki/Home)
 * [API Documentation](https://guaraiba.github.io/guaraiba-sdk)
