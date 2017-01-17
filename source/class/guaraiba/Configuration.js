@@ -29,7 +29,7 @@ qx.Class.define("guaraiba.Configuration", {
             appBaseNameSpace = this.classname.replace(regExp, '');
 
         // Set base path for application resources.
-        this.registerResourceUri(appBaseNameSpace, guaraiba.appResourcePath)
+        this.registerResourceUri(appBaseNameSpace, guaraiba.appResourcePath);
         // Set base path for guaraiba resources.
         if (guaraiba.fs.existsSync(guaraiba.path.join(guaraiba.appResourcePath, 'guaraiba'))) {
             this.registerResourceUri("guaraiba", guaraiba.appResourcePath);
@@ -37,7 +37,7 @@ qx.Class.define("guaraiba.Configuration", {
             this.registerResourceUri("guaraiba", guaraiba.path.join(__dirname, '/../../resource'));
         }
 
-        this.__cacheControlExpires = {'default': 0};
+        this.__cacheControlExpires = { 'default': 0 };
         this.__passports = {};
         this.__dBSchemas = {};
 
@@ -84,12 +84,6 @@ qx.Class.define("guaraiba.Configuration", {
         port: {
             check: 'Integer',
             init: 3002
-        },
-
-        /** Environment of execution */
-        environment: {
-            check: 'String',
-            init: 'development'
         },
 
         /**
@@ -524,6 +518,14 @@ qx.Class.define("guaraiba.Configuration", {
          */
         existDBSchema: function (name) {
             return (this.__dBSchemas[name]) ? true : false;
+        },
+
+        /**
+         * Import jar file.
+         * @param jarFile {String} Path to jar file.
+         */
+        javaClassPath: function (jarFile) {
+            guaraiba.javaClassPath(jarFile);
         }
     }
 });

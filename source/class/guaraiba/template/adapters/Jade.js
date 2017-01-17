@@ -24,7 +24,7 @@ qx.Class.define('guaraiba.template.adapters.Jade', {
     extend: guaraiba.template.adapters.Common,
 
     construct: function () {
-        this.base(arguments, 'jade');
+        this.base(arguments, 'pug');
     },
 
     members: {

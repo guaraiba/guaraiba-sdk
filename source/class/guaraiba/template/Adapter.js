@@ -62,6 +62,7 @@ qx.Class.define('guaraiba.template.Adapter', {
                     this.__engine = guaraiba.template.adapters.Ejs.getInstance();
                     break;
                 case 'jade':
+                case 'pug':
                     this.__engine = guaraiba.template.adapters.Jade.getInstance();
                     break;
                 case 'hbs':

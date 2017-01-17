@@ -30,45 +30,45 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
     construct: function () {
         var java = guaraiba.java = (guaraiba.java || require('java'));
 
-        guaraiba.javaClasspath('guaraiba/java/commons-beanutils-1.8.2.jar');
-        guaraiba.javaClasspath('guaraiba/java/commons-collections-3.2.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/commons-digester-2.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/commons-javaflow-20060411.jar');
-        guaraiba.javaClasspath('guaraiba/java/commons-logging-1.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/groovy-all-2.0.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/iText-2.1.7.jar');
-        guaraiba.javaClasspath('guaraiba/java/jackson-annotations-2.0.5.jar');
-        guaraiba.javaClasspath('guaraiba/java/jackson-core-2.0.5.jar');
-        guaraiba.javaClasspath('guaraiba/java/jackson-databind-2.0.5.jar');
-        guaraiba.javaClasspath('guaraiba/java/jasperreports-5.5.0.jar');
-        guaraiba.javaClasspath('guaraiba/java/jcommon-1.0.15.jar');
-        guaraiba.javaClasspath('guaraiba/java/jfreechart-1.0.12.jar');
-        guaraiba.javaClasspath('guaraiba/java/json-simple-1.1.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/log4j-1.2.15.jar');
-        guaraiba.javaClasspath('guaraiba/java/poi-3.7-20101029.jar');
-        guaraiba.javaClasspath('guaraiba/java/servlet-api-2.4.jar');
-        guaraiba.javaClasspath('guaraiba/java/barcode4j-2.1.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-anim.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-awt-util.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-bridge.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-css.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-dom.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-ext.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-gvt.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-parser.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-script.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-svg-dom.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-svggen.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-util.jar');
-        guaraiba.javaClasspath('guaraiba/java/batik-xml.jar');
-        guaraiba.javaClasspath('guaraiba/java/xml-apis-ext.jar');
-        guaraiba.javaClasspath('guaraiba/java/commons-pool-1.6.jar');
-        guaraiba.javaClasspath('guaraiba/java/js-mongodb-datasource-0.5.0.jar');
-        guaraiba.javaClasspath('guaraiba/java/mongo-java-driver-2.7.3.jar');
-        guaraiba.javaClasspath('guaraiba/java/spring.jar');
-        guaraiba.javaClasspath('guaraiba/java/jasperreports-json.jar');
-        //guaraiba.javaClasspath('guaraiba/java/jasperreports-chart-themes-5.2.0.jar');
-        //guaraiba.javaClasspath('guaraiba/java/postgresql-9.3-1102.jdbc4.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-beanutils-1.8.2.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-collections-3.2.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-digester-2.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-javaflow-20060411.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-logging-1.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/groovy-all-2.0.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/iText-2.1.7.jar');
+        guaraiba.javaClassPath('guaraiba/java/jackson-annotations-2.0.5.jar');
+        guaraiba.javaClassPath('guaraiba/java/jackson-core-2.0.5.jar');
+        guaraiba.javaClassPath('guaraiba/java/jackson-databind-2.0.5.jar');
+        guaraiba.javaClassPath('guaraiba/java/jasperreports-5.5.0.jar');
+        guaraiba.javaClassPath('guaraiba/java/jcommon-1.0.15.jar');
+        guaraiba.javaClassPath('guaraiba/java/jfreechart-1.0.12.jar');
+        guaraiba.javaClassPath('guaraiba/java/json-simple-1.1.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/log4j-1.2.15.jar');
+        guaraiba.javaClassPath('guaraiba/java/poi-3.7-20101029.jar');
+        guaraiba.javaClassPath('guaraiba/java/servlet-api-2.4.jar');
+        guaraiba.javaClassPath('guaraiba/java/barcode4j-2.1.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-anim.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-awt-util.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-bridge.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-css.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-dom.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-ext.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-gvt.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-parser.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-script.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-svg-dom.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-svggen.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-util.jar');
+        guaraiba.javaClassPath('guaraiba/java/batik-xml.jar');
+        guaraiba.javaClassPath('guaraiba/java/xml-apis-ext.jar');
+        guaraiba.javaClassPath('guaraiba/java/commons-pool-1.6.jar');
+        guaraiba.javaClassPath('guaraiba/java/js-mongodb-datasource-0.5.0.jar');
+        guaraiba.javaClassPath('guaraiba/java/mongo-java-driver-2.7.3.jar');
+        guaraiba.javaClassPath('guaraiba/java/spring.jar');
+        guaraiba.javaClassPath('guaraiba/java/jasperreports-json.jar');
+        //guaraiba.javaClassPath('guaraiba/java/jasperreports-chart-themes-5.2.0.jar');
+        //guaraiba.javaClassPath('guaraiba/java/postgresql-9.3-1102.jdbc4.jar');
 
         this.JasperFillManager = java.import('net.sf.jasperreports.engine.JasperFillManager');
         this.JasperExportManager = java.import('net.sf.jasperreports.engine.JasperExportManager');
@@ -130,7 +130,7 @@ qx.Class.define('guaraiba.template.engines.JasperReport', {
          * @return {Buffer} XHTM source code.
          */
         exportToXHTML: function (content, jasperFiles, dataSourceOrConnection) {
-            var uuid = require('node-uuid'),
+            var uuid = require('uuid'),
                 imgPath = uuid.v4(),
                 params = this._getParamsHashMap(content),
                 report = new this.ByteArrayOutputStream(),
