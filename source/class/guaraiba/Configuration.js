@@ -29,7 +29,7 @@ qx.Class.define("guaraiba.Configuration", {
             appBaseNameSpace = this.classname.replace(regExp, '');
 
         // Set base path for application resources.
-        this.registerResourceUri(appBaseNameSpace, guaraiba.appResourcePath)
+        this.registerResourceUri(appBaseNameSpace, guaraiba.appResourcePath);
         // Set base path for guaraiba resources.
         if (guaraiba.fs.existsSync(guaraiba.path.join(guaraiba.appResourcePath, 'guaraiba'))) {
             this.registerResourceUri("guaraiba", guaraiba.appResourcePath);
