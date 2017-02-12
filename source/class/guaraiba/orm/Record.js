@@ -251,7 +251,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for string property type.
          * @param v {var}
          * @return {String}
          */
@@ -262,7 +262,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for boolean property type.
          * @param v {var}
          * @return {Boolean}
          */
@@ -278,7 +278,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for number property type.
          * @param v {var}
          * @return {Number}
          */
@@ -293,7 +293,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for date property type.
          * @param v {var}
          * @return {Date}
          */
@@ -308,7 +308,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for text property type.
          * @param v {var}
          * @return {String}
          */
@@ -317,7 +317,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for character property type.
          * @param v {var}
          * @return {String}
          */
@@ -326,7 +326,7 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for integer property type.
          * @param v {var}
          * @return {Integer}
          */
@@ -344,9 +344,9 @@ qx.Class.define('guaraiba.orm.Record', {
         },
 
         /**
-         * Returns trasform value for serial property type.
+         * Returns trasform value for float property type.
          * @param v {var}
-         * @return {Integer}
+         * @return {Number}
          */
         _transformFloat: function (v) {
             return this._transformNumber(v);
