@@ -3,11 +3,11 @@ desc(
     '\t\t\t\t// Dump all models:\n'.info +
     '\t\t\t\tjake fixture:dump\n'.choose +
     '\t\t\t\tjake fixture:dump s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:dump schema=schema_x\n'.choose +
+    '\t\t\t\tjake fixture:dump dbSchema=schema_x\n'.choose +
     '\t\t\t\t// Dump any model that contain Book, Article, or User word in name:\n'.info +
     '\t\t\t\tjake fixture:dump[Book,Article,User]\n'.choose +
     '\t\t\t\tjake fixture:dump[Book,Article,User] s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:dump[Book,Article,User] schema=schema_x\n'.choose
+    '\t\t\t\tjake fixture:dump[Book,Article,User] dbSchema=schema_x\n'.choose
 );
 task('dump', {async: true}, function () {
     var overrideOption = -1,

@@ -3,11 +3,11 @@ desc(
     '\t\t\t\t// Clean all models:\n'.info +
     '\t\t\t\tjake fixture:clean\n'.choose +
     '\t\t\t\tjake fixture:clean s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:clean schema=schema_x\n'.choose +
+    '\t\t\t\tjake fixture:clean dbSchema=schema_x\n'.choose +
     '\t\t\t\t// Clean any model that contain Book, Article, or User word in name:\n'.info +
     '\t\t\t\tjake fixture:clean[Book,Article,User]\n'.choose +
     '\t\t\t\tjake fixture:clean[Book,Article,User] s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:clean[Book,Article,User] schema=schema_x\n'.choose
+    '\t\t\t\tjake fixture:clean[Book,Article,User] dbSchema=schema_x\n'.choose
 );
 task('clean', { async: true }, function () {
     var async = require('async'),

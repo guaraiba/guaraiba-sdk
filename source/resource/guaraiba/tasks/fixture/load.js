@@ -3,11 +3,11 @@ desc(
     '\t\t\t\t// Load all models:\n'.info +
     '\t\t\t\tjake fixture:load\n'.choose +
     '\t\t\t\tjake fixture:load s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:load schema=schema_x\n'.choose +
+    '\t\t\t\tjake fixture:load dbSchema=schema_x\n'.choose +
     '\t\t\t\t// Load any model that contain Book, Article, or User word in name:\n'.info +
     '\t\t\t\tjake fixture:load[Book,Article,User]\n'.choose +
     '\t\t\t\tjake fixture:load[Book,Article,User] s=schema_x\n'.choose +
-    '\t\t\t\tjake fixture:load[Book,Article,User] schema=schema_x\n'.choose
+    '\t\t\t\tjake fixture:load[Book,Article,User] dbSchema=schema_x\n'.choose
 );
 task('load', {async: true}, function () {
     var fs = require('fs'),
