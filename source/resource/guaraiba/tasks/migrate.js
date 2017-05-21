@@ -18,7 +18,8 @@ namespace('db', function () {
             var name = process.env.name || process.env.n,
                 make = function (name) {
                     console.info('MAKE MIGRATION (' + name + ') OVER (' + dbSchemaName + ') DATABASE SCHEMA.');
-                    knex.migrate.make(name).then(function () {
+                    knex.migrate.make(name).then(function (file) {
+                        console.info('MIGRATE FILE: ' + file);
                         complete();
                     });
                 };
