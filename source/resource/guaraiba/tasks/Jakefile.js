@@ -9,4 +9,5 @@ if (guaraiba.Tasks.itIsDeveloping()) {
 }
 
 require('./migrate');
+require('./seed');
 require('./fixture');
