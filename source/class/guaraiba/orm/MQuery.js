@@ -85,7 +85,7 @@ qx.Mixin.define('guaraiba.orm.MQuery', {
         },
 
         /**
-         * Init query builder for find instances of model selecting custem columns.
+         * Init query builder for find instances of model selecting custom columns.
          * Call "then" after call this method doesn't will hydrate the rows as guaratiba.orm.Record.
          *
          * @param columns {String|Array} Columns to select.
@@ -105,6 +105,29 @@ qx.Mixin.define('guaraiba.orm.MQuery', {
 
             return qb;
         },
+
+        /**
+         * Init query builder for find instances of model selecting custom columns with distinct clause.
+         * Call "then" after call this method doesn't will hydrate the rows as guaratiba.orm.Record.
+         *
+         * @param columns {String|Array} Columns to select.
+         * @param callback {Function?} Callback function with two argument Ex: function(err, records) {...}
+         * @param scope {Object?} Callback function scope.
+         * @return {guaraiba.orm.QueryBuilder}
+         */
+        distinct: function (columns, callback, scope) {
+            var qb = this.createQueryBuilder();
+
+            if (!qx.lang.Type.isArray(columns)) {
+                columns = [columns];
+            }
+
+            qb.distinct.apply(qb, columns);
+            callback && qb.then(callback, scope || this);
+
+            return qb;
+        },
+
 
         /**
          * Limit the number of rows result.

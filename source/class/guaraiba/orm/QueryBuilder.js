@@ -96,6 +96,19 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
         },
 
         /**
+         * Sets a distinct clause on the query.
+         *
+         * @param columns {String|Array} Columns to select.
+         * @returns {guaraiba.orm.QueryBuilder}
+         */
+        distinct: function (columns) {
+            this._hydrateResultRecord = (this._hydrateResultRecord !== false) && (columns == '*');
+            this._query.distinct.apply(this._query, arguments);
+
+            return this;
+        },
+
+        /**
          * Init query builder for find first instance of model selecting all columns.
          *
          * @param columns {String|Array} Columns to select.

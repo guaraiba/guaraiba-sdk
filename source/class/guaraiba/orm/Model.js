@@ -86,6 +86,12 @@ qx.Class.define('guaraiba.orm.Model', {
         /** Class for instances record of this model. */
         recordClass: {
             check: 'Class'
+        },
+
+        /** List of fixture part **/
+        fixtures: {
+            check: 'Object',
+            nullable: true
         }
     },
 
