@@ -9,24 +9,24 @@ desc(
     '\t\t\t\tjake fixture:load[Book,Article,User] s=schema_x\n'.choose +
     '\t\t\t\tjake fixture:load[Book,Article,User] dbSchema=schema_x\n'.choose
 );
-task('load', {async: true}, function () {
+task('load', { async: true }, function () {
     var fs = require('fs'),
         util = require('util'),
         async = require('async'),
-        filters = qx.lang.Array.fromArguments(arguments),
+        filters = arguments.length ? qx.lang.Array.fromArguments(arguments) : [/.*/],
         dbSchemaName = process.env.dbSchema || process.env.s || 'default',
         dbSchema = qx.core.BaseInit.getApplication().getDBSchema(dbSchemaName),
         fixturesPath = dbSchema.getKNex().client.config.fixtures.directory,
         models = dbSchema.getModels(),
         loadFileActions = [],
 
-        execute = function (model) {
+        load = function (model, file) {
 
             loadFileActions.push(function (nextFile) {
                 var modelName = model.getModelName(),
-                    file = guaraiba.path.join(fixturesPath, modelName + '.json');
+                    relFilePath = file.replace(guaraiba.appRoot + '/', '');
 
-                console.info('START LOAD TO MODEL: ' + modelName);
+                console.info('START LOAD TO MODEL (' + modelName + ') FROM (' + relFilePath + ')');
                 fs.exists(file, function (exists) {
                     if (exists) {
                         var items = require(file),
@@ -51,7 +51,7 @@ task('load', {async: true}, function () {
                                 console.error(err.message);
                                 process.abort();
                             } else {
-                                console.info('FINISH LOAD TO MODEL: ' + modelName);
+                                console.info('FINISH LOAD TO MODEL (' + modelName + ') FROM (' + relFilePath + ')');
                                 nextFile();
                             }
                         });
@@ -69,20 +69,23 @@ task('load', {async: true}, function () {
         if (Object.keys(models).length == 0) {
             console.warn('NO MODELS REGISTERED IN THE DATABASE SCHEMA: ' + dbSchemaName);
         } else {
-            if (filters.length == 0) {
-                for (var i in models) {
-                    execute(models[i]);
-                }
-            } else {
-                for (var i in models) {
-                    filters.forEach(function (f) {
-                        if (i.match(f)) {
-                            execute(models[i]);
+            for (var i in models) {
+                filters.forEach(function (f) {
+                    if (i.match(f)) {
+                        var modelName = models[i].getModelName(),
+                            fixtures = models[i].getFixtures();
+
+                        if (fixtures != null) {
+                            Object.keys(fixtures).forEach(function (name, idx) {
+                                load(models[i], guaraiba.path.join(fixturesPath, modelName + '.' + name + '.json'));
+                            });
                         } else {
-                            console.warn('SKIP LOAD TO MODEL: ' + models[i].getModelName());
+                            load(models[i], guaraiba.path.join(fixturesPath, modelName + '.json'));
                         }
-                    }, this);
-                }
+                    } else {
+                        console.warn('SKIP LOAD TO MODEL: ' + models[i].getModelName());
+                    }
+                }, this);
             }
         }
 

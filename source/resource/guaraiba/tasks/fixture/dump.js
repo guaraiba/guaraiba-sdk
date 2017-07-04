@@ -9,10 +9,9 @@ desc(
     '\t\t\t\tjake fixture:dump[Book,Article,User] s=schema_x\n'.choose +
     '\t\t\t\tjake fixture:dump[Book,Article,User] dbSchema=schema_x\n'.choose
 );
-task('dump', {async: true}, function () {
+task('dump', { async: true }, function () {
     var overrideOption = -1,
         fs = require('fs'),
-        util = require('util'),
         async = require('async'),
         promptly = require('promptly'),
         prettyData = require('pretty-data').pd,
@@ -24,26 +23,39 @@ task('dump', {async: true}, function () {
         actions = [],
 
         dump = function (model, file, next) {
-            model.all().orderBy(model.getIdFieldName()).then(function (err, records) {
-                if (!err) {
-                    var item, data = [];
-                    records.forEach(function (record) {
-                        item = record.toDataObject();
-                        data.push(item);
+            var fixtures = model.getFixtures(),
+                save = function (err, records, fileName, last) {
+                    if (!err) {
+                        var item, data = [];
+                        records.forEach(function (record) {
+                            item = record.toDataObject();
+                            data.push(item);
+                        });
+                        fs.writeFile(fileName, prettyData.json(data), function (err) {
+                            if (err) {
+                                console.error(err.message);
+                                process.abort();
+                            } else {
+                                last && next();
+                            }
+                        });
+                    } else {
+                        console.error(err.message);
+                        process.abort();
+                    }
+                };
+
+            if (fixtures != null) {
+                Object.keys(fixtures).forEach(function (name, idx) {
+                    fixtures[name].then(function (err, records) {
+                        save(err, records, file.replace(/\.json/, '.' + name + '.json'), idx == Object.keys.length - 1);
                     });
-                    fs.writeFile(file, prettyData.json(data), function (err) {
-                        if (err) {
-                            console.error(err.message);
-                            process.abort();
-                        } else {
-                            next();
-                        }
-                    });
-                } else {
-                    console.error(err.message);
-                    process.abort();
-                }
-            });
+                });
+            } else {
+                model.all().orderBy(model.getIdFieldName()).then(function (err, records) {
+                    save(err, records, file, true);
+                });
+            }
         },
 
         execute = function (model, dbSchema) {
@@ -70,8 +82,9 @@ task('dump', {async: true}, function () {
                                 + '     3. Skip all.\n'.choose
                                 + '     4. Skip this.\n'.choose
                                 + '     x. Abort.\n'.choose
-                                + '------------------------------------------------\n[' + '4'.choose + ']:'
-                            promptly.choose(msg, [1, 2, 3, 4, 'x'], {default: 4}, function (err, option) {
+                                + '------------------------------------------------\n[' + '4'.choose + ']:';
+
+                            promptly.choose(msg, [1, 2, 3, 4, 'x'], { default: 4 }, function (err, option) {
                                     switch (option) {
                                         case 1: /* Override all */
                                             overrideOption = option;
