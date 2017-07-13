@@ -8,6 +8,8 @@ if (guaraiba.Tasks.itIsDeveloping()) {
     require('./generate');
 }
 
-require('./migrate');
-require('./seed');
-require('./fixture');
+namespace('db', function () {
+    require('./migrate');
+    require('./seed');
+    require('./fixture');
+});
