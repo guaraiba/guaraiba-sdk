@@ -8,12 +8,14 @@ namespace('migrate', function () {
 
         desc(
             'Creates a new migration, with the (name) of the migration being added.\n' +
-            '\t\t\t  Interactive mode over default database schema:\n'.info +
-            '\t\t\t    jake db:migrate:make\n'.choose +
-            '\t\t\t  Quiet mode:\n'.info +
-            '\t\t\t    jake db:migrate:make n=create_books\n'.choose +
-            '\t\t\t    jake db:migrate:make n=create_articles s=schema_x\n'.choose +
-            '\t\t\t    jake db:migrate:make name=alter_articles dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '     Interactive mode over default database schema:\n'.info +
+            '       jake db:migrate:make\n'.choose +
+            '     Quiet mode:\n'.info +
+            '       jake db:migrate:make n=create_books\n'.choose +
+            '       jake db:migrate:make n=create_articles s=schema_x\n'.choose +
+            '       jake db:migrate:make name=alter_articles dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('make', { async: true }, function () {
             var name = process.env.name || process.env.n,
@@ -46,9 +48,11 @@ namespace('migrate', function () {
 
         desc(
             'Runs all migrations that have not yet been run.\n' +
-            '\t\t\t    jake db:migrate:run\n'.choose +
-            '\t\t\t    jake db:migrate:run s=schema_x\n'.choose +
-            '\t\t\t    jake db:migrate:run dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '       jake db:migrate:run\n'.choose +
+            '       jake db:migrate:run s=schema_x\n'.choose +
+            '       jake db:migrate:run dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('run', { async: true }, function () {
             console.info('RUN MIGRATIONS OVER (' + dbSchemaName + ') DATABASE SCHEMA.');
@@ -60,9 +64,11 @@ namespace('migrate', function () {
 
         desc(
             'Rolls back the latest migrations group.\n' +
-            '\t\t\t    jake db:migrate:rollback\n'.choose +
-            '\t\t\t    jake db:migrate:rollback s=schema_x\n'.choose +
-            '\t\t\t    jake db:migrate:rollback dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '       jake db:migrate:rollback\n'.choose +
+            '       jake db:migrate:rollback s=schema_x\n'.choose +
+            '       jake db:migrate:rollback dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('rollback', { async: true }, function () {
             console.info('ROLLBACK LAST MIGRATIONS GROUP OVER (' + dbSchemaName + ') DATABASE SCHEMA.');
@@ -74,9 +80,11 @@ namespace('migrate', function () {
 
         desc(
             'View the current version for the migration.\n' +
-            '\t\t\t    jake db:migrate:status\n'.choose +
-            '\t\t\t    jake db:migrate:status s=schema_x\n'.choose +
-            '\t\t\t    jake db:migrate:status dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '       jake db:migrate:status\n'.choose +
+            '       jake db:migrate:status s=schema_x\n'.choose +
+            '       jake db:migrate:status dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('status', { async: true }, function () {
             knex.migrate.currentVersion().then(function () {
@@ -86,8 +94,8 @@ namespace('migrate', function () {
         });
 
     } catch (ex) {
-        console.log('----------------------------------------------------------------------');
+        console.log('======================================================================');
         console.log(ex.getComment ? ex.getComment() : ex.toString());
-        console.log('----------------------------------------------------------------------');
+        console.log('======================================================================');
     }
 });

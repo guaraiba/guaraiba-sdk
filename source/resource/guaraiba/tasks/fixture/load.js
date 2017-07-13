@@ -1,13 +1,15 @@
 desc(
     'Load data (update or create) from the "data/fixture/[model].json" files and inserted into corresponding entity database.\n' +
-    '\t\t\t  Load all models:\n'.info +
-    '\t\t\t    db:fixture:load\n'.choose +
-    '\t\t\t    db:fixture:load s=schema_x\n'.choose +
-    '\t\t\t    db:fixture:load dbSchema=schema_x\n'.choose +
-    '\t\t\t  Load any model that contain Book, Article, or User word in name:\n'.info +
-    '\t\t\t    db:fixture:load[Book,Article,User]\n'.choose +
-    '\t\t\t    db:fixture:load[Book,Article,User] s=schema_x\n'.choose +
-    '\t\t\t    db:fixture:load[Book,Article,User] dbSchema=schema_x\n'.choose
+    '     ======================================================================\n'.choose +
+    '     Load all models:\n'.info +
+    '       db:fixture:load\n'.choose +
+    '       db:fixture:load s=schema_x\n'.choose +
+    '       db:fixture:load dbSchema=schema_x\n'.choose +
+    '     Load any model that contain Book, Article, or User word in name:\n'.info +
+    '       db:fixture:load[Book,Article,User]\n'.choose +
+    '       db:fixture:load[Book,Article,User] s=schema_x\n'.choose +
+    '       db:fixture:load[Book,Article,User] dbSchema=schema_x\n'.choose +
+    '     ======================================================================\n'.choose
 );
 task('load', { async: true }, function () {
     var fs = require('fs'),

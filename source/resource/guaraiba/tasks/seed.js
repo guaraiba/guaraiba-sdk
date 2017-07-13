@@ -8,12 +8,14 @@ namespace('seed', function () {
 
         desc(
             'Creates a new seed, with the (name) of the seed being added.\n' +
-            '\t\t\t  Interactive mode:\n'.info +
-            '\t\t\t    jake db:seed:make\n'.choose +
-            '\t\t\t  Quiet mode:\n'.info +
-            '\t\t\t    jake db:seed:make n=load_books\n'.choose +
-            '\t\t\t    jake db:seed:make n=load_articles s=schema_x\n'.choose +
-            '\t\t\t    jake db:seed:make name=load_articles dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '     Interactive mode:\n'.info +
+            '       jake db:seed:make\n'.choose +
+            '     Quiet mode:\n'.info +
+            '       jake db:seed:make n=load_books\n'.choose +
+            '       jake db:seed:make n=load_articles s=schema_x\n'.choose +
+            '       jake db:seed:make name=load_articles dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('make', { async: true }, function () {
             var name = process.env.name || process.env.n,
@@ -45,9 +47,11 @@ namespace('seed', function () {
 
         desc(
             'Runs all seeds that have not yet been run.\n' +
-            '\t\t\t    jake db:seed:run\n'.choose +
-            '\t\t\t    jake db:seed:run s=schema_x\n'.choose +
-            '\t\t\t    jake db:seed:run dbSchema=schema_x\n'.choose
+            '     ======================================================================\n'.choose +
+            '       jake db:seed:run\n'.choose +
+            '       jake db:seed:run s=schema_x\n'.choose +
+            '       jake db:seed:run dbSchema=schema_x\n'.choose +
+            '     ======================================================================\n'.choose
         );
         task('run', { async: true }, function () {
             console.info('RUN SEEDS OVER (' + dbSchemaName + ') DATABASE SCHEMA.');
@@ -58,8 +62,8 @@ namespace('seed', function () {
         });
 
     } catch (ex) {
-        console.log('----------------------------------------------------------------------');
+        console.log('======================================================================');
         console.log(ex.getComment ? ex.getComment() : ex.toString());
-        console.log('----------------------------------------------------------------------');
+        console.log('======================================================================');
     }
 });

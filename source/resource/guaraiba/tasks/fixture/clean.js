@@ -1,13 +1,15 @@
 desc(
     'Remove instances of model classes in databases.\n' +
-    '\t\t\t  Clean all models:\n'.info +
-    '\t\t\t    db:fixture:clean\n'.choose +
-    '\t\t\t    db:fixture:clean s=schema_x\n'.choose +
-    '\t\t\t    db:fixture:clean dbSchema=schema_x\n'.choose +
-    '\t\t\t  Clean any model that contain Book, Article, or User word in name:\n'.info +
-    '\t\t\t    db:fixture:clean[Book,Article,User]\n'.choose +
-    '\t\t\t    db:fixture:clean[Book,Article,User] s=schema_x\n'.choose +
-    '\t\t\t    db:fixture:clean[Book,Article,User] dbSchema=schema_x\n'.choose
+    '     ======================================================================\n'.choose +
+    '     Clean all models:\n'.info +
+    '       db:fixture:clean\n'.choose +
+    '       db:fixture:clean s=schema_x\n'.choose +
+    '       db:fixture:clean dbSchema=schema_x\n'.choose +
+    '     Clean any model that contain Book, Article, or User word in name:\n'.info +
+    '       db:fixture:clean[Book,Article,User]\n'.choose +
+    '       db:fixture:clean[Book,Article,User] s=schema_x\n'.choose +
+    '       db:fixture:clean[Book,Article,User] dbSchema=schema_x\n'.choose +
+    '     ======================================================================\n'.choose
 );
 task('clean', { async: true }, function () {
     var async = require('async'),
