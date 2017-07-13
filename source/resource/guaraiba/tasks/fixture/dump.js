@@ -1,15 +1,13 @@
 desc(
     'Dump data from model entity an save this in resource directory with self model path.\n' +
-    '     ======================================================================\n'.choose +
-    '     Dump all models:\n'.info +
-    '       jake db:fixture:dump\n'.choose +
-    '       jake db:fixture:dump s=schema_x\n'.choose +
-    '       jake db:fixture:dump dbSchema=schema_x\n'.choose +
-    '     Dump any model that contain Book, Article, or User word in name:\n'.info +
-    '       jake db:fixture:dump[Book,Article,User]\n'.choose +
-    '       jake db:fixture:dump[Book,Article,User] s=schema_x\n'.choose +
-    '       jake db:fixture:dump[Book,Article,User] dbSchema=schema_x\n'.choose +
-    '     ======================================================================\n'.choose
+    'Dump all models:\n'.info +
+    '  jake db:fixture:dump\n'.choose +
+    '  jake db:fixture:dump s=schema_x\n'.choose +
+    '  jake db:fixture:dump dbSchema=schema_x\n'.choose +
+    'Dump any model that contain Book, Article, or User word in name:\n'.info +
+    '  jake db:fixture:dump[Book,Article,User]\n'.choose +
+    '  jake db:fixture:dump[Book,Article,User] s=schema_x\n'.choose +
+    '  jake db:fixture:dump[Book,Article,User] dbSchema=schema_x\n'.choose
 );
 task('dump', { async: true }, function () {
     var overrideOption = -1,
@@ -79,11 +77,11 @@ task('dump', { async: true }, function () {
                             console.warn('Choose one of the following options:');
                             var msg = 'Choose action:\n'.prompt
                                 + '=============================================---\n'
-                                + '     1. Override all.\n'.choose
-                                + '     2. Override this.\n'.choose
-                                + '     3. Skip all.\n'.choose
-                                + '     4. Skip this.\n'.choose
-                                + '     x. Abort.\n'.choose
+                                + '1. Override all.\n'.choose
+                                + '2. Override this.\n'.choose
+                                + '3. Skip all.\n'.choose
+                                + '4. Skip this.\n'.choose
+                                + 'x. Abort.\n'.choose
                                 + '=============================================---\n[' + '4'.choose + ']:';
 
                             promptly.choose(msg, [1, 2, 3, 4, 'x'], { default: 4 }, function (err, option) {

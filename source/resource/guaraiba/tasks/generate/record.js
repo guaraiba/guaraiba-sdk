@@ -48,13 +48,13 @@ task('record', { async: true }, function () {
 
         actions = {
             start: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 console.info('Creating new record class for application model.');
                 actions.stepGetRecordClass()
             },
 
             stepGetRecordClass: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var msg = 'Name of record class in UpperCamelCase'.prompt;
                 promptly.prompt(msg, { validator: validateClassName }, function (err, value) {
                     settings.className = value;
@@ -63,7 +63,7 @@ task('record', { async: true }, function () {
             },
 
             stepGetRecordTableName: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var defaultName = inflection.underscore(settings.className.split('.').pop()),
                     msg = 'Name of relation (view or table) in underscore_case'.prompt;
 
@@ -74,7 +74,7 @@ task('record', { async: true }, function () {
             },
 
             stepIsTimestampRecord: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var msg = 'Is timestamp record '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
                     settings.timestamp = (value.toLowerCase() == 'y');
@@ -83,7 +83,7 @@ task('record', { async: true }, function () {
             },
 
             stepAddField: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var msg = 'Name of field in lowerCamelCase'.prompt;
                 promptly.prompt(msg, { validator: validateFieldName }, function (err, value) {
                     settings.fields[value] = { name: value };
@@ -92,13 +92,13 @@ task('record', { async: true }, function () {
             },
 
             stepGetFieldType: function (name) {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var types = ['Boolean', 'Character', 'Date', 'Float', 'Integer', 'Number', 'Serial', 'String', 'Text'],
                     values = types.map(function (t, i) {return i}),
                     msg = 'Choose type for '.prompt + name.choose + ' field:\n'.prompt
-                        + '=============================================---\n'
+                        + '------------------------------------------------\n'
                         + types.map(function (t, i) {return i + '. ' + t}).join('\n').choose + '\n'
-                        + '=============================================---\n[' + 'String'.choose + ']';
+                        + '------------------------------------------------\n[' + 'String'.choose + ']';
                 promptly.choose(msg, values, { default: 7 }, function (err, value) {
                     settings.fields[name].type = 'guaraiba.orm.DBSchema.' + types[value];
                     actions.stepAllowNull(name);
@@ -106,7 +106,7 @@ task('record', { async: true }, function () {
             },
 
             stepAllowNull: function (name) {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var msg = 'Allow null value in '.prompt + name.choose + ' field '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
                     settings.fields[name].allowNull = (value.toLowerCase() == 'y');
@@ -115,15 +115,15 @@ task('record', { async: true }, function () {
             },
 
             stepChooseNextAction: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var msg = 'Choose action:\n'.prompt
-                    + '=============================================---\n'
+                    + '------------------------------------------------\n'
                     + '     1. Add new field.\n'.choose
                     + '     2. List all fields.\n'.choose
                     + '     3. Remove all fields.\n'.choose
                     + '     4. Create record class.\n'.choose
                     + '     x. Abort.\n'.choose
-                    + '=============================================---\n';
+                    + '------------------------------------------------\n';
                 promptly.choose(msg, ['1', '2', '3', '4', 'x', 'X'], { default: 1 }, function (err, value) {
                     if (value == '1') actions.stepAddField();
                     else if (value == '2') actions.stepListAllFields();
@@ -134,7 +134,7 @@ task('record', { async: true }, function () {
             },
 
             stepListAllFields: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 console.log(prettyJson.render(settings.fields));
                 actions.stepChooseNextAction();
             },
@@ -145,7 +145,7 @@ task('record', { async: true }, function () {
             },
 
             stepCreateFile: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 var stream = fs.createWriteStream(settings.path);
                 stream.once('open', function (fd) {
                     var template = '' +
@@ -180,9 +180,9 @@ task('record', { async: true }, function () {
             },
 
             stepRegisterModel: function (code) {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 console.log(colors.warn(code));
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
 
                 var schema = 'source/class/' + appNamespacePath + '/schemas/Default.js';
                 if (fs.existsSync(schema)) {
@@ -204,7 +204,7 @@ task('record', { async: true }, function () {
                         colors.choose('source/class/' + appNamespacePath + '/schemas')
                     );
                 }
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
 
                 var msg = 'Do you whant create RestController '.prompt + '(Y/n)'.choose + '?'.prompt;
                 promptly.choose(msg, ['y', 'n', 'Y', 'N'], { default: 'y' }, function (err, value) {
@@ -252,9 +252,9 @@ task('record', { async: true }, function () {
             },
 
             stepRegisterRouter: function (code, clazz) {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 console.log(colors.warn(code));
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
 
                 console.info('Registering controller class in Router class:');
                 var replace = require('replace');
@@ -264,13 +264,13 @@ task('record', { async: true }, function () {
                     paths: ['source/class/' + appNamespacePath + '/Router.js'],
                     silent: true,
                 });
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 console.log(colors.warn('  this.resource(' + clazz + ')'));
                 actions.end();
             },
 
             end: function () {
-                console.log('=============================================---');
+                console.log('------------------------------------------------');
                 jake.Task['build:dev'].execute();
                 complete();
             }

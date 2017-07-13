@@ -19,6 +19,33 @@ jake.addListener('complete', function () {
     process.exit();
 });
 
+jake.showAllTaskDescriptions = function (f) {
+    var task, padding1, padding2, descr,
+        maxTaskNameLength = 0,
+        filter = typeof f == 'string' ? f : null,
+        names = Object.keys(jake.Task);
+
+    names.forEach(function (name) {
+        maxTaskNameLength = name.length > maxTaskNameLength ? name.length : maxTaskNameLength;
+    });
+
+    // Print out each entry with descriptions neatly aligned
+    names.forEach(function (name) {
+        if (!filter || name.indexOf(filter) != -1) {
+            task = jake.Task[name];
+
+            // Create padding-string with calculated length
+            padding1 = (new Array(maxTaskNameLength - name.length + 2)).join(' ');
+            padding2 = (new Array(maxTaskNameLength + 7)).join(' ');
+
+            if (task.description) {
+                descr = task.description.split(/\n/).join("\n" + padding2)
+                console.log('jake ' + name.green + padding1 + descr.gray);
+            }
+        }
+    });
+};
+
 /**
  * This class offers the basic properties and features to create an start guaraiba server applications.
  *
@@ -52,7 +79,7 @@ qx.Class.define('guaraiba.Tasks', {
          * @return {Boolean}
          * @ignore(__filename)
          */
-        itIsDeveloping: function(){
+        itIsDeveloping: function () {
             return String(__filename).match(/source\/class\/guaraiba\/Tasks.js$/);
         },
 
@@ -61,7 +88,7 @@ qx.Class.define('guaraiba.Tasks', {
          *
          * @return {Boolean}
          */
-        itIsProduction: function(){
+        itIsProduction: function () {
             return !this.itIsDeveloping();
         }
     }
