@@ -86,6 +86,12 @@ qx.Class.define('guaraiba.orm.Model', {
         /** Class for instances record of this model. */
         recordClass: {
             check: 'Class'
+        },
+
+        /** List of fixture part **/
+        fixtures: {
+            check: 'Object',
+            nullable: true
         }
     },
 
@@ -127,10 +133,10 @@ qx.Class.define('guaraiba.orm.Model', {
                     field = this._toUnderscoreCase(name);
                     mProperties.set(field, {
                         qxName: name,
-                        check: rProperties[name]['check'],
-                        defaultValue: rProperties[name]['init'],
-                        isRequired: rProperties[name]['nullable'] !== true,
-                        isSerial: rProperties[name]['check'] === guaraiba.orm.DBSchema.Serial
+                        check: rProperties[name].check,
+                        defaultValue: rProperties[name].init,
+                        isRequired: rProperties[name].nullable !== true,
+                        isSerial: rProperties[name].check === guaraiba.orm.DBSchema.Serial
                     });
                 }, this);
 
