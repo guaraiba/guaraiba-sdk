@@ -99,7 +99,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * Sets a distinct clause on the query.
          *
          * @param columns {String|Array} Columns to select.
-         * @returns {guaraiba.orm.QueryBuilder}
+         * @return {guaraiba.orm.QueryBuilder}
          */
         distinct: function (columns) {
             this._hydrateResultRecord = (this._hydrateResultRecord !== false) && (columns == '*');
