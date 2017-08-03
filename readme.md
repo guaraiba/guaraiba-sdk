@@ -21,20 +21,6 @@ compilation and documentation of applications under the paradigm of object-orien
 * Allows configure and run the application as a cluster in relation with number of processors available on the server.
 * It allows configuration of cross-domain access.
 
-### Install globally modules:
-
-#### Install from www.npmjs.com:
-
-```shell
-npm install -g guaraiba
-```
-
-#### Install from github.com:
-
-```shell
-npm install -g guaraiba/guaraiba
-```
-
 ### Documentation:
 * [Wiki pages](https://github.com/guaraiba/guaraiba-sdk/wiki/Home)
 * [API Documentation](https://guaraiba.github.io/guaraiba-sdk)
