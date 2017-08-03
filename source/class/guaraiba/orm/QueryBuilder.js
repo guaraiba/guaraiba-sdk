@@ -80,7 +80,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
             this.then(callback, scope);
         },
 
-        // START SELECTINS SECTION //
+        // START SELECTIONS SECTION //
 
         /**
          * Define columns to select in current query.
@@ -99,7 +99,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
          * Sets a distinct clause on the query.
          *
          * @param columns {String|Array} Columns to select.
-         * @returns {guaraiba.orm.QueryBuilder}
+         * @return {guaraiba.orm.QueryBuilder}
          */
         distinct: function (columns) {
             this._hydrateResultRecord = (this._hydrateResultRecord !== false) && (columns == '*');
@@ -180,7 +180,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
             return this;
         },
 
-        // END SELECTINS SECTION //
+        // END SELECTIONS SECTION //
 
         // START WRITINGS SECTION //
 
@@ -257,7 +257,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
 
         // END WRITINGS SECTION //
 
-        // START AGGEGATRO FUNCTION SECCTION //
+        // START AGGREGATOR FUNCTION SECTION //
 
         /**
          * Add aggregator function to currernt query.
@@ -335,7 +335,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
             return this;
         },
 
-        // END AGGEGATRO FUNCTION SECCTION //
+        // END AGGREGATOR FUNCTION SECTION //
 
         // START JOIN SECTION //
 
@@ -474,7 +474,7 @@ qx.Class.define('guaraiba.orm.QueryBuilder', {
             return this;
         },
 
-        // END JOIN SECCTION //
+        // END JOIN SECTION //
 
         // START WHERE SECTION //
 
