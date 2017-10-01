@@ -100,13 +100,17 @@ qx.Class.define('guaraiba.orm.Record', {
                 scope = callback;
                 callback = function () {};
             }
+
             scope = scope || vThis;
+
             vThis.beforeSave(function (resume) {
                 if (resume === true) {
                     if (vThis.isNewRecord()) {
                         vThis.__model.create(vThis, function (err, records) {
-                            vThis.afterSave(err, function () {
-                                callback.call(scope, err, records ? records[0] : null);
+                            if (err) return callback.call(scope, err, records ? records[0] : null);
+
+                            vThis.afterSave(function () {
+                                callback.call(scope, null, records ? records[0] : null);
                             });
                         });
                     } else {
@@ -117,8 +121,10 @@ qx.Class.define('guaraiba.orm.Record', {
                             .update(data)
                             .where(idFieldName, data[idFieldName])
                             .then(function (err, records) {
-                                vThis.afterSave(err, function () {
-                                    callback.call(scope, err, vThis);
+                                if (err) return callback.call(scope, err, this);
+
+                                vThis.afterSave(function () {
+                                    callback.call(scope, null, vThis);
                                 });
                             });
                     }
@@ -151,8 +157,10 @@ qx.Class.define('guaraiba.orm.Record', {
                     model.remove()
                         .where(idFieldName, vThis.get(idFieldName))
                         .then(function (err, record) {
-                            vThis.afterDestroy(err, function () {
-                                callback.call(scope, err, vThis);
+                            if (err) return callback.call(scope, null, vThis);
+
+                            vThis.afterDestroy(function () {
+                                callback.call(scope, null, vThis);
                             });
                         });
                 } else {

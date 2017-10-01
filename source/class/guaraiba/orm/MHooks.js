@@ -40,10 +40,8 @@ qx.Mixin.define('guaraiba.orm.MHooks', {
         /**
          * Hook to execute after save record.
          *
-         * @param err {Error|Null}
-         * @param done {Function} Resume function without arguments.
          */
-        afterSave: function (err, done) {
+        afterSave: function (done) {
             done();
         },
 
@@ -59,10 +57,9 @@ qx.Mixin.define('guaraiba.orm.MHooks', {
         /**
          * Hook to execute after destroy record.
          *
-         * @param err {Error|Null}
          * @param done {Function} Resume function without arguments.
          */
-        afterDestroy: function (err, done) {
+        afterDestroy: function (done) {
             done();
         }
     }
