@@ -7,8 +7,8 @@ desc(
 );
 task('reload', { async: true }, function () {
     var args = Array.prototype.slice.call(arguments),
-        clean = jake.Task['fixture:clean'],
-        load = jake.Task['fixture:load'];
+        clean = jake.Task['db:fixture:clean'],
+        load = jake.Task['db:fixture:load'];
 
     clean.addListener('complete', function () {
         load.invoke.apply(load, args);
