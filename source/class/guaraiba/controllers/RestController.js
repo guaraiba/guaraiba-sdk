@@ -260,11 +260,13 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 idFieldName = this.getIdFieldName(),
                 qb = this.createQueryBuilder().first('*').where(idFieldName, params.id || params[idFieldName]);
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
-                this.applyAccessControlListWhereConditionsToResources(qb, done);
-            } else {
-                done.call(this, qb);
-            }
+            this.applyCustomQueryConditions(qb, qx.lang.Function.bind(function (qb) {
+                if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                    this.applyAccessControlListWhereConditionsToResources(qb, done);
+                } else {
+                    done.call(this, qb);
+                }
+            }, this));
         },
 
         /**
@@ -337,11 +339,23 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 }
             }
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
-                this.applyAccessControlListWhereConditionsToResources(qb, done);
-            } else {
-                done.call(this, qb);
-            }
+            this.applyCustomQueryConditions(qb, qx.lang.Function.bind(function (qb) {
+                if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                    this.applyAccessControlListWhereConditionsToResources(qb, done);
+                } else {
+                    done.call(this, qb);
+                }
+            }, this));
+        },
+
+        /**
+         * Add custom conditions to sql query.
+         *
+         * @param qb {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
+         */
+        applyCustomQueryConditions: function (qb, done) {
+            done.call(this, qb);
         },
 
         /**
