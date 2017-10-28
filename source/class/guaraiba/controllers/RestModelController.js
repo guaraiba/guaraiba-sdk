@@ -23,22 +23,15 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
          * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         createAction: function (request, response, params) {
-            var items = params.items || {};
-
-            if (qx.lang.Type.isString(items)) {
-                items = request.parseJson(items);
-            }
-
-            items = this._normalizeData(items);
-
-            var model = this.getModel(),
+            var items = this._normalizeData(params.items),
+                model = this.getModel(),
                 record = new (model.getRecordClass())(items, model.getDBSchema());
 
             record.save(function (err, sRecord) {
-                record = sRecord || record
+                record = sRecord || record;
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
                     if (!this.respondError(err)) {
-                        var done = qx.lang.Function.bind(function(){
+                        var done = qx.lang.Function.bind(function () {
                             this.respond({
                                 type: this.getRecordClassName(),
                                 id: record.get(this.getIdFieldName()),
@@ -64,13 +57,7 @@ qx.Class.define('guaraiba.controllers.RestModelController', {
          * @param params {Object} Request parameters hash with id field: Ex: <code>{ id: 1, items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         updateAction: function (request, response, params) {
-            var items = params.items || {};
-
-            if (qx.lang.Type.isString(items)) {
-                items = request.parseJson(items);
-            }
-
-            items = this._normalizeData(items);
+            var items = this._normalizeData(params.items);
 
             this._record.fromDataObject(items);
             this._record.save(function (err, sRecord) {

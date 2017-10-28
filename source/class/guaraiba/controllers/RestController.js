@@ -31,6 +31,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
         this.base(arguments, request, response, params);
         this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
         this.beforeOnly('_parseFilters', ['index', 'count']);
+        this.beforeOnly('_parseItems', ['create', 'update']);
     },
 
     properties: {
@@ -179,6 +180,24 @@ qx.Class.define('guaraiba.controllers.RestController', {
             if (qx.lang.Type.isString(params.filters)) {
                 params.filters = this.getRequest().parseJson(params.filters);
             }
+
+            done.call(this);
+        },
+
+        /**
+         * Decode and normalize params items.
+         *
+         * @param done {Function} Callback function
+         */
+        _parseItems: function (done) {
+            var params = this.getParams();
+
+            params.items = params.items || {};
+            if (qx.lang.Type.isString(params.items)) {
+                params.items = this.getRequest().parseJson(params.items);
+            }
+
+            params.items = this._normalizeData(params.items);
 
             done.call(this);
         },

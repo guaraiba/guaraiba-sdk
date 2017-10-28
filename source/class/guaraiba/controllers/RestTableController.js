@@ -23,14 +23,7 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
          * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         createAction: function (request, response, params) {
-            var items = params.items || {},
-                qb = this.createQueryBuilder();
-
-            if (qx.lang.Type.isString(items)) {
-                items = request.parseJson(items);
-            }
-
-            items = this._normalizeData(items);
+            var items = this._normalizeData(params.items);
 
             qb.insert(items, '*').then(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
@@ -64,7 +57,7 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
             var qb = this.createQueryBuilder(),
                 idFieldName = this.getIdFieldName(),
                 id = params.id || params[idFieldName],
-                items = params.items || {};
+                items = this._normalizeData(params.items);
 
             if (qx.lang.Type.isString(items)) {
                 items = request.parseJson(items);
