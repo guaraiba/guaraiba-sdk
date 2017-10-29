@@ -410,7 +410,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
             items.forEach(function (item) {
                 order = item.split(/\s+/);
                 orders[order[0]] = order[1] || 'ASC';
-            })
+            });
 
             return orders;
         },
