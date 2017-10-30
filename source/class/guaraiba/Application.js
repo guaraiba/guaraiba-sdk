@@ -198,7 +198,7 @@ qx.Class.define("guaraiba.Application", {
                 // Watch version file
                 if (this.itIsDeveloping()) {
                     var walk = require('walk'),
-                        walker = walk.walk(guaraiba.appRoot + '/../class', {
+                        walker = walk.walk(guaraiba.path.join(guaraiba.appRoot, 'class'), {
                             followLinks: false,
                             filters: // directories with these keys will be skipped
                                 ['api', 'docs', 'node_modules', '.idea']

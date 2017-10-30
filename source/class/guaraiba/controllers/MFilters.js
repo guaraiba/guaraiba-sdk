@@ -44,7 +44,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
                 /**
                  * Create an async wrapper for sync filters.
                  *
-                 * @param method {Function} Function with name or of one existent function.
+                 * @param method {Function} Existent instance method.
                  * @return {Function}
                  */
                 createWrappedFilter = function (method) {
@@ -52,7 +52,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
                         if (!vThis.getCompleted()) {
                             method.call(vThis, done);
                         } else {
-                            done()
+                            done();
                         }
                     };
                 };
@@ -74,7 +74,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
          * Save filter params.
          *
          * @param phase {String} ('before' or 'after')
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          * @param actions {Array}
          * @param type {String} ('EXCEPT' or 'ONLY')
          */
@@ -106,7 +106,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed before all actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          */
         beforeAll: function (method) {
             this.__saveFilter('before', method, [], 'EXCEPT');
@@ -115,7 +115,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed before given actions
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          * @param actions {Array}
          */
         beforeOnly: function (method, actions) {
@@ -125,7 +125,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed before all actions except given actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          * @param actions {Array}
          */
         beforeExcept: function (method, actions) {
@@ -135,7 +135,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Remove one method to be executed before any actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          */
         beforeClean: function (method) {
             var name;
@@ -159,7 +159,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed after all actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          */
         afterAll: function (method) {
             this.__saveFilter('after', method, [], 'EXCEPT');
@@ -168,7 +168,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed after given actions
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          * @param actions {Array}
          */
         afterOnly: function (method, actions) {
@@ -178,7 +178,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Set one method to be executed after all actions except given actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          * @param actions {Array}
          */
         afterExcept: function (method, actions) {
@@ -188,7 +188,7 @@ qx.Mixin.define('guaraiba.controllers.MFilters', {
         /**
          * Remove one method to be executed after any actions.
          *
-         * @param method {String|Function} Function with name or of one existent function.
+         * @param method {String|Function} Name or function with name of existent instance method.
          */
         afterClean: function (method) {
             var name;

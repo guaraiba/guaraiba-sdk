@@ -31,6 +31,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
         this.base(arguments, request, response, params);
         this.beforeOnly('_requireRecord', ['show', 'update', 'destroy']);
         this.beforeOnly('_parseFilters', ['index', 'count']);
+        this.beforeOnly('_parseItems', ['create', 'update']);
     },
 
     properties: {
@@ -184,6 +185,24 @@ qx.Class.define('guaraiba.controllers.RestController', {
         },
 
         /**
+         * Decode and normalize params items.
+         *
+         * @param done {Function} Callback function
+         */
+        _parseItems: function (done) {
+            var params = this.getParams();
+
+            params.items = params.items || {};
+            if (qx.lang.Type.isString(params.items)) {
+                params.items = this.getRequest().parseJson(params.items);
+            }
+
+            params.items = this._normalizeData(params.items);
+
+            done.call(this);
+        },
+
+        /**
          * Prepare item as a Map with the fields of the record returned by toDataObject method.
          * Item is same record if the method don't exist.
          *
@@ -260,11 +279,13 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 idFieldName = this.getIdFieldName(),
                 qb = this.createQueryBuilder().first('*').where(idFieldName, params.id || params[idFieldName]);
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
-                this.applyAccessControlListWhereConditionsToResources(qb, done);
-            } else {
-                done.call(this, qb);
-            }
+            this.applyCustomQueryConditions(qb, qx.lang.Function.bind(function (qb) {
+                if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                    this.applyAccessControlListWhereConditionsToResources(qb, done);
+                } else {
+                    done.call(this, qb);
+                }
+            }, this));
         },
 
         /**
@@ -337,11 +358,23 @@ qx.Class.define('guaraiba.controllers.RestController', {
                 }
             }
 
-            if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
-                this.applyAccessControlListWhereConditionsToResources(qb, done);
-            } else {
-                done.call(this, qb);
-            }
+            this.applyCustomQueryConditions(qb, qx.lang.Function.bind(function (qb) {
+                if (qx.Interface.objectImplements(this, guaraiba.controllers.IAccessControlListToResources)) {
+                    this.applyAccessControlListWhereConditionsToResources(qb, done);
+                } else {
+                    done.call(this, qb);
+                }
+            }, this));
+        },
+
+        /**
+         * Add custom conditions to sql query.
+         *
+         * @param qb {guaraiba.orm.QueryBuilder}
+         * @param done {Function} Callback function with guaraiba.orm.QueryBuilder argument Ex: function(qb) {...}
+         */
+        applyCustomQueryConditions: function (qb, done) {
+            done.call(this, qb);
         },
 
         /**
@@ -377,7 +410,7 @@ qx.Class.define('guaraiba.controllers.RestController', {
             items.forEach(function (item) {
                 order = item.split(/\s+/);
                 orders[order[0]] = order[1] || 'ASC';
-            })
+            });
 
             return orders;
         },
