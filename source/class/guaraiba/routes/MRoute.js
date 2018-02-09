@@ -149,14 +149,18 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
                 path = null;
             }
 
-            var cClazz = this._toPlural(controller.basename),
+            var parts = controller.classname.split('.controllers.'),
+                cClazz = parts.length == 2 ? parts[1].replace('.', '/') : this._toPlural(controller.basename),
                 routes = [], paths;
 
-            if (path === null) {
-                paths = [/*CamelCase*/ cClazz, /*UnderscoreCase*/ this._toUnderscoreCase(cClazz)]
-            } else {
-                paths = [/*CamelCase*/ cClazz, /*custom path*/ path]
+            if (path === null) { /*UnderscoreCase*/
+                path = cClazz.split('/').map(qx.lang.Function.bind(function (p) {
+                    return this._toUnderscoreCase(p)
+                }), this).join('/')
             }
+            paths = [/*CamelCase*/ cClazz, /*custom or UnderscoreCase path*/ path]
+
+            console.log(paths);
 
             paths.forEach(function (path) {
                 if (style == 'url') {
