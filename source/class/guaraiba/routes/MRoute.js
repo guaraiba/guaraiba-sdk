@@ -160,8 +160,6 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
             }
             paths = [/*CamelCase*/ cClazz, /*custom or UnderscoreCase path*/ path]
 
-            console.log(paths);
-
             paths.forEach(function (path) {
                 if (style == 'url') {
                     routes = [
