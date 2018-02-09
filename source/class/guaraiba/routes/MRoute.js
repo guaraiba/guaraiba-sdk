@@ -155,10 +155,10 @@ qx.Mixin.define("guaraiba.routes.MRoute", {
 
             if (path === null) { /*UnderscoreCase*/
                 path = cClazz.split('/').map(qx.lang.Function.bind(function (p) {
-                    return this._toUnderscoreCase(p)
-                }), this).join('/')
+                    return this._toUnderscoreCase(p);
+                }), this).join('/');
             }
-            paths = [/*CamelCase*/ cClazz, /*custom or UnderscoreCase path*/ path]
+            paths = [/*CamelCase*/ cClazz, /*custom or UnderscoreCase path*/ path];
 
             paths.forEach(function (path) {
                 if (style == 'url') {
