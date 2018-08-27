@@ -23,7 +23,8 @@ qx.Class.define('guaraiba.controllers.RestTableController', {
          * @param params {Object} Request parameters hash. <code>{ items: {field1: 'v1', ... fieldN: 'vN'} }</code>.
          */
         createAction: function (request, response, params) {
-            var items = this._normalizeData(params.items);
+            var qb = this.createQueryBuilder(),
+                items = this._normalizeData(params.items);
 
             qb.insert(items, '*').then(function (err, record) {
                 this.respondError(err) || this._prepareItem(record, function (err, item) {
